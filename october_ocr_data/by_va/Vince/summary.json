@@ -1,0 +1,17 @@
+{
+  "va": "Vince",
+  "total_posts": 4,
+  "posts_with_text": 3,
+  "posts_without_text": 1,
+  "text_extraction_rate": 0.75,
+  "total_views": 127379,
+  "avg_views": 31844,
+  "viral_posts": 3,
+  "viral_rate": 0.75,
+  "duplicate_groups": 0,
+  "accounts": [
+    "sukihanae",
+    "sukiyori",
+    "sukihimee"
+  ]
+}

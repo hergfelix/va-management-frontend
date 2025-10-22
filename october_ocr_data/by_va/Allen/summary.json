@@ -1,0 +1,17 @@
+{
+  "va": "Allen",
+  "total_posts": 4,
+  "posts_with_text": 2,
+  "posts_without_text": 2,
+  "text_extraction_rate": 0.5,
+  "total_views": 18166,
+  "avg_views": 4541,
+  "viral_posts": 1,
+  "viral_rate": 0.25,
+  "duplicate_groups": 0,
+  "accounts": [
+    "maraswoon",
+    "marapeekk",
+    "marashelll"
+  ]
+}

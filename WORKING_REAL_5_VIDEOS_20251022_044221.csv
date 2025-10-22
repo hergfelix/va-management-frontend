@@ -1,0 +1,9 @@
+post_url,scraped_at,views,likes,comments,shares,bookmarks,engagement,engagement_rate,account_username,account_followers,error
+https://www.tiktok.com/t/ZTMuUscW9/,2025-10-22T04:41:26.767109,0,0,0,0,0,0.0,0.0,Unknown,0,
+https://www.tiktok.com/t/ZTMuUEG3c/,2025-10-22T04:41:34.063725,0,0,0,0,0,0.0,0.0,Unknown,0,
+https://www.tiktok.com/t/ZTMuyRh5a/,2025-10-22T04:41:41.089271,0,0,0,0,0,0.0,0.0,Unknown,0,
+https://www.tiktok.com/t/ZP8A7kX4w/,2025-10-22T04:42:13.322519,0,0,0,0,0,0.0,0.0,Unknown,0,"Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to ""https://www.tiktok.com/t/ZP8A7kX4w/"", waiting until ""networkidle""
+"
+https://www.tiktok.com/t/ZP8A7L74E/,2025-10-22T04:42:21.514433,0,0,0,0,0,0.0,0.0,Unknown,0,

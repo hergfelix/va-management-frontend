@@ -1,0 +1,540 @@
+var DASHBOARD_CONFIG = {
+  sheets: {
+    input: "Input",
+    dashboard: "TikTok Analytics Dashboard"
+  },
+  columns: {
+    employee: 0,
+    account: 1,
+    male7d: 32,
+    viewers7d: 39,
+    male28d: 40,
+    viewers28d: 47
+  },
+  videoRanges: [
+    { start: 2, end: 11, name: "Video 1" },
+    { start: 12, end: 21, name: "Video 2" },
+    { start: 22, end: 31, name: "Video 3" }
+  ],
+  demographicRanges: {
+    us7d: { start: 33, end: 37 },
+    us28d: { start: 41, end: 45 }
+  },
+  targets: {
+    male: {
+      excellent: 0.90
+    },
+    us: {
+      excellent: 0.85,
+      good: 0.65
+    }
+  },
+  design: {
+    colors: {
+      dark1: "#0d1117",
+      dark2: "#161b22",
+      dark3: "#21262d",
+      dark4: "#30363d",
+      accent1: "#58a6ff",
+      accent2: "#1f6feb",
+      accentGreen: "#3fb950",
+      accentPurple: "#bc8cff",
+      accentOrange: "#ff9500",
+      accentRed: "#ff6b6b",
+      accentYellow: "#ffd60a",
+      textPrimary: "#c9d1d9",
+      textSecondary: "#8b949e",
+      border: "#30363d",
+      borderBright: "#58a6ff",
+      kpiGreen: "#238636",
+      kpiYellow: "#d29922",
+      kpiRed: "#da3633"
+    },
+    fonts: { title: 16, header: 12, subHeader: 11, data: 10, small: 9 }
+  }
+};
+
+function refreshDashboard() {
+  try {
+    var ss = SpreadsheetApp.getActiveSpreadsheet();
+    var inputSheet = getInputSheet(ss);
+    var dashboardSheet = prepareDashboardSheet(ss);
+    var inputData = validateAndGetData(inputSheet);
+    var dashboardData = processDashboardData(inputData);
+    dashboardSheet.clear();
+    dashboardSheet.clearFormats();
+    createDarkHeader(dashboardSheet);
+    writeDashboardData(dashboardSheet, dashboardData);
+    applyDarkModernFormatting(dashboardSheet, dashboardData);
+    SpreadsheetApp.getUi().alert("Success", "Dashboard refreshed!", SpreadsheetApp.getUi().ButtonSet.OK);
+    Logger.log("Dashboard refreshed");
+  } catch (error) {
+    SpreadsheetApp.getUi().alert("Error", error.message, SpreadsheetApp.getUi().ButtonSet.OK);
+    throw error;
+  }
+}
+
+function createDarkHeader(sheet) {
+  var c = DASHBOARD_CONFIG.design.colors;
+  var f = DASHBOARD_CONFIG.design.fonts;
+  
+  sheet.getRange(1,1,1,12).merge().setValue("TIKTOK ANALYTICS DASHBOARD").setBackground(c.dark1).setFontColor(c.accent1).setFontWeight("bold").setFontSize(f.title).setHorizontalAlignment("center").setVerticalAlignment("middle").setBorder(false,false,true,false,false,false,c.borderBright,SpreadsheetApp.BorderStyle.SOLID_MEDIUM);
+  sheet.setRowHeight(1, 60);
+  
+  sheet.getRange(2,1,1,6).merge().setValue("GOAL: 90%+ Male | 85%+ US Viewers").setBackground(c.dark2).setFontColor(c.accentPurple).setFontSize(f.small).setFontWeight("bold").setHorizontalAlignment("center").setVerticalAlignment("middle");
+  
+  sheet.getRange(2,7,1,6).merge().setValue("Last Updated: " + getTimestamp()).setBackground(c.dark2).setFontColor(c.textSecondary).setFontSize(f.small).setFontStyle("italic").setHorizontalAlignment("center").setVerticalAlignment("middle");
+  sheet.setRowHeight(2, 35);
+  
+  sheet.getRange(3,1,1,12).merge().setValue("Run refreshDashboard to update data").setBackground(c.accent2).setFontColor("#ffffff").setFontSize(f.small).setHorizontalAlignment("center").setVerticalAlignment("middle");
+  sheet.setRowHeight(3, 28);
+}
+
+function getTimestamp() {
+  return Utilities.formatDate(new Date(), Session.getScriptTimeZone(), "MMM dd, yyyy HH:mm");
+}
+
+function getInputSheet(ss) {
+  var sheet = ss.getSheetByName(DASHBOARD_CONFIG.sheets.input);
+  if (!sheet) throw new Error("Input sheet not found");
+  return sheet;
+}
+
+function prepareDashboardSheet(ss) {
+  var sheet = ss.getSheetByName(DASHBOARD_CONFIG.sheets.dashboard);
+  if (!sheet) sheet = ss.insertSheet(DASHBOARD_CONFIG.sheets.dashboard);
+  return sheet;
+}
+
+function validateAndGetData(sheet) {
+  var data = sheet.getDataRange().getValues();
+  if (data.length < 4) throw new Error("Insufficient data");
+  return data;
+}
+
+function processDashboardData(inputData) {
+  var output = [];
+  var groups = groupByEmployeeInOrder(inputData);
+  
+  for (var e = 0; e < groups.length; e++) {
+    var empData = groups[e];
+    var empName = empData.name;
+    var accts = empData.accounts;
+    
+    output.push(createEmployeeHeader(empName, accts));
+    output.push(createColumnHeaders());
+    for (var i = 0; i < accts.length; i++) {
+      output.push(accts[i]);
+    }
+    output.push(createEmployeeSummary(accts));
+    output.push(createSeparator());
+  }
+  
+  output.push(createGlobalSummary(groups));
+  return output;
+}
+
+function groupByEmployeeInOrder(data) {
+  var empOrder = [];
+  var groups = {};
+  
+  for (var r = 3; r < data.length; r++) {
+    var row = data[r];
+    if (isEmptyRow(row)) continue;
+    var emp = row[DASHBOARD_CONFIG.columns.employee] || "Unknown";
+    
+    if (!groups[emp]) {
+      groups[emp] = [];
+      empOrder.push(emp);
+    }
+    
+    groups[emp].push(createAccountRow(row));
+  }
+  
+  var result = [];
+  for (var i = 0; i < empOrder.length; i++) {
+    result.push({
+      name: empOrder[i],
+      accounts: groups[empOrder[i]]
+    });
+  }
+  
+  return result;
+}
+
+function createEmployeeHeader(name, accts) {
+  var st = calculateEmployeeStats(accts);
+  return [
+    name.toUpperCase(),
+    accts.length + " Accounts",
+    "Avg Male: " + (st.avgMale * 100).toFixed(1) + "%",
+    "Avg US: " + (st.avgUS * 100).toFixed(1) + "%",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "EMPLOYEE_HEADER"
+  ];
+}
+
+function calculateEmployeeStats(accts) {
+  var totM = 0, totU = 0;
+  for (var i = 0; i < accts.length; i++) {
+    totM += accts[i][2];
+    totU += accts[i][5];
+  }
+  return {
+    avgMale: totM / accts.length,
+    avgUS: totU / accts.length
+  };
+}
+
+function createColumnHeaders() {
+  return [
+    "Account",
+    "Avg US%",
+    "Male% 7d",
+    "Male% 28d",
+    "Male Delta",
+    "US% 7d",
+    "US% 28d",
+    "US Delta",
+    "Daily Avg 7d",
+    "Daily Avg 28d",
+    "Trend",
+    "Status",
+    "COLUMN_HEADER"
+  ];
+}
+
+function createAccountRow(row) {
+  var acct = row[DASHBOARD_CONFIG.columns.account] || "";
+  var m7 = parsePercentage(row[DASHBOARD_CONFIG.columns.male7d]);
+  var m28 = parsePercentage(row[DASHBOARD_CONFIG.columns.male28d]);
+  var v7 = parseNumber(row[DASHBOARD_CONFIG.columns.viewers7d]);
+  var v28 = parseNumber(row[DASHBOARD_CONFIG.columns.viewers28d]);
+  
+  var dailyAvg7 = v7 / 7;
+  var dailyAvg28 = v28 / 28;
+  var trendValue = dailyAvg7 / dailyAvg28;
+  var trendEmoji = getTrendEmoji(trendValue);
+  
+  var avgUS = calculateAverageUSPercentage(row);
+  var u7 = calculateUSPercentageForRange(row, DASHBOARD_CONFIG.demographicRanges.us7d);
+  var u28 = calculateUSPercentageForRange(row, DASHBOARD_CONFIG.demographicRanges.us28d);
+  
+  var status = calculateStatus(m7, u7, trendValue);
+  
+  return [
+    acct,
+    avgUS,
+    m7,
+    m28,
+    m7 - m28,
+    u7,
+    u28,
+    u7 - u28,
+    dailyAvg7,
+    dailyAvg28,
+    trendEmoji,
+    status,
+    "DATA_ROW"
+  ];
+}
+
+function getTrendEmoji(trendValue) {
+  if (trendValue >= 1.2) return "ROCKET";
+  if (trendValue >= 1.05) return "UP";
+  if (trendValue >= 0.95) return "STABLE";
+  if (trendValue >= 0.8) return "DOWN";
+  return "CRITICAL";
+}
+
+function calculateStatus(m7, u7, trend) {
+  var t = DASHBOARD_CONFIG.targets;
+  var score = 0;
+  
+  if (m7 >= t.male.excellent) score += 2;
+  else score -= 1;
+  
+  if (u7 >= t.us.excellent) score += 2;
+  else if (u7 >= t.us.good) score += 1;
+  else score -= 1;
+  
+  if (trend >= 1.05) score += 1;
+  else if (trend < 0.95) score -= 1;
+  
+  if (score >= 4) return "PERFECT";
+  if (score >= 2) return "GOOD";
+  if (score >= 0) return "OK";
+  return "CRITICAL";
+}
+
+function createEmployeeSummary(accts) {
+  var totDaily7 = 0, totDaily28 = 0, m = 0, u = 0;
+  for (var i = 0; i < accts.length; i++) {
+    totDaily7 += accts[i][8];
+    totDaily28 += accts[i][9];
+    m += accts[i][2];
+    u += accts[i][5];
+  }
+  
+  var avgTrend = totDaily7 / totDaily28;
+  var trendEmoji = getTrendEmoji(avgTrend);
+  
+  return [
+    "TEAM TOTAL",
+    "",
+    m / accts.length,
+    "",
+    "",
+    u / accts.length,
+    "",
+    "",
+    totDaily7,
+    totDaily28,
+    trendEmoji,
+    "",
+    "SUMMARY_ROW"
+  ];
+}
+
+function createSeparator() {
+  return ["", "", "", "", "", "", "", "", "", "", "", "", "SEPARATOR"];
+}
+
+function createGlobalSummary(groups) {
+  var totA = 0;
+  for (var e = 0; e < groups.length; e++) {
+    totA += groups[e].accounts.length;
+  }
+  return [
+    "OVERVIEW",
+    groups.length + " Teams",
+    totA + " Accounts",
+    "Focus: Male US",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "GLOBAL_SUMMARY"
+  ];
+}
+
+function calculateAverageUSPercentage(row) {
+  var tot = 0, cnt = 0;
+  for (var i = 0; i < DASHBOARD_CONFIG.videoRanges.length; i++) {
+    var u = calculateUSPercentageForRange(row, DASHBOARD_CONFIG.videoRanges[i]);
+    if (u > 0) {
+      tot += u;
+      cnt++;
+    }
+  }
+  return cnt > 0 ? tot / cnt : 0;
+}
+
+function calculateUSPercentageForRange(row, range) {
+  var u = 0;
+  for (var c = range.start; c <= range.end; c += 2) {
+    u += extractUSPercentageFromPair(row, c);
+  }
+  return u;
+}
+
+function extractUSPercentageFromPair(row, idx) {
+  if (idx < 0 || idx >= row.length - 1) return 0;
+  var name = String(row[idx] || "").toLowerCase().trim();
+  if (/^(united states|usa|u\.s\.|us)$/i.test(name)) return parsePercentage(row[idx + 1]);
+  return 0;
+}
+
+function parsePercentage(val) {
+  if (val === "" || val == null) return 0;
+  var str = String(val).trim().replace(/%/g, "").replace(/,/g, ".");
+  var num = Number(str);
+  if (isNaN(num)) return 0;
+  return num > 1 ? num / 100 : num;
+}
+
+function parseNumber(val) {
+  if (val === "" || val == null) return 0;
+  var str = String(val).replace(/[\s,\u00A0\u2007\u202F]/g, "");
+  var num = Number(str);
+  return isNaN(num) ? 0 : num;
+}
+
+function isEmptyRow(row) {
+  for (var i = 0; i < row.length; i++) {
+    if (row[i] !== "" && row[i] != null) return false;
+  }
+  return true;
+}
+
+function writeDashboardData(sheet, data) {
+  var clean = [];
+  for (var i = 0; i < data.length; i++) {
+    clean.push(data[i].slice(0, -1));
+  }
+  sheet.getRange(4, 1, clean.length, clean[0].length).setValues(clean);
+}
+
+function applyDarkModernFormatting(sheet, data) {
+  var c = DASHBOARD_CONFIG.design.colors;
+  var row = 4, empIdx = 0;
+  
+  for (var i = 0; i < data.length; i++) {
+    var marker = data[i][data[i].length - 1];
+    var cols = data[i].length - 1;
+    var rng = sheet.getRange(row, 1, 1, cols);
+    
+    if (marker === "EMPLOYEE_HEADER") {
+      formatDarkEmployeeSection(sheet, rng, empIdx);
+      empIdx++;
+    } else if (marker === "COLUMN_HEADER") {
+      formatDarkColumnHeader(sheet, rng);
+    } else if (marker === "DATA_ROW") {
+      formatDarkDataRow(sheet, row, cols, data[i]);
+    } else if (marker === "SUMMARY_ROW") {
+      formatDarkTeamSummary(sheet, rng);
+    } else if (marker === "SEPARATOR") {
+      formatDarkSeparator(sheet, rng);
+    } else if (marker === "GLOBAL_SUMMARY") {
+      formatDarkGlobalSection(sheet, rng);
+    }
+    row++;
+  }
+  
+  sheet.autoResizeColumns(1, 12);
+  sheet.setFrozenRows(3);
+}
+
+function formatDarkEmployeeSection(sheet, rng, idx) {
+  var c = DASHBOARD_CONFIG.design.colors;
+  var colors = [c.accent2, c.accentPurple, c.accentGreen, c.accentOrange];
+  var bg = colors[idx % colors.length];
+  
+  rng.setBackground(bg).setFontColor("#ffffff").setFontWeight("bold").setFontSize(DASHBOARD_CONFIG.design.fonts.header).setHorizontalAlignment("left").setVerticalAlignment("middle");
+  sheet.setRowHeight(rng.getRow(), 45);
+  
+  var r = rng.getRow();
+  sheet.getRange(r, 1, 1, 1).setFontSize(14);
+}
+
+function formatDarkColumnHeader(sheet, rng) {
+  var c = DASHBOARD_CONFIG.design.colors;
+  var r = rng.getRow();
+  
+  rng.setBackground(c.dark3).setFontColor(c.textPrimary).setFontWeight("bold").setFontSize(DASHBOARD_CONFIG.design.fonts.subHeader).setHorizontalAlignment("center").setVerticalAlignment("middle").setBorder(false, false, true, false, false, false, c.border, SpreadsheetApp.BorderStyle.SOLID);
+  sheet.setRowHeight(r, 38);
+  
+  sheet.getRange(r, 3, 1, 1).setBackground(c.accentGreen).setFontColor("#000000");
+  sheet.getRange(r, 6, 1, 1).setBackground(c.accentGreen).setFontColor("#000000");
+  sheet.getRange(r, 11, 1, 1).setBackground(c.accent1).setFontColor("#000000");
+}
+
+function formatDarkDataRow(sheet, r, cols, data) {
+  var c = DASHBOARD_CONFIG.design.colors;
+  var rng = sheet.getRange(r, 1, 1, cols);
+  
+  rng.setBackground(c.dark2).setFontColor(c.textPrimary).setFontSize(DASHBOARD_CONFIG.design.fonts.data).setVerticalAlignment("middle").setBorder(false, false, true, false, false, false, c.border, SpreadsheetApp.BorderStyle.DOTTED);
+  sheet.setRowHeight(r, 32);
+  
+  sheet.getRange(r, 1, 1, 1).setFontWeight("bold").setHorizontalAlignment("left");
+  sheet.getRange(r, 2, 1, 10).setHorizontalAlignment("center");
+  sheet.getRange(r, 12, 1, 1).setHorizontalAlignment("center").setFontWeight("bold");
+  
+  sheet.getRange(r, 2, 1, 8).setNumberFormat("0.0%");
+  sheet.getRange(r, 9, 1, 2).setNumberFormat("#,##0");
+  
+  applyKPIColors(sheet, r, data);
+  applyTrendEmoji(sheet, r, data);
+  applyStatusColor(sheet, r, data);
+}
+
+function applyKPIColors(sheet, r, data) {
+  var c = DASHBOARD_CONFIG.design.colors;
+  var t = DASHBOARD_CONFIG.targets;
+  
+  var m7 = data[2];
+  var m7c = sheet.getRange(r, 3);
+  if (m7 >= t.male.excellent) {
+    m7c.setBackground(c.kpiGreen).setFontColor("#ffffff").setFontWeight("bold");
+  } else {
+    m7c.setBackground(c.kpiRed).setFontColor("#ffffff").setFontWeight("bold");
+  }
+  
+  var u7 = data[5];
+  var u7c = sheet.getRange(r, 6);
+  if (u7 >= t.us.excellent) {
+    u7c.setBackground(c.kpiGreen).setFontColor("#ffffff").setFontWeight("bold");
+  } else if (u7 >= t.us.good) {
+    u7c.setBackground(c.kpiYellow).setFontColor("#000000").setFontWeight("bold");
+  } else {
+    u7c.setBackground(c.kpiRed).setFontColor("#ffffff").setFontWeight("bold");
+  }
+}
+
+function applyTrendEmoji(sheet, r, data) {
+  var c = DASHBOARD_CONFIG.design.colors;
+  var trend = data[10];
+  var trendCell = sheet.getRange(r, 11);
+  
+  if (trend === "ROCKET") {
+    trendCell.setValue("🚀 +20%").setBackground(c.kpiGreen).setFontColor("#ffffff").setFontWeight("bold");
+  } else if (trend === "UP") {
+    trendCell.setValue("📈 +5%").setBackground(c.accentGreen).setFontColor("#000000").setFontWeight("bold");
+  } else if (trend === "STABLE") {
+    trendCell.setValue("➡️ Stable").setBackground(c.dark4).setFontColor(c.textPrimary);
+  } else if (trend === "DOWN") {
+    trendCell.setValue("📉 -5%").setBackground(c.kpiYellow).setFontColor("#000000").setFontWeight("bold");
+  } else if (trend === "CRITICAL") {
+    trendCell.setValue("⚠️ -20%").setBackground(c.kpiRed).setFontColor("#ffffff").setFontWeight("bold");
+  }
+}
+
+function applyStatusColor(sheet, r, data) {
+  var c = DASHBOARD_CONFIG.design.colors;
+  var status = data[11];
+  var statusCell = sheet.getRange(r, 12);
+  
+  if (status === "PERFECT") {
+    statusCell.setBackground(c.kpiGreen).setFontColor("#ffffff");
+  } else if (status === "GOOD") {
+    statusCell.setBackground(c.accentGreen).setFontColor("#000000");
+  } else if (status === "OK") {
+    statusCell.setBackground(c.kpiYellow).setFontColor("#000000");
+  } else if (status === "CRITICAL") {
+    statusCell.setBackground(c.kpiRed).setFontColor("#ffffff");
+  }
+}
+
+function formatDarkTeamSummary(sheet, rng) {
+  var c = DASHBOARD_CONFIG.design.colors;
+  var r = rng.getRow();
+  
+  rng.setBackground(c.dark4).setFontColor(c.accent1).setFontWeight("bold").setFontSize(DASHBOARD_CONFIG.design.fonts.subHeader).setHorizontalAlignment("left").setVerticalAlignment("middle").setBorder(true, false, true, false, false, false, c.borderBright, SpreadsheetApp.BorderStyle.SOLID_MEDIUM);
+  sheet.setRowHeight(r, 40);
+  
+  sheet.getRange(r, 3, 1, 1).setNumberFormat("0.0%").setHorizontalAlignment("center");
+  sheet.getRange(r, 6, 1, 1).setNumberFormat("0.0%").setHorizontalAlignment("center");
+  sheet.getRange(r, 9, 1, 2).setNumberFormat("#,##0").setHorizontalAlignment("center");
+}
+
+function formatDarkSeparator(sheet, rng) {
+  rng.setBackground(DASHBOARD_CONFIG.design.colors.dark1);
+  sheet.setRowHeight(rng.getRow(), 18);
+}
+
+function formatDarkGlobalSection(sheet, rng) {
+  var c = DASHBOARD_CONFIG.design.colors;
+  rng.setBackground(c.dark1).setFontColor(c.accentPurple).setFontWeight("bold").setFontSize(DASHBOARD_CONFIG.design.fonts.header).setHorizontalAlignment("center").setVerticalAlignment("middle").setBorder(true, false, true, false, false, false, c.accentPurple, SpreadsheetApp.BorderStyle.SOLID_THICK);
+  sheet.setRowHeight(rng.getRow(), 50);
+}

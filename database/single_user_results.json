@@ -1,0 +1,405 @@
+{
+  "scenario": "single_user",
+  "user": "Felix + Claude AI",
+  "timestamp": "2025-10-21T23:53:30.978514",
+  "original_results": {
+    "Local SQLite": {
+      "score": {
+        "performance": 9,
+        "cost": 10,
+        "simplicity": 10,
+        "team_collaboration": 3,
+        "scalability": 7,
+        "overall": 7.2
+      },
+      "costs": {
+        "total_monthly": 0
+      },
+      "implementation_time": "1-2 hours",
+      "best_for": [
+        "Single user",
+        "Quick prototyping",
+        "No dependencies"
+      ]
+    },
+    "Cloud PostgreSQL": {
+      "score": {
+        "performance": 9,
+        "cost": 7,
+        "simplicity": 6,
+        "team_collaboration": 10,
+        "scalability": 10,
+        "overall": 8.4
+      },
+      "costs": {
+        "total_monthly": 14
+      },
+      "implementation_time": "4-8 hours",
+      "best_for": [
+        "Professional teams",
+        "Production apps",
+        "High availability"
+      ]
+    },
+    "Supabase": {
+      "score": {
+        "performance": 8,
+        "cost": 6,
+        "simplicity": 9,
+        "team_collaboration": 10,
+        "scalability": 9,
+        "overall": 8.4
+      },
+      "costs": {
+        "total_monthly": 25
+      },
+      "implementation_time": "2-4 hours",
+      "best_for": [
+        "Real-time features",
+        "API integration",
+        "Modern teams"
+      ]
+    },
+    "Hybrid Local+Cloud": {
+      "score": {
+        "performance": 8,
+        "cost": 8,
+        "simplicity": 7,
+        "team_collaboration": 7,
+        "scalability": 8,
+        "overall": 7.6
+      },
+      "costs": {
+        "total_monthly": 8
+      },
+      "implementation_time": "6-10 hours",
+      "best_for": [
+        "Small teams",
+        "Offline capability",
+        "Cost optimization"
+      ]
+    },
+    "Google Sheets": {
+      "score": {
+        "performance": 4,
+        "cost": 9,
+        "simplicity": 10,
+        "team_collaboration": 8,
+        "scalability": 5,
+        "overall": 7.2
+      },
+      "costs": {
+        "total_monthly": 6
+      },
+      "implementation_time": "1-3 hours",
+      "best_for": [
+        "Familiar interface",
+        "Quick setup",
+        "Small datasets"
+      ]
+    },
+    "Multi-Database": {
+      "score": {
+        "performance": 10,
+        "cost": 6,
+        "simplicity": 4,
+        "team_collaboration": 9,
+        "scalability": 10,
+        "overall": 7.8
+      },
+      "costs": {
+        "total_monthly": 20
+      },
+      "implementation_time": "8-16 hours",
+      "best_for": [
+        "Enterprise",
+        "Complex requirements",
+        "High performance"
+      ]
+    }
+  },
+  "recalculated_results": {
+    "Local SQLite": {
+      "original_score": 7.2,
+      "new_score": 9.0,
+      "improvement": 1.8,
+      "costs": {
+        "total_monthly": 0
+      },
+      "implementation_time": "1-2 hours",
+      "best_for": [
+        "Single user",
+        "Quick prototyping",
+        "No dependencies"
+      ],
+      "scores": {
+        "performance": 9,
+        "cost": 10,
+        "simplicity": 10,
+        "scalability": 7
+      }
+    },
+    "Cloud PostgreSQL": {
+      "original_score": 8.4,
+      "new_score": 8.0,
+      "improvement": -0.4,
+      "costs": {
+        "total_monthly": 14
+      },
+      "implementation_time": "4-8 hours",
+      "best_for": [
+        "Professional teams",
+        "Production apps",
+        "High availability"
+      ],
+      "scores": {
+        "performance": 9,
+        "cost": 7,
+        "simplicity": 6,
+        "scalability": 10
+      }
+    },
+    "Supabase": {
+      "original_score": 8.4,
+      "new_score": 8.0,
+      "improvement": -0.4,
+      "costs": {
+        "total_monthly": 25
+      },
+      "implementation_time": "2-4 hours",
+      "best_for": [
+        "Real-time features",
+        "API integration",
+        "Modern teams"
+      ],
+      "scores": {
+        "performance": 8,
+        "cost": 6,
+        "simplicity": 9,
+        "scalability": 9
+      }
+    },
+    "Hybrid Local+Cloud": {
+      "original_score": 7.6,
+      "new_score": 7.8,
+      "improvement": 0.2,
+      "costs": {
+        "total_monthly": 8
+      },
+      "implementation_time": "6-10 hours",
+      "best_for": [
+        "Small teams",
+        "Offline capability",
+        "Cost optimization"
+      ],
+      "scores": {
+        "performance": 8,
+        "cost": 8,
+        "simplicity": 7,
+        "scalability": 8
+      }
+    },
+    "Google Sheets": {
+      "original_score": 7.2,
+      "new_score": 7.0,
+      "improvement": -0.2,
+      "costs": {
+        "total_monthly": 6
+      },
+      "implementation_time": "1-3 hours",
+      "best_for": [
+        "Familiar interface",
+        "Quick setup",
+        "Small datasets"
+      ],
+      "scores": {
+        "performance": 4,
+        "cost": 9,
+        "simplicity": 10,
+        "scalability": 5
+      }
+    },
+    "Multi-Database": {
+      "original_score": 7.8,
+      "new_score": 7.5,
+      "improvement": -0.3,
+      "costs": {
+        "total_monthly": 20
+      },
+      "implementation_time": "8-16 hours",
+      "best_for": [
+        "Enterprise",
+        "Complex requirements",
+        "High performance"
+      ],
+      "scores": {
+        "performance": 10,
+        "cost": 6,
+        "simplicity": 4,
+        "scalability": 10
+      }
+    }
+  },
+  "sorted_results": [
+    [
+      "Local SQLite",
+      {
+        "original_score": 7.2,
+        "new_score": 9.0,
+        "improvement": 1.8,
+        "costs": {
+          "total_monthly": 0
+        },
+        "implementation_time": "1-2 hours",
+        "best_for": [
+          "Single user",
+          "Quick prototyping",
+          "No dependencies"
+        ],
+        "scores": {
+          "performance": 9,
+          "cost": 10,
+          "simplicity": 10,
+          "scalability": 7
+        }
+      }
+    ],
+    [
+      "Cloud PostgreSQL",
+      {
+        "original_score": 8.4,
+        "new_score": 8.0,
+        "improvement": -0.4,
+        "costs": {
+          "total_monthly": 14
+        },
+        "implementation_time": "4-8 hours",
+        "best_for": [
+          "Professional teams",
+          "Production apps",
+          "High availability"
+        ],
+        "scores": {
+          "performance": 9,
+          "cost": 7,
+          "simplicity": 6,
+          "scalability": 10
+        }
+      }
+    ],
+    [
+      "Supabase",
+      {
+        "original_score": 8.4,
+        "new_score": 8.0,
+        "improvement": -0.4,
+        "costs": {
+          "total_monthly": 25
+        },
+        "implementation_time": "2-4 hours",
+        "best_for": [
+          "Real-time features",
+          "API integration",
+          "Modern teams"
+        ],
+        "scores": {
+          "performance": 8,
+          "cost": 6,
+          "simplicity": 9,
+          "scalability": 9
+        }
+      }
+    ],
+    [
+      "Hybrid Local+Cloud",
+      {
+        "original_score": 7.6,
+        "new_score": 7.8,
+        "improvement": 0.2,
+        "costs": {
+          "total_monthly": 8
+        },
+        "implementation_time": "6-10 hours",
+        "best_for": [
+          "Small teams",
+          "Offline capability",
+          "Cost optimization"
+        ],
+        "scores": {
+          "performance": 8,
+          "cost": 8,
+          "simplicity": 7,
+          "scalability": 8
+        }
+      }
+    ],
+    [
+      "Multi-Database",
+      {
+        "original_score": 7.8,
+        "new_score": 7.5,
+        "improvement": -0.3,
+        "costs": {
+          "total_monthly": 20
+        },
+        "implementation_time": "8-16 hours",
+        "best_for": [
+          "Enterprise",
+          "Complex requirements",
+          "High performance"
+        ],
+        "scores": {
+          "performance": 10,
+          "cost": 6,
+          "simplicity": 4,
+          "scalability": 10
+        }
+      }
+    ],
+    [
+      "Google Sheets",
+      {
+        "original_score": 7.2,
+        "new_score": 7.0,
+        "improvement": -0.2,
+        "costs": {
+          "total_monthly": 6
+        },
+        "implementation_time": "1-3 hours",
+        "best_for": [
+          "Familiar interface",
+          "Quick setup",
+          "Small datasets"
+        ],
+        "scores": {
+          "performance": 4,
+          "cost": 9,
+          "simplicity": 10,
+          "scalability": 5
+        }
+      }
+    ]
+  ],
+  "winner": "Local SQLite",
+  "winner_data": {
+    "original_score": 7.2,
+    "new_score": 9.0,
+    "improvement": 1.8,
+    "costs": {
+      "total_monthly": 0
+    },
+    "implementation_time": "1-2 hours",
+    "best_for": [
+      "Single user",
+      "Quick prototyping",
+      "No dependencies"
+    ],
+    "scores": {
+      "performance": 9,
+      "cost": 10,
+      "simplicity": 10,
+      "scalability": 7
+    }
+  },
+  "best_value": "Local SQLite"
+}

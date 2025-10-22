@@ -1,0 +1,18 @@
+{
+  "va": "Chin",
+  "total_posts": 8,
+  "posts_with_text": 7,
+  "posts_without_text": 1,
+  "text_extraction_rate": 0.875,
+  "total_views": 213941,
+  "avg_views": 26742,
+  "viral_posts": 3,
+  "viral_rate": 0.375,
+  "duplicate_groups": 0,
+  "accounts": [
+    "naomifades",
+    "naomizooms",
+    "naomipeeks",
+    "naomibeats"
+  ]
+}

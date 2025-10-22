@@ -1,0 +1,39 @@
+{
+  "max_budget_per_day": 10.0,
+  "max_posts_per_day": 10000,
+  "success_rate_threshold": 0.8,
+  "max_retries": 3,
+  "retry_delay": 2.0,
+  "cost_weights": {
+    "apify": 0.0025,
+    "playwright": 0.0001,
+    "selenium": 0.0002,
+    "puppeteer": 0.00015
+  },
+  "database_path": "tiktok_analytics.db",
+  "log_level": "INFO",
+  "rate_limits": {
+    "apify": 1.0,
+    "playwright": 2.0,
+    "selenium": 2.5,
+    "puppeteer": 2.0
+  },
+  "fallback_chain": [
+    "playwright",
+    "puppeteer",
+    "selenium",
+    "apify"
+  ],
+  "monitoring": {
+    "enable_performance_tracking": true,
+    "enable_cost_tracking": true,
+    "enable_error_logging": true,
+    "performance_report_interval": 100
+  },
+  "scraping": {
+    "timeout": 30,
+    "max_concurrent": 3,
+    "retry_on_failure": true,
+    "save_to_database": true
+  }
+}

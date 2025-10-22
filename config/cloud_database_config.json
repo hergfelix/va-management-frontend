@@ -1,0 +1,23 @@
+{
+    "provider": "supabase",
+    "database_url": "postgresql://postgres:[YOUR_PASSWORD]@db.[YOUR_PROJECT_REF].supabase.co:5432/postgres",
+    "backup_enabled": true,
+    "backup_frequency": "daily",
+    "monitoring_enabled": true,
+    "security": {
+        "ssl_required": true,
+        "row_level_security": true,
+        "api_rate_limiting": true
+    },
+    "scaling": {
+        "auto_scaling": true,
+        "max_connections": 100,
+        "connection_pooling": true
+    },
+    "features": {
+        "real_time": true,
+        "api_auto_generation": true,
+        "dashboard": true,
+        "webhooks": true
+    }
+}

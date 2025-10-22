@@ -1,0 +1,18 @@
+{
+  "va": "Abegail",
+  "total_posts": 7,
+  "posts_with_text": 7,
+  "posts_without_text": 0,
+  "text_extraction_rate": 1.0,
+  "total_views": 38636,
+  "avg_views": 5519,
+  "viral_posts": 2,
+  "viral_rate": 0.2857142857142857,
+  "duplicate_groups": 0,
+  "accounts": [
+    "naomisips",
+    "naomiislides",
+    "naomigazee",
+    "naomiisnaps"
+  ]
+}

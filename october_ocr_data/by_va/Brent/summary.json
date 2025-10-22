@@ -1,0 +1,15 @@
+{
+  "va": "Brent",
+  "total_posts": 2,
+  "posts_with_text": 1,
+  "posts_without_text": 1,
+  "text_extraction_rate": 0.5,
+  "total_views": 37800,
+  "avg_views": 18900,
+  "viral_posts": 2,
+  "viral_rate": 1.0,
+  "duplicate_groups": 0,
+  "accounts": [
+    "sukiyoji"
+  ]
+}

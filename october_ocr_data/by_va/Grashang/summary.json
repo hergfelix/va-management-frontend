@@ -1,0 +1,19 @@
+{
+  "va": "Grashang",
+  "total_posts": 14,
+  "posts_with_text": 8,
+  "posts_without_text": 6,
+  "text_extraction_rate": 0.5714285714285714,
+  "total_views": 169717,
+  "avg_views": 12122,
+  "viral_posts": 9,
+  "viral_rate": 0.6428571428571429,
+  "duplicate_groups": 0,
+  "accounts": [
+    "miriammatters",
+    "miriamselflovee",
+    "glowingmiriam",
+    "peachmiriam",
+    "miriamshiness"
+  ]
+}

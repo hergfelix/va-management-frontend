@@ -1,0 +1,19 @@
+{
+  "va": "Carla",
+  "total_posts": 8,
+  "posts_with_text": 6,
+  "posts_without_text": 2,
+  "text_extraction_rate": 0.75,
+  "total_views": 231841,
+  "avg_views": 28980,
+  "viral_posts": 5,
+  "viral_rate": 0.625,
+  "duplicate_groups": 0,
+  "accounts": [
+    "miriamglowing",
+    "miriamchicc",
+    "miriamrollqueen",
+    "miriamsweets",
+    "miriamshines"
+  ]
+}

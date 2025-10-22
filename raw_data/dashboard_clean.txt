@@ -1,0 +1,394 @@
+var DASHBOARD_CONFIG = {
+  sheets: {
+    input: "Input",
+    dashboard: "TikTok Analytics Dashboard"
+  },
+  columns: {
+    employee: 0,
+    account: 1,
+    male7d: 32,
+    viewers7d: 39,
+    male28d: 40,
+    viewers28d: 47
+  },
+  videoRanges: [
+    { start: 2, end: 11, name: "Video 1" },
+    { start: 12, end: 21, name: "Video 2" },
+    { start: 22, end: 31, name: "Video 3" }
+  ],
+  demographicRanges: {
+    us7d: { start: 33, end: 37 },
+    us28d: { start: 41, end: 45 }
+  },
+  targets: {
+    male: { excellent: 0.50, good: 0.35, warning: 0.30 },
+    us: { excellent: 0.60, good: 0.40, warning: 0.40 },
+    delta: { positive: 0.02, negative: -0.02 },
+    growth: { excellent: 1.1, warning: 0.9 }
+  },
+  design: {
+    colors: {
+      dashboardHeader: "#0a0e27",
+      dashboardTitle: "#ffffff",
+      perfectTarget: "#1b5e20",
+      onTrack: "#66bb6a",
+      needsWork: "#ff9800",
+      critical: "#c62828",
+      employeeColors: ["#e8eaf6", "#e0f2f1", "#fff3e0", "#fce4ec", "#f1f8e9", "#e0f7fa"],
+      kpiExcellent: "#2e7d32",
+      kpiGood: "#66bb6a",
+      kpiWarning: "#ffa726",
+      kpiCritical: "#d32f2f",
+      buttonBackground: "#1976d2",
+      buttonText: "#ffffff",
+      headerDark: "#263238",
+      headerLight: "#37474f",
+      textPrimary: "#212121",
+      textSecondary: "#757575",
+      border: "#bdbdbd",
+      lightBorder: "#e0e0e0"
+    },
+    fonts: { title: 14, header: 11, subHeader: 10, data: 9, small: 8 }
+  }
+};
+
+function refreshDashboard() {
+  try {
+    var ss = SpreadsheetApp.getActiveSpreadsheet();
+    var inputSheet = getInputSheet(ss);
+    var dashboardSheet = prepareDashboardSheet(ss);
+    var inputData = validateAndGetData(inputSheet);
+    var dashboardData = processDashboardData(inputData);
+    dashboardSheet.clear();
+    dashboardSheet.clearFormats();
+    createRefreshButton(dashboardSheet);
+    writeDashboardData(dashboardSheet, dashboardData);
+    applyModernFormatting(dashboardSheet, dashboardData);
+    SpreadsheetApp.getUi().alert("Dashboard Updated", "Analytics refreshed successfully!", SpreadsheetApp.getUi().ButtonSet.OK);
+    Logger.log("Dashboard refreshed successfully");
+  } catch (error) {
+    SpreadsheetApp.getUi().alert("Error", "Failed to refresh: " + error.message, SpreadsheetApp.getUi().ButtonSet.OK);
+    throw error;
+  }
+}
+
+function createRefreshButton(sheet) {
+  var c = DASHBOARD_CONFIG.design.colors;
+  sheet.getRange(1,1,1,12).merge().setValue("TIKTOK ANALYTICS DASHBOARD").setBackground(c.dashboardHeader).setFontColor(c.dashboardTitle).setFontWeight("bold").setFontSize(DASHBOARD_CONFIG.design.fonts.title).setHorizontalAlignment("center").setVerticalAlignment("middle");
+  sheet.setRowHeight(1, 50);
+  sheet.getRange(2,1,1,12).merge().setValue("Goal: Maximize Male US Viewers | Last Updated: " + getTimestamp()).setBackground(c.headerDark).setFontColor("#ffffff").setFontSize(DASHBOARD_CONFIG.design.fonts.small).setHorizontalAlignment("center").setVerticalAlignment("middle");
+  sheet.setRowHeight(2, 30);
+  sheet.getRange(3,1,1,12).merge().setValue("To refresh: Run refreshDashboard from Apps Script").setBackground(c.buttonBackground).setFontColor(c.buttonText).setFontSize(DASHBOARD_CONFIG.design.fonts.small).setFontStyle("italic").setHorizontalAlignment("center").setVerticalAlignment("middle");
+  sheet.setRowHeight(3, 25);
+}
+
+function getTimestamp() {
+  return Utilities.formatDate(new Date(), Session.getScriptTimeZone(), "MMM dd, yyyy HH:mm");
+}
+
+function getInputSheet(ss) {
+  var sheet = ss.getSheetByName(DASHBOARD_CONFIG.sheets.input);
+  if (!sheet) throw new Error("Sheet Input not found");
+  return sheet;
+}
+
+function prepareDashboardSheet(ss) {
+  var sheet = ss.getSheetByName(DASHBOARD_CONFIG.sheets.dashboard);
+  if (!sheet) sheet = ss.insertSheet(DASHBOARD_CONFIG.sheets.dashboard);
+  return sheet;
+}
+
+function validateAndGetData(sheet) {
+  var data = sheet.getDataRange().getValues();
+  if (data.length < 4) throw new Error("Insufficient data");
+  return data;
+}
+
+function processDashboardData(inputData) {
+  var output = [];
+  var groups = groupByEmployee(inputData);
+  var sortedEmps = sortEmployeesByPerformance(groups);
+  for (var e = 0; e < sortedEmps.length; e++) {
+    var empName = sortedEmps[e];
+    var accts = sortAccountsByStatus(groups[empName]);
+    output.push(createEmployeeHeader(empName, accts));
+    output.push(createColumnHeaders());
+    for (var i = 0; i < accts.length; i++) output.push(accts[i]);
+    output.push(createEmployeeSummary(accts));
+    output.push(createSeparator());
+  }
+  output.push(createGlobalSummary(groups));
+  return output;
+}
+
+function groupByEmployee(data) {
+  var groups = {};
+  for (var r = 3; r < data.length; r++) {
+    var row = data[r];
+    if (isEmptyRow(row)) continue;
+    var emp = row[DASHBOARD_CONFIG.columns.employee] || "Unknown";
+    if (!groups[emp]) groups[emp] = [];
+    groups[emp].push(createAccountRow(row));
+  }
+  return groups;
+}
+
+function sortEmployeesByPerformance(groups) {
+  var emps = [];
+  for (var name in groups) {
+    var accts = groups[name];
+    var totM = 0, totU = 0;
+    for (var i = 0; i < accts.length; i++) {
+      totM += accts[i][2];
+      totU += accts[i][5];
+    }
+    emps.push({ name: name, score: (totM + totU) / (accts.length * 2) });
+  }
+  emps.sort(function(a, b) { return b.score - a.score; });
+  return emps.map(function(e) { return e.name; });
+}
+
+function sortAccountsByStatus(accts) {
+  var order = { "CRITICAL": 0, "NEEDS WORK": 1, "ON TRACK": 2, "PERFECT TARGET": 3 };
+  accts.sort(function(a, b) {
+    return (order[a[10]] || 99) - (order[b[10]] || 99);
+  });
+  return accts;
+}
+
+function createEmployeeHeader(name, accts) {
+  var st = calculateEmployeeStats(accts);
+  return [name.toUpperCase(), accts.length + " Accounts", "Avg Male: " + (st.avgMale * 100).toFixed(1) + "%", "Avg US: " + (st.avgUS * 100).toFixed(1) + "%", st.criticalCount + " Critical", st.perfectCount + " Perfect", "", "", "", "", "", "", "EMPLOYEE_HEADER"];
+}
+
+function calculateEmployeeStats(accts) {
+  var totM = 0, totU = 0, crit = 0, perf = 0;
+  for (var i = 0; i < accts.length; i++) {
+    totM += accts[i][2];
+    totU += accts[i][5];
+    if (accts[i][10] === "CRITICAL") crit++;
+    if (accts[i][10] === "PERFECT TARGET") perf++;
+  }
+  return { avgMale: totM / accts.length, avgUS: totU / accts.length, criticalCount: crit, perfectCount: perf };
+}
+
+function createColumnHeaders() {
+  return ["Account", "Avg US%", "Male% 7d", "Male% 28d", "Male Delta", "US% 7d", "US% 28d", "US Delta", "Viewers 7d", "Viewers 28d", "Growth%", "Status", "COLUMN_HEADER"];
+}
+
+function createAccountRow(row) {
+  var acct = row[DASHBOARD_CONFIG.columns.account] || "";
+  var m7 = parsePercentage(row[DASHBOARD_CONFIG.columns.male7d]);
+  var m28 = parsePercentage(row[DASHBOARD_CONFIG.columns.male28d]);
+  var v7 = parseNumber(row[DASHBOARD_CONFIG.columns.viewers7d]);
+  var v28 = parseNumber(row[DASHBOARD_CONFIG.columns.viewers28d]);
+  var avgUS = calculateAverageUSPercentage(row);
+  var u7 = calculateUSPercentageForRange(row, DASHBOARD_CONFIG.demographicRanges.us7d);
+  var u28 = calculateUSPercentageForRange(row, DASHBOARD_CONFIG.demographicRanges.us28d);
+  var status = calculateTargetStatus(m7, u7, m7 - m28, u7 - u28);
+  return [acct, avgUS, m7, m28, m7-m28, u7, u28, u7-u28, v7, v28, calculateGrowth(v7, v28), status, "DATA_ROW"];
+}
+
+function calculateTargetStatus(m7, u7, mDelta, uDelta) {
+  var t = DASHBOARD_CONFIG.targets;
+  if (m7 >= t.male.excellent && u7 >= t.us.excellent) return "PERFECT TARGET";
+  if (m7 < t.male.warning || u7 < t.us.warning) return "CRITICAL";
+  if (m7 < t.male.good || u7 < t.us.good) return "NEEDS WORK";
+  return "ON TRACK";
+}
+
+function createEmployeeSummary(accts) {
+  var v7 = 0, v28 = 0, m = 0, u = 0;
+  for (var i = 0; i < accts.length; i++) {
+    v7 += accts[i][8];
+    v28 += accts[i][9];
+    m += accts[i][2];
+    u += accts[i][5];
+  }
+  return ["TEAM TOTAL", "", m/accts.length, "", "", u/accts.length, "", "", v7, v28, v7/v28, "", "SUMMARY_ROW"];
+}
+
+function createSeparator() {
+  return ["", "", "", "", "", "", "", "", "", "", "", "", "SEPARATOR"];
+}
+
+function createGlobalSummary(groups) {
+  var totA = 0, totE = 0;
+  for (var e in groups) {
+    totA += groups[e].length;
+    totE++;
+  }
+  return ["GLOBAL OVERVIEW", totE + " Team Members", totA + " Total Accounts", "Focus: Male US Audience", "", "", "", "", "", "", "", "", "GLOBAL_SUMMARY"];
+}
+
+function calculateAverageUSPercentage(row) {
+  var tot = 0, cnt = 0;
+  for (var i = 0; i < DASHBOARD_CONFIG.videoRanges.length; i++) {
+    var u = calculateUSPercentageForRange(row, DASHBOARD_CONFIG.videoRanges[i]);
+    if (u > 0) { tot += u; cnt++; }
+  }
+  return cnt > 0 ? tot / cnt : 0;
+}
+
+function calculateUSPercentageForRange(row, range) {
+  var u = 0;
+  for (var c = range.start; c <= range.end; c += 2) {
+    u += extractUSPercentageFromPair(row, c);
+  }
+  return u;
+}
+
+function extractUSPercentageFromPair(row, idx) {
+  if (idx < 0 || idx >= row.length - 1) return 0;
+  var name = String(row[idx] || "").toLowerCase().trim();
+  if (/^(united states|usa|u\.s\.|us)$/i.test(name)) return parsePercentage(row[idx + 1]);
+  return 0;
+}
+
+function calculateGrowth(v7, v28) {
+  return v28 === 0 ? 0 : v7 / v28;
+}
+
+function parsePercentage(val) {
+  if (val === "" || val == null) return 0;
+  var str = String(val).trim().replace(/%/g, "").replace(/,/g, ".");
+  var num = Number(str);
+  if (isNaN(num)) return 0;
+  return num > 1 ? num / 100 : num;
+}
+
+function parseNumber(val) {
+  if (val === "" || val == null) return 0;
+  var str = String(val).replace(/[\s,\u00A0\u2007\u202F]/g, "");
+  var num = Number(str);
+  return isNaN(num) ? 0 : num;
+}
+
+function isEmptyRow(row) {
+  for (var i = 0; i < row.length; i++) {
+    if (row[i] !== "" && row[i] != null) return false;
+  }
+  return true;
+}
+
+function writeDashboardData(sheet, data) {
+  var clean = [];
+  for (var i = 0; i < data.length; i++) {
+    clean.push(data[i].slice(0, -1));
+  }
+  sheet.getRange(4, 1, clean.length, clean[0].length).setValues(clean);
+}
+
+function applyModernFormatting(sheet, data) {
+  var c = DASHBOARD_CONFIG.design.colors;
+  var row = 4, empIdx = 0;
+  for (var i = 0; i < data.length; i++) {
+    var marker = data[i][data[i].length - 1];
+    var cols = data[i].length - 1;
+    var rng = sheet.getRange(row, 1, 1, cols);
+    if (marker === "EMPLOYEE_HEADER") {
+      formatEmployeeSection(sheet, rng, empIdx);
+      empIdx++;
+    } else if (marker === "COLUMN_HEADER") {
+      formatModernColumnHeader(sheet, rng);
+    } else if (marker === "DATA_ROW") {
+      formatModernDataRow(sheet, row, cols, data[i]);
+    } else if (marker === "SUMMARY_ROW") {
+      formatTeamSummary(sheet, rng);
+    } else if (marker === "SEPARATOR") {
+      formatModernSeparator(sheet, rng);
+    } else if (marker === "GLOBAL_SUMMARY") {
+      formatGlobalSection(sheet, rng);
+    }
+    row++;
+  }
+  sheet.autoResizeColumns(1, 12);
+  sheet.setFrozenRows(3);
+}
+
+function formatEmployeeSection(sheet, rng, idx) {
+  var c = DASHBOARD_CONFIG.design.colors;
+  var bg = c.employeeColors[idx % c.employeeColors.length];
+  rng.setBackground(bg).setFontWeight("bold").setFontSize(DASHBOARD_CONFIG.design.fonts.header).setHorizontalAlignment("left").setVerticalAlignment("middle").setBorder(true,true,true,true,false,false,c.border,SpreadsheetApp.BorderStyle.SOLID_MEDIUM);
+  sheet.setRowHeight(rng.getRow(), 40);
+}
+
+function formatModernColumnHeader(sheet, rng) {
+  var c = DASHBOARD_CONFIG.design.colors;
+  var r = rng.getRow();
+  rng.setBackground(c.headerDark).setFontColor("#ffffff").setFontWeight("bold").setFontSize(DASHBOARD_CONFIG.design.fonts.subHeader).setHorizontalAlignment("center").setVerticalAlignment("middle").setBorder(true,true,true,true,true,true,"#ffffff",SpreadsheetApp.BorderStyle.SOLID);
+  sheet.setRowHeight(r, 35);
+  sheet.getRange(r,3,1,1).setBackground(c.kpiExcellent);
+  sheet.getRange(r,6,1,1).setBackground(c.kpiExcellent);
+  sheet.getRange(r,5,1,1).setBackground(c.headerLight);
+  sheet.getRange(r,8,1,1).setBackground(c.headerLight);
+}
+
+function formatModernDataRow(sheet, r, cols, data) {
+  var c = DASHBOARD_CONFIG.design.colors;
+  var rng = sheet.getRange(r, 1, 1, cols);
+  var status = data[10];
+  var bg = "#FFFFFF";
+  if (status === "CRITICAL") bg = "#ffebee";
+  else if (status === "NEEDS WORK") bg = "#fff3e0";
+  else if (status === "PERFECT TARGET") bg = "#e8f5e9";
+  rng.setBackground(bg).setFontSize(DASHBOARD_CONFIG.design.fonts.data).setVerticalAlignment("middle").setBorder(false,false,true,false,false,false,c.lightBorder,SpreadsheetApp.BorderStyle.SOLID);
+  sheet.getRange(r,2,1,1).setNumberFormat("0.0%");
+  sheet.getRange(r,3,1,4).setNumberFormat("0.0%");
+  sheet.getRange(r,7,1,2).setNumberFormat("0.0%");
+  sheet.getRange(r,9,1,2).setNumberFormat("#,##0");
+  sheet.getRange(r,11,1,1).setNumberFormat("0.0%");
+  applyKPIFormatting(sheet, r, data);
+}
+
+function applyKPIFormatting(sheet, r, data) {
+  var c = DASHBOARD_CONFIG.design.colors;
+  var t = DASHBOARD_CONFIG.targets;
+  var m7 = data[2];
+  var m7c = sheet.getRange(r, 3);
+  if (m7 >= t.male.excellent) m7c.setBackground(c.kpiExcellent).setFontColor("#FFFFFF").setFontWeight("bold");
+  else if (m7 >= t.male.good) m7c.setBackground(c.kpiGood).setFontWeight("bold");
+  else if (m7 < t.male.warning) m7c.setBackground(c.kpiCritical).setFontColor("#FFFFFF").setFontWeight("bold");
+  else m7c.setBackground(c.kpiWarning);
+  var u7 = data[5];
+  var u7c = sheet.getRange(r, 6);
+  if (u7 >= t.us.excellent) u7c.setBackground(c.kpiExcellent).setFontColor("#FFFFFF").setFontWeight("bold");
+  else if (u7 >= t.us.good) u7c.setBackground(c.kpiGood).setFontWeight("bold");
+  else if (u7 < t.us.warning) u7c.setBackground(c.kpiCritical).setFontColor("#FFFFFF").setFontWeight("bold");
+  else u7c.setBackground(c.kpiWarning);
+  var md = data[4];
+  var mdc = sheet.getRange(r, 5);
+  if (md > t.delta.positive) mdc.setFontColor(c.kpiExcellent).setFontWeight("bold");
+  else if (md < t.delta.negative) mdc.setFontColor(c.kpiCritical).setFontWeight("bold");
+  var ud = data[7];
+  var udc = sheet.getRange(r, 8);
+  if (ud > t.delta.positive) udc.setFontColor(c.kpiExcellent).setFontWeight("bold");
+  else if (ud < t.delta.negative) udc.setFontColor(c.kpiCritical).setFontWeight("bold");
+  var st = data[10];
+  var stc = sheet.getRange(r, 12);
+  if (st === "PERFECT TARGET") stc.setBackground(c.perfectTarget).setFontColor("#FFFFFF").setFontWeight("bold");
+  else if (st === "ON TRACK") stc.setBackground(c.onTrack).setFontWeight("bold");
+  else if (st === "NEEDS WORK") stc.setBackground(c.needsWork).setFontWeight("bold");
+  else if (st === "CRITICAL") stc.setBackground(c.critical).setFontColor("#FFFFFF").setFontWeight("bold");
+}
+
+function formatTeamSummary(sheet, rng) {
+  var c = DASHBOARD_CONFIG.design.colors;
+  var r = rng.getRow();
+  rng.setBackground(c.headerLight).setFontColor("#FFFFFF").setFontWeight("bold").setFontSize(DASHBOARD_CONFIG.design.fonts.subHeader).setBorder(true,true,true,true,false,false,c.border,SpreadsheetApp.BorderStyle.SOLID_MEDIUM);
+  sheet.getRange(r,9,1,2).setNumberFormat("#,##0");
+  sheet.getRange(r,11,1,1).setNumberFormat("0.0%");
+  sheet.getRange(r,3,1,1).setNumberFormat("0.0%");
+  sheet.getRange(r,6,1,1).setNumberFormat("0.0%");
+}
+
+function formatModernSeparator(sheet, rng) {
+  rng.setBackground("#FFFFFF");
+  sheet.setRowHeight(rng.getRow(), 15);
+}
+
+function formatGlobalSection(sheet, rng) {
+  var c = DASHBOARD_CONFIG.design.colors;
+  rng.setBackground(c.dashboardHeader).setFontColor("#FFFFFF").setFontWeight("bold").setFontSize(DASHBOARD_CONFIG.design.fonts.header).setHorizontalAlignment("center").setVerticalAlignment("middle").setBorder(true,true,true,true,false,false,"#000000",SpreadsheetApp.BorderStyle.SOLID_THICK);
+  sheet.setRowHeight(rng.getRow(), 45);
+}

@@ -1,0 +1,16 @@
+{
+  "va": "Pilar",
+  "total_posts": 6,
+  "posts_with_text": 4,
+  "posts_without_text": 2,
+  "text_extraction_rate": 0.6666666666666666,
+  "total_views": 233544,
+  "avg_views": 38924,
+  "viral_posts": 5,
+  "viral_rate": 0.8333333333333334,
+  "duplicate_groups": 0,
+  "accounts": [
+    "sofiaagrabb",
+    "sofiaupclose"
+  ]
+}

@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TikTok USA Location Optimization Dashboard</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Socket.IO -->
+    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+    
+    <style>
+        .dashboard-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+        
+        .metric-card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .metric-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        
+        .metric-label {
+            font-size: 0.9rem;
+            color: #6c757d;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+        }
+        
+        .status-critical { background-color: #dc3545; }
+        .status-warning { background-color: #ffc107; }
+        .status-optimal { background-color: #28a745; }
+        .status-info { background-color: #17a2b8; }
+        
+        .alert-card {
+            border-left: 4px solid;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+        
+        .alert-critical { border-left-color: #dc3545; }
+        .alert-warning { border-left-color: #ffc107; }
+        .alert-info { border-left-color: #17a2b8; }
+        
+        .recommendation-card {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .chart-container {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .account-card {
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            transition: transform 0.3s ease;
+        }
+        
+        .account-card:hover {
+            transform: translateY(-2px);
+        }
+        
+        .warmup-session {
+            background-color: #e3f2fd;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .emergency-btn {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            border: none;
+            border-radius: 25px;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .emergency-btn:hover {
+            transform: scale(1.05);
+            color: white;
+        }
+        
+        .refresh-indicator {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #28a745;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            z-index: 1000;
+            display: none;
+        }
+        
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="dashboard-header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h1><i class="fas fa-globe-americas"></i> TikTok USA Location Optimization</h1>
+                    <p class="mb-0">Real-time monitoring and automation for USA audience targeting</p>
+                </div>
+                <div class="col-md-4 text-end">
+                    <div class="refresh-indicator" id="refreshIndicator">
+                        <i class="fas fa-sync-alt"></i> Updating...
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <!-- Summary Cards -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="card metric-card">
+                    <div class="card-body text-center">
+                        <div class="metric-value text-primary" id="totalAccounts">-</div>
+                        <div class="metric-label">Total Accounts</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card metric-card">
+                    <div class="card-body text-center">
+                        <div class="metric-value text-success" id="avgUsaPercentage">-</div>
+                        <div class="metric-label">Avg USA %</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card metric-card">
+                    <div class="card-body text-center">
+                        <div class="metric-value text-warning" id="criticalAccounts">-</div>
+                        <div class="metric-label">Critical Accounts</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card metric-card">
+                    <div class="card-body text-center">
+                        <div class="metric-value text-info" id="totalAlerts">-</div>
+                        <div class="metric-label">Active Alerts</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- System Alerts -->
+        <div class="row mb-4" id="systemAlertsSection" style="display: none;">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-danger text-white">
+                        <h5 class="mb-0"><i class="fas fa-exclamation-triangle"></i> System Alerts</h5>
+                    </div>
+                    <div class="card-body" id="systemAlerts">
+                        <!-- Alerts will be populated here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Accounts Overview -->
+        <div class="row">
+            <div class="col-12">
+                <h3 class="mb-4"><i class="fas fa-users"></i> Accounts Overview</h3>
+                <div id="accountsContainer">
+                    <!-- Account cards will be populated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Account Detail Modal -->
+    <div class="modal fade" id="accountModal" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="accountModalTitle">Account Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="chart-container">
+                                <h6>USA Percentage Trend</h6>
+                                <canvas id="metricsChart" width="400" height="200"></canvas>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>Recent Warm-up Sessions</h6>
+                            <div id="warmupSessions">
+                                <!-- Warm-up sessions will be populated here -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <h6>Recommendations</h6>
+                            <div id="accountRecommendations">
+                                <!-- Recommendations will be populated here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn emergency-btn" id="emergencyWarmupBtn">
+                        <i class="fas fa-fire"></i> Emergency Warm-up
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Initialize Socket.IO connection
+        const socket = io();
+        
+        // Global variables
+        let dashboardData = {};
+        let metricsChart = null;
+        let currentAccount = null;
+        
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            loadDashboardData();
+            
+            // Set up real-time updates
+            socket.on('dashboard_update', function(data) {
+                dashboardData = data;
+                updateDashboard();
+                showRefreshIndicator();
+            });
+            
+            socket.on('connect', function() {
+                console.log('Connected to dashboard');
+                socket.emit('request_update');
+            });
+            
+            // Request updates every 30 seconds
+            setInterval(function() {
+                socket.emit('request_update');
+            }, 30000);
+        });
+        
+        // Load dashboard data
+        async function loadDashboardData() {
+            try {
+                const response = await fetch('/api/dashboard-data');
+                dashboardData = await response.json();
+                updateDashboard();
+            } catch (error) {
+                console.error('Error loading dashboard data:', error);
+            }
+        }
+        
+        // Update dashboard with new data
+        function updateDashboard() {
+            updateSummaryCards();
+            updateSystemAlerts();
+            updateAccountsOverview();
+        }
+        
+        // Update summary cards
+        function updateSummaryCards() {
+            const summary = dashboardData.summary || {};
+            
+            document.getElementById('totalAccounts').textContent = summary.total_accounts || 0;
+            document.getElementById('avgUsaPercentage').textContent = 
+                summary.average_usa_percentage ? summary.average_usa_percentage + '%' : '-';
+            document.getElementById('criticalAccounts').textContent = summary.critical_accounts || 0;
+            document.getElementById('totalAlerts').textContent = summary.total_alerts || 0;
+        }
+        
+        // Update system alerts
+        function updateSystemAlerts() {
+            const alerts = dashboardData.alerts || [];
+            const alertsSection = document.getElementById('systemAlertsSection');
+            const alertsContainer = document.getElementById('systemAlerts');
+            
+            if (alerts.length === 0) {
+                alertsSection.style.display = 'none';
+                return;
+            }
+            
+            alertsSection.style.display = 'block';
+            alertsContainer.innerHTML = '';
+            
+            alerts.forEach(alert => {
+                const alertClass = `alert-${alert.alert_level}`;
+                const alertCard = document.createElement('div');
+                alertCard.className = `alert-card ${alertClass}`;
+                alertCard.innerHTML = `
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <strong>${alert.account}</strong> - ${alert.message}
+                            ${alert.recommendation ? `<br><small class="text-muted">${alert.recommendation}</small>` : ''}
+                        </div>
+                        <small class="text-muted">${new Date(alert.triggered_at).toLocaleString()}</small>
+                    </div>
+                `;
+                alertsContainer.appendChild(alertCard);
+            });
+        }
+        
+        // Update accounts overview
+        function updateAccountsOverview() {
+            const accounts = dashboardData.accounts || {};
+            const container = document.getElementById('accountsContainer');
+            
+            container.innerHTML = '';
+            
+            Object.values(accounts).forEach(accountData => {
+                const accountCard = createAccountCard(accountData);
+                container.appendChild(accountCard);
+            });
+        }
+        
+        // Create account card
+        function createAccountCard(accountData) {
+            const card = document.createElement('div');
+            card.className = 'card account-card';
+            
+            const metrics = accountData.current_metrics;
+            const usaPercentage = metrics ? metrics.usa_percentage : 0;
+            const statusClass = usaPercentage >= 95 ? 'optimal' : 
+                               usaPercentage >= 70 ? 'warning' : 'critical';
+            const statusText = usaPercentage >= 95 ? 'Optimal' : 
+                              usaPercentage >= 70 ? 'Warning' : 'Critical';
+            
+            card.innerHTML = `
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-md-3">
+                            <h5 class="mb-1">${accountData.account}</h5>
+                            <div class="d-flex align-items-center">
+                                <span class="status-indicator status-${statusClass}"></span>
+                                <span class="badge bg-${statusClass === 'critical' ? 'danger' : 
+                                                       statusClass === 'warning' ? 'warning' : 'success'}">
+                                    ${statusText}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-2 text-center">
+                            <div class="h4 mb-0 text-${statusClass === 'critical' ? 'danger' : 
+                                                       statusClass === 'warning' ? 'warning' : 'success'}">
+                                ${usaPercentage}%
+                            </div>
+                            <small class="text-muted">USA Audience</small>
+                        </div>
+                        <div class="col-md-2 text-center">
+                            <div class="h6 mb-0">${metrics ? metrics.total_audience.toLocaleString() : 0}</div>
+                            <small class="text-muted">Total Audience</small>
+                        </div>
+                        <div class="col-md-2 text-center">
+                            <div class="h6 mb-0">${accountData.recent_warmups.length}</div>
+                            <small class="text-muted">Recent Warm-ups</small>
+                        </div>
+                        <div class="col-md-2 text-center">
+                            <div class="h6 mb-0">${accountData.alerts.length}</div>
+                            <small class="text-muted">Active Alerts</small>
+                        </div>
+                        <div class="col-md-1">
+                            <button class="btn btn-outline-primary btn-sm" onclick="openAccountModal('${accountData.account}')">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            return card;
+        }
+        
+        // Open account modal
+        async function openAccountModal(accountName) {
+            currentAccount = accountName;
+            
+            try {
+                // Load account data
+                const response = await fetch(`/api/account/${accountName}`);
+                const accountData = await response.json();
+                
+                // Update modal title
+                document.getElementById('accountModalTitle').textContent = 
+                    `Account Details - ${accountName}`;
+                
+                // Update warm-up sessions
+                updateWarmupSessions(accountData.recent_warmups);
+                
+                // Update recommendations
+                updateRecommendations(accountData.recommendations);
+                
+                // Load and display chart
+                await loadMetricsChart(accountName);
+                
+                // Show modal
+                const modal = new bootstrap.Modal(document.getElementById('accountModal'));
+                modal.show();
+                
+            } catch (error) {
+                console.error('Error loading account data:', error);
+            }
+        }
+        
+        // Update warm-up sessions in modal
+        function updateWarmupSessions(warmups) {
+            const container = document.getElementById('warmupSessions');
+            container.innerHTML = '';
+            
+            if (warmups.length === 0) {
+                container.innerHTML = '<p class="text-muted">No recent warm-up sessions</p>';
+                return;
+            }
+            
+            warmups.forEach(session => {
+                const sessionCard = document.createElement('div');
+                sessionCard.className = 'warmup-session';
+                sessionCard.innerHTML = `
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <strong>${session.session_type.charAt(0).toUpperCase() + session.session_type.slice(1)} Session</strong>
+                            <br>
+                            <small class="text-muted">
+                                ${session.comments_made} comments, ${session.follows_made} follows
+                                ${session.success_score ? ` (${Math.round(session.success_score * 100)}% success)` : ''}
+                            </small>
+                        </div>
+                        <small class="text-muted">
+                            ${new Date(session.started_at).toLocaleString()}
+                        </small>
+                    </div>
+                `;
+                container.appendChild(sessionCard);
+            });
+        }
+        
+        // Update recommendations in modal
+        function updateRecommendations(recommendations) {
+            const container = document.getElementById('accountRecommendations');
+            container.innerHTML = '';
+            
+            if (recommendations.length === 0) {
+                container.innerHTML = '<p class="text-muted">No recommendations available</p>';
+                return;
+            }
+            
+            recommendations.forEach(rec => {
+                const recCard = document.createElement('div');
+                recCard.className = 'recommendation-card';
+                recCard.innerHTML = `<p class="mb-0">${rec}</p>`;
+                container.appendChild(recCard);
+            });
+        }
+        
+        // Load metrics chart
+        async function loadMetricsChart(accountName) {
+            try {
+                const response = await fetch(`/api/chart/${accountName}`);
+                const chartData = JSON.parse(await response.text());
+                
+                if (!chartData.data) {
+                    document.getElementById('metricsChart').style.display = 'none';
+                    return;
+                }
+                
+                const ctx = document.getElementById('metricsChart').getContext('2d');
+                
+                if (metricsChart) {
+                    metricsChart.destroy();
+                }
+                
+                // Create chart from Plotly data (simplified for Chart.js)
+                const dates = chartData.data[0].x;
+                const values = chartData.data[0].y;
+                
+                metricsChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: dates.map(date => new Date(date).toLocaleDateString()),
+                        datasets: [{
+                            label: 'USA Percentage',
+                            data: values,
+                            borderColor: '#1f77b4',
+                            backgroundColor: 'rgba(31, 119, 180, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                max: 100
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                display: true
+                            }
+                        }
+                    }
+                });
+                
+            } catch (error) {
+                console.error('Error loading chart:', error);
+                document.getElementById('metricsChart').style.display = 'none';
+            }
+        }
+        
+        // Emergency warm-up button handler
+        document.getElementById('emergencyWarmupBtn').addEventListener('click', async function() {
+            if (!currentAccount) return;
+            
+            const button = this;
+            const originalText = button.innerHTML;
+            
+            // Show loading state
+            button.innerHTML = '<span class="loading-spinner"></span> Executing...';
+            button.disabled = true;
+            
+            try {
+                const response = await fetch(`/api/emergency-warmup/${currentAccount}`);
+                const result = await response.json();
+                
+                if (result.status === 'success') {
+                    alert('Emergency warm-up initiated successfully!');
+                } else {
+                    alert('Error: ' + result.message);
+                }
+            } catch (error) {
+                alert('Error executing emergency warm-up: ' + error.message);
+            } finally {
+                // Restore button state
+                button.innerHTML = originalText;
+                button.disabled = false;
+            }
+        });
+        
+        // Show refresh indicator
+        function showRefreshIndicator() {
+            const indicator = document.getElementById('refreshIndicator');
+            indicator.style.display = 'block';
+            
+            setTimeout(() => {
+                indicator.style.display = 'none';
+            }, 2000);
+        }
+    </script>
+</body>
+</html>

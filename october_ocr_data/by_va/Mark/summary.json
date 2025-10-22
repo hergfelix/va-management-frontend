@@ -1,0 +1,18 @@
+{
+  "va": "Mark",
+  "total_posts": 5,
+  "posts_with_text": 2,
+  "posts_without_text": 3,
+  "text_extraction_rate": 0.4,
+  "total_views": 13547,
+  "avg_views": 2709,
+  "viral_posts": 1,
+  "viral_rate": 0.2,
+  "duplicate_groups": 0,
+  "accounts": [
+    "miraflaree",
+    "miravellum",
+    "miravayne",
+    "mirashadee"
+  ]
+}

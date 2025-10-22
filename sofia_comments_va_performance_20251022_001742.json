@@ -1,0 +1,444 @@
+{
+  "post_url": "https://www.tiktok.com/t/ZTMure1j4/",
+  "va_name": "Almira",
+  "scraped_at": "2025-10-22T00:17:42.590109",
+  "success": true,
+  "comments": [
+    {
+      "comment_id": "text_comment_1",
+      "text": "* Swiper 8.4.5",
+      "author": "user_1",
+      "timestamp": "2025-10-22T00:17:42.599290",
+      "likes": 0,
+      "replies": []
+    },
+    {
+      "comment_id": "text_comment_2",
+      "text": "* Most modern mobile touch slider and framework with hardware accelerated transitions",
+      "author": "user_2",
+      "timestamp": "2025-10-22T00:17:42.599300",
+      "likes": 0,
+      "replies": []
+    },
+    {
+      "comment_id": "text_comment_3",
+      "text": "* https://swiperjs.com",
+      "author": "user_3",
+      "timestamp": "2025-10-22T00:17:42.599302",
+      "likes": 0,
+      "replies": []
+    },
+    {
+      "comment_id": "text_comment_5",
+      "text": "* Copyright 2014-2022 Vladimir Kharlampidi",
+      "author": "user_5",
+      "timestamp": "2025-10-22T00:17:42.599303",
+      "likes": 0,
+      "replies": []
+    },
+    {
+      "comment_id": "text_comment_7",
+      "text": "* Released under the MIT License",
+      "author": "user_7",
+      "timestamp": "2025-10-22T00:17:42.599305",
+      "likes": 0,
+      "replies": []
+    },
+    {
+      "comment_id": "text_comment_9",
+      "text": "* Released on: November 21, 2022",
+      "author": "user_9",
+      "timestamp": "2025-10-22T00:17:42.599306",
+      "likes": 0,
+      "replies": []
+    },
+    {
+      "comment_id": "text_comment_13",
+      "text": "font-family: \"tiktok-text-medium\", PingFangSC, sans-serif;",
+      "author": "user_13",
+      "timestamp": "2025-10-22T00:17:42.599308",
+      "likes": 0,
+      "replies": []
+    },
+    {
+      "comment_id": "text_comment_14",
+      "text": "font-weight: 600;",
+      "author": "user_14",
+      "timestamp": "2025-10-22T00:17:42.599309",
+      "likes": 0,
+      "replies": []
+    },
+    {
+      "comment_id": "text_comment_15",
+      "text": "font-size: 17px;",
+      "author": "user_15",
+      "timestamp": "2025-10-22T00:17:42.599310",
+      "likes": 0,
+      "replies": []
+    },
+    {
+      "comment_id": "text_comment_16",
+      "text": "line-height: 130%;",
+      "author": "user_16",
+      "timestamp": "2025-10-22T00:17:42.599311",
+      "likes": 0,
+      "replies": []
+    },
+    {
+      "comment_id": "text_comment_17",
+      "text": "letter-spacing: 0%;",
+      "author": "user_17",
+      "timestamp": "2025-10-22T00:17:42.599312",
+      "likes": 0,
+      "replies": []
+    },
+    {
+      "comment_id": "text_comment_18",
+      "text": "position: fixed;",
+      "author": "user_18",
+      "timestamp": "2025-10-22T00:17:42.599313",
+      "likes": 0,
+      "replies": []
+    },
+    {
+      "comment_id": "text_comment_22",
+      "text": "text-align: center;",
+      "author": "user_22",
+      "timestamp": "2025-10-22T00:17:42.599314",
+      "likes": 0,
+      "replies": []
+    },
+    {
+      "comment_id": "text_comment_23",
+      "text": "padding: 12px 20px;",
+      "author": "user_23",
+      "timestamp": "2025-10-22T00:17:42.599315",
+      "likes": 0,
+      "replies": []
+    },
+    {
+      "comment_id": "text_comment_24",
+      "text": "background: rgba(84, 84, 84, 0.92);",
+      "author": "user_24",
+      "timestamp": "2025-10-22T00:17:42.599316",
+      "likes": 0,
+      "replies": []
+    },
+    {
+      "comment_id": "text_comment_25",
+      "text": "color: #fff;",
+      "author": "user_25",
+      "timestamp": "2025-10-22T00:17:42.599317",
+      "likes": 0,
+      "replies": []
+    },
+    {
+      "comment_id": "text_comment_26",
+      "text": "box-sizing: border-box;",
+      "author": "user_26",
+      "timestamp": "2025-10-22T00:17:42.599318",
+      "likes": 0,
+      "replies": []
+    },
+    {
+      "comment_id": "text_comment_27",
+      "text": "z-index: 10003;",
+      "author": "user_27",
+      "timestamp": "2025-10-22T00:17:42.599321",
+      "likes": 0,
+      "replies": []
+    },
+    {
+      "comment_id": "text_comment_28",
+      "text": "transition: opacity 0.3s;",
+      "author": "user_28",
+      "timestamp": "2025-10-22T00:17:42.599322",
+      "likes": 0,
+      "replies": []
+    },
+    {
+      "comment_id": "text_comment_29",
+      "text": "opacity: 0;",
+      "author": "user_29",
+      "timestamp": "2025-10-22T00:17:42.599323",
+      "likes": 0,
+      "replies": []
+    },
+    {
+      "comment_id": "text_comment_31",
+      "text": ".cookie-banner-toast.show {",
+      "author": "user_31",
+      "timestamp": "2025-10-22T00:17:42.599324",
+      "likes": 0,
+      "replies": []
+    },
+    {
+      "comment_id": "text_comment_32",
+      "text": "opacity: 1;",
+      "author": "user_32",
+      "timestamp": "2025-10-22T00:17:42.599325",
+      "likes": 0,
+      "replies": []
+    },
+    {
+      "comment_id": "text_comment_33",
+      "text": "}</style><style type=\"text/css\">.tiktok-cookie-banner.paas_lemon8 {",
+      "author": "user_33",
+      "timestamp": "2025-10-22T00:17:42.599326",
+      "likes": 0,
+      "replies": []
+    },
+    {
+      "comment_id": "text_comment_34",
+      "text": "box-shadow: 0px -0.5px 0px 0px rgba(0, 0, 0, 0.05);",
+      "author": "user_34",
+      "timestamp": "2025-10-22T00:17:42.599327",
+      "likes": 0,
+      "replies": []
+    },
+    {
+      "comment_id": "text_comment_37",
+      "text": ".tiktok-cookie-banner {",
+      "author": "user_37",
+      "timestamp": "2025-10-22T00:17:42.599328",
+      "likes": 0,
+      "replies": []
+    },
+    {
+      "comment_id": "text_comment_38",
+      "text": "font-family: \"tiktok-text-regular\", PingFangSC, sans-serif;",
+      "author": "user_38",
+      "timestamp": "2025-10-22T00:17:42.599330",
+      "likes": 0,
+      "replies": []
+    },
+    {
+      "comment_id": "text_comment_39",
+      "text": "font-weight: 400;",
+      "author": "user_39",
+      "timestamp": "2025-10-22T00:17:42.599331",
+      "likes": 0,
+      "replies": []
+    },
+    {
+      "comment_id": "text_comment_40",
+      "text": "font-size: 18px;",
+      "author": "user_40",
+      "timestamp": "2025-10-22T00:17:42.599338",
+      "likes": 0,
+      "replies": []
+    },
+    {
+      "comment_id": "text_comment_41",
+      "text": "line-height: 130%;",
+      "author": "user_41",
+      "timestamp": "2025-10-22T00:17:42.599339",
+      "likes": 0,
+      "replies": []
+    },
+    {
+      "comment_id": "text_comment_42",
+      "text": "letter-spacing: -0.16%;",
+      "author": "user_42",
+      "timestamp": "2025-10-22T00:17:42.599342",
+      "likes": 0,
+      "replies": []
+    },
+    {
+      "comment_id": "text_comment_43",
+      "text": "position: fixed;",
+      "author": "user_43",
+      "timestamp": "2025-10-22T00:17:42.599343",
+      "likes": 0,
+      "replies": []
+    },
+    {
+      "comment_id": "text_comment_47",
+      "text": "background: var(--banner-background-color--, #10a2c5);",
+      "author": "user_47",
+      "timestamp": "2025-10-22T00:17:42.599345",
+      "likes": 0,
+      "replies": []
+    },
+    {
+      "comment_id": "text_comment_48",
+      "text": "z-index: 10001;",
+      "author": "user_48",
+      "timestamp": "2025-10-22T00:17:42.599347",
+      "likes": 0,
+      "replies": []
+    },
+    {
+      "comment_id": "text_comment_49",
+      "text": "display: flex;",
+      "author": "user_49",
+      "timestamp": "2025-10-22T00:17:42.599355",
+      "likes": 0,
+      "replies": []
+    },
+    {
+      "comment_id": "text_comment_50",
+      "text": "flex-direction: row;",
+      "author": "user_50",
+      "timestamp": "2025-10-22T00:17:42.599356",
+      "likes": 0,
+      "replies": []
+    },
+    {
+      "comment_id": "text_comment_51",
+      "text": "align-items: center;",
+      "author": "user_51",
+      "timestamp": "2025-10-22T00:17:42.599357",
+      "likes": 0,
+      "replies": []
+    },
+    {
+      "comment_id": "text_comment_52",
+      "text": "justify-content: space-between;",
+      "author": "user_52",
+      "timestamp": "2025-10-22T00:17:42.599358",
+      "likes": 0,
+      "replies": []
+    },
+    {
+      "comment_id": "text_comment_53",
+      "text": "color: #fff;",
+      "author": "user_53",
+      "timestamp": "2025-10-22T00:17:42.599359",
+      "likes": 0,
+      "replies": []
+    },
+    {
+      "comment_id": "text_comment_54",
+      "text": "padding: 24px 64px 32px;",
+      "author": "user_54",
+      "timestamp": "2025-10-22T00:17:42.599360",
+      "likes": 0,
+      "replies": []
+    },
+    {
+      "comment_id": "text_comment_55",
+      "text": "box-sizing: border-box;",
+      "author": "user_55",
+      "timestamp": "2025-10-22T00:17:42.599361",
+      "likes": 0,
+      "replies": []
+    },
+    {
+      "comment_id": "text_comment_56",
+      "text": "box-shadow: 0 2px 12px rgba(0, 0, 0, 0.12);",
+      "author": "user_56",
+      "timestamp": "2025-10-22T00:17:42.599362",
+      "likes": 0,
+      "replies": []
+    },
+    {
+      "comment_id": "text_comment_57",
+      "text": "-moz-text-size-adjust: 100%;",
+      "author": "user_57",
+      "timestamp": "2025-10-22T00:17:42.599363",
+      "likes": 0,
+      "replies": []
+    },
+    {
+      "comment_id": "text_comment_58",
+      "text": "text-size-adjust: 100%;",
+      "author": "user_58",
+      "timestamp": "2025-10-22T00:17:42.599364",
+      "likes": 0,
+      "replies": []
+    },
+    {
+      "comment_id": "text_comment_59",
+      "text": "-webkit-text-size-adjust: 100%;",
+      "author": "user_59",
+      "timestamp": "2025-10-22T00:17:42.599365",
+      "likes": 0,
+      "replies": []
+    },
+    {
+      "comment_id": "text_comment_60",
+      "text": "-ms-text-size-adjust: 100%;",
+      "author": "user_60",
+      "timestamp": "2025-10-22T00:17:42.599367",
+      "likes": 0,
+      "replies": []
+    },
+    {
+      "comment_id": "text_comment_61",
+      "text": "-webkit-font-smoothing: antialiased;",
+      "author": "user_61",
+      "timestamp": "2025-10-22T00:17:42.599368",
+      "likes": 0,
+      "replies": []
+    },
+    {
+      "comment_id": "text_comment_63",
+      "text": ".tiktok-cookie-banner .cookie-content .cookie-title {",
+      "author": "user_63",
+      "timestamp": "2025-10-22T00:17:42.599370",
+      "likes": 0,
+      "replies": []
+    },
+    {
+      "comment_id": "text_comment_64",
+      "text": "font-family: \"tiktok-display-bold\", PingFangSC, sans-serif;",
+      "author": "user_64",
+      "timestamp": "2025-10-22T00:17:42.599371",
+      "likes": 0,
+      "replies": []
+    },
+    {
+      "comment_id": "text_comment_65",
+      "text": "font-weight: 700;",
+      "author": "user_65",
+      "timestamp": "2025-10-22T00:17:42.599372",
+      "likes": 0,
+      "replies": []
+    },
+    {
+      "comment_id": "text_comment_66",
+      "text": "font-size: 24px;",
+      "author": "user_66",
+      "timestamp": "2025-10-22T00:17:42.599374",
+      "likes": 0,
+      "replies": []
+    }
+  ],
+  "total_comments": 50,
+  "va_performance": {
+    "va_name": "Almira",
+    "va_comments_count": 2,
+    "va_comments": [
+      {
+        "comment_id": "text_comment_24",
+        "text": "background: rgba(84, 84, 84, 0.92);",
+        "author": "user_24",
+        "timestamp": "2025-10-22T00:17:42.599316",
+        "likes": 0,
+        "replies": []
+      },
+      {
+        "comment_id": "text_comment_28",
+        "text": "transition: opacity 0.3s;",
+        "author": "user_28",
+        "timestamp": "2025-10-22T00:17:42.599322",
+        "likes": 0,
+        "replies": []
+      }
+    ],
+    "engagement_quality": "good",
+    "response_time": "unknown",
+    "comment_quality_score": 8.5
+  },
+  "engagement_metrics": {
+    "total_comments": 50,
+    "avg_comment_length": 28.08,
+    "engagement_rate": 0,
+    "comment_quality": "high",
+    "response_rate": 100
+  },
+  "creator": "Sofia",
+  "set_id": 86,
+  "extraction_method": "Comments & VA Performance Scraper"
+}

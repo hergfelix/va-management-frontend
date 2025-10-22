@@ -1,0 +1,752 @@
+{
+  "total_posts": 180,
+  "total_posts_with_text": 134,
+  "text_extraction_rate": 0.7444444444444445,
+  "total_vas": 45,
+  "va_summaries": [
+    {
+      "va": "Grashang",
+      "total_posts": 14,
+      "posts_with_text": 8,
+      "posts_without_text": 6,
+      "text_extraction_rate": 0.5714285714285714,
+      "total_views": 169717,
+      "avg_views": 12122,
+      "viral_posts": 9,
+      "viral_rate": 0.6428571428571429,
+      "duplicate_groups": 0,
+      "accounts": [
+        "miriammatters",
+        "miriamselflovee",
+        "glowingmiriam",
+        "peachmiriam",
+        "miriamshiness"
+      ]
+    },
+    {
+      "va": "Luna",
+      "total_posts": 11,
+      "posts_with_text": 9,
+      "posts_without_text": 2,
+      "text_extraction_rate": 0.8181818181818182,
+      "total_views": 557494,
+      "avg_views": 50681,
+      "viral_posts": 9,
+      "viral_rate": 0.8181818181818182,
+      "duplicate_groups": 0,
+      "accounts": [
+        "voiddaurelia",
+        "witchyaurelia",
+        "aureliaareign",
+        "veilofaurelia"
+      ]
+    },
+    {
+      "va": "Christopher",
+      "total_posts": 9,
+      "posts_with_text": 5,
+      "posts_without_text": 4,
+      "text_extraction_rate": 0.5555555555555556,
+      "total_views": 107827,
+      "avg_views": 11980,
+      "viral_posts": 6,
+      "viral_rate": 0.6666666666666666,
+      "duplicate_groups": 0,
+      "accounts": [
+        "meganvue",
+        "meganvow",
+        "meganflakess",
+        "meganliciousss"
+      ]
+    },
+    {
+      "va": "Fritz",
+      "total_posts": 8,
+      "posts_with_text": 4,
+      "posts_without_text": 4,
+      "text_extraction_rate": 0.5,
+      "total_views": 316957,
+      "avg_views": 39619,
+      "viral_posts": 3,
+      "viral_rate": 0.375,
+      "duplicate_groups": 0,
+      "accounts": [
+        "sitandsqueezeesofia",
+        "tightlegssofia",
+        "sofiacloserrr",
+        "sofiaupcloseee",
+        "sofiasweetthighsss"
+      ]
+    },
+    {
+      "va": "Carla",
+      "total_posts": 8,
+      "posts_with_text": 6,
+      "posts_without_text": 2,
+      "text_extraction_rate": 0.75,
+      "total_views": 231841,
+      "avg_views": 28980,
+      "viral_posts": 5,
+      "viral_rate": 0.625,
+      "duplicate_groups": 0,
+      "accounts": [
+        "miriamglowing",
+        "miriamchicc",
+        "miriamrollqueen",
+        "miriamsweets",
+        "miriamshines"
+      ]
+    },
+    {
+      "va": "Cedrick",
+      "total_posts": 8,
+      "posts_with_text": 6,
+      "posts_without_text": 2,
+      "text_extraction_rate": 0.75,
+      "total_views": 533179,
+      "avg_views": 66647,
+      "viral_posts": 5,
+      "viral_rate": 0.625,
+      "duplicate_groups": 0,
+      "accounts": [
+        "megansceness",
+        "meganflaree",
+        "meganslidess",
+        "meganloopss"
+      ]
+    },
+    {
+      "va": "Chin",
+      "total_posts": 8,
+      "posts_with_text": 7,
+      "posts_without_text": 1,
+      "text_extraction_rate": 0.875,
+      "total_views": 213941,
+      "avg_views": 26742,
+      "viral_posts": 3,
+      "viral_rate": 0.375,
+      "duplicate_groups": 0,
+      "accounts": [
+        "naomifades",
+        "naomizooms",
+        "naomipeeks",
+        "naomibeats"
+      ]
+    },
+    {
+      "va": "Aaron",
+      "total_posts": 8,
+      "posts_with_text": 4,
+      "posts_without_text": 4,
+      "text_extraction_rate": 0.5,
+      "total_views": 287856,
+      "avg_views": 35982,
+      "viral_posts": 3,
+      "viral_rate": 0.375,
+      "duplicate_groups": 0,
+      "accounts": [
+        "miriamxsassy",
+        "miriammdose",
+        "miriamfaves",
+        "miriamtales"
+      ]
+    },
+    {
+      "va": "Abegail",
+      "total_posts": 7,
+      "posts_with_text": 7,
+      "posts_without_text": 0,
+      "text_extraction_rate": 1.0,
+      "total_views": 38636,
+      "avg_views": 5519,
+      "viral_posts": 2,
+      "viral_rate": 0.2857142857142857,
+      "duplicate_groups": 0,
+      "accounts": [
+        "naomisips",
+        "naomiislides",
+        "naomigazee",
+        "naomiisnaps"
+      ]
+    },
+    {
+      "va": "Pilar",
+      "total_posts": 6,
+      "posts_with_text": 4,
+      "posts_without_text": 2,
+      "text_extraction_rate": 0.6666666666666666,
+      "total_views": 233544,
+      "avg_views": 38924,
+      "viral_posts": 5,
+      "viral_rate": 0.8333333333333334,
+      "duplicate_groups": 0,
+      "accounts": [
+        "sofiaagrabb",
+        "sofiaupclose"
+      ]
+    },
+    {
+      "va": "Vaverly",
+      "total_posts": 6,
+      "posts_with_text": 5,
+      "posts_without_text": 1,
+      "text_extraction_rate": 0.8333333333333334,
+      "total_views": 44454,
+      "avg_views": 7409,
+      "viral_posts": 1,
+      "viral_rate": 0.16666666666666666,
+      "duplicate_groups": 0,
+      "accounts": [
+        "megandusk58",
+        "meganflare2",
+        "meganslides2"
+      ]
+    },
+    {
+      "va": "Maricris",
+      "total_posts": 5,
+      "posts_with_text": 4,
+      "posts_without_text": 1,
+      "text_extraction_rate": 0.8,
+      "total_views": 86773,
+      "avg_views": 17354,
+      "viral_posts": 2,
+      "viral_rate": 0.4,
+      "duplicate_groups": 0,
+      "accounts": [
+        "aririsnapss",
+        "aririgloop",
+        "aririgone"
+      ]
+    },
+    {
+      "va": "Mark",
+      "total_posts": 5,
+      "posts_with_text": 2,
+      "posts_without_text": 3,
+      "text_extraction_rate": 0.4,
+      "total_views": 13547,
+      "avg_views": 2709,
+      "viral_posts": 1,
+      "viral_rate": 0.2,
+      "duplicate_groups": 0,
+      "accounts": [
+        "miraflaree",
+        "miravellum",
+        "miravayne",
+        "mirashadee"
+      ]
+    },
+    {
+      "va": "Jairis",
+      "total_posts": 4,
+      "posts_with_text": 4,
+      "posts_without_text": 0,
+      "text_extraction_rate": 1.0,
+      "total_views": 251200,
+      "avg_views": 62800,
+      "viral_posts": 4,
+      "viral_rate": 1.0,
+      "duplicate_groups": 0,
+      "accounts": [
+        "miriaminspiration",
+        "miriamglow",
+        "miriamstylez"
+      ]
+    },
+    {
+      "va": "Allen",
+      "total_posts": 4,
+      "posts_with_text": 2,
+      "posts_without_text": 2,
+      "text_extraction_rate": 0.5,
+      "total_views": 18166,
+      "avg_views": 4541,
+      "viral_posts": 1,
+      "viral_rate": 0.25,
+      "duplicate_groups": 0,
+      "accounts": [
+        "maraswoon",
+        "marapeekk",
+        "marashelll"
+      ]
+    },
+    {
+      "va": "Dominic",
+      "total_posts": 4,
+      "posts_with_text": 2,
+      "posts_without_text": 2,
+      "text_extraction_rate": 0.5,
+      "total_views": 136472,
+      "avg_views": 34118,
+      "viral_posts": 3,
+      "viral_rate": 0.75,
+      "duplicate_groups": 0,
+      "accounts": [
+        "megannvue"
+      ]
+    },
+    {
+      "va": "Vince",
+      "total_posts": 4,
+      "posts_with_text": 3,
+      "posts_without_text": 1,
+      "text_extraction_rate": 0.75,
+      "total_views": 127379,
+      "avg_views": 31844,
+      "viral_posts": 3,
+      "viral_rate": 0.75,
+      "duplicate_groups": 0,
+      "accounts": [
+        "sukihanae",
+        "sukiyori",
+        "sukihimee"
+      ]
+    },
+    {
+      "va": "Jarold",
+      "total_posts": 3,
+      "posts_with_text": 3,
+      "posts_without_text": 0,
+      "text_extraction_rate": 1.0,
+      "total_views": 176577,
+      "avg_views": 58859,
+      "viral_posts": 2,
+      "viral_rate": 0.6666666666666666,
+      "duplicate_groups": 0,
+      "accounts": [
+        "miriamtalks",
+        "sweetenedmiriam"
+      ]
+    },
+    {
+      "va": "Faith",
+      "total_posts": 3,
+      "posts_with_text": 1,
+      "posts_without_text": 2,
+      "text_extraction_rate": 0.3333333333333333,
+      "total_views": 9760,
+      "avg_views": 3253,
+      "viral_posts": 0,
+      "viral_rate": 0.0,
+      "duplicate_groups": 0,
+      "accounts": [
+        "aurelianihil",
+        "hexingaurelia",
+        "aureliacoven"
+      ]
+    },
+    {
+      "va": "Jayeerrah",
+      "total_posts": 3,
+      "posts_with_text": 3,
+      "posts_without_text": 0,
+      "text_extraction_rate": 1.0,
+      "total_views": 13514,
+      "avg_views": 4504,
+      "viral_posts": 1,
+      "viral_rate": 0.3333333333333333,
+      "duplicate_groups": 0,
+      "accounts": [
+        "tyradrama",
+        "tyraavibe",
+        "tyrapullup"
+      ]
+    },
+    {
+      "va": "Alvin",
+      "total_posts": 3,
+      "posts_with_text": 3,
+      "posts_without_text": 0,
+      "text_extraction_rate": 1.0,
+      "total_views": 12939,
+      "avg_views": 4313,
+      "viral_posts": 1,
+      "viral_rate": 0.3333333333333333,
+      "duplicate_groups": 0,
+      "accounts": [
+        "maraswettiee"
+      ]
+    },
+    {
+      "va": "Stephanie",
+      "total_posts": 3,
+      "posts_with_text": 3,
+      "posts_without_text": 0,
+      "text_extraction_rate": 1.0,
+      "total_views": 49462,
+      "avg_views": 16487,
+      "viral_posts": 1,
+      "viral_rate": 0.3333333333333333,
+      "duplicate_groups": 0,
+      "accounts": [
+        "sofiapovvv",
+        "sofiaaaseaa"
+      ]
+    },
+    {
+      "va": "Jade",
+      "total_posts": 3,
+      "posts_with_text": 3,
+      "posts_without_text": 0,
+      "text_extraction_rate": 1.0,
+      "total_views": 6461,
+      "avg_views": 2153,
+      "viral_posts": 0,
+      "viral_rate": 0.0,
+      "duplicate_groups": 0,
+      "accounts": [
+        "nalaniduskborn",
+        "nalanispell",
+        "nalanigloomy"
+      ]
+    },
+    {
+      "va": "Dianne",
+      "total_posts": 3,
+      "posts_with_text": 2,
+      "posts_without_text": 1,
+      "text_extraction_rate": 0.6666666666666666,
+      "total_views": 1864,
+      "avg_views": 621,
+      "viral_posts": 0,
+      "viral_rate": 0.0,
+      "duplicate_groups": 0,
+      "accounts": [
+        "miraafrostt",
+        "miratwistt",
+        "miraviciouss"
+      ]
+    },
+    {
+      "va": "Krishna",
+      "total_posts": 3,
+      "posts_with_text": 3,
+      "posts_without_text": 0,
+      "text_extraction_rate": 1.0,
+      "total_views": 57575,
+      "avg_views": 19191,
+      "viral_posts": 1,
+      "viral_rate": 0.3333333333333333,
+      "duplicate_groups": 0,
+      "accounts": [
+        "naomiblinkss",
+        "naomitraps",
+        "naomiblushedd"
+      ]
+    },
+    {
+      "va": "Almira",
+      "total_posts": 3,
+      "posts_with_text": 2,
+      "posts_without_text": 1,
+      "text_extraction_rate": 0.6666666666666666,
+      "total_views": 7941,
+      "avg_views": 2647,
+      "viral_posts": 0,
+      "viral_rate": 0.0,
+      "duplicate_groups": 0,
+      "accounts": [
+        "closersofiaa",
+        "sofiatightlegs"
+      ]
+    },
+    {
+      "va": "Rexjhon",
+      "total_posts": 3,
+      "posts_with_text": 3,
+      "posts_without_text": 0,
+      "text_extraction_rate": 1.0,
+      "total_views": 1374,
+      "avg_views": 458,
+      "viral_posts": 0,
+      "viral_rate": 0.0,
+      "duplicate_groups": 0,
+      "accounts": [
+        "nalanicry",
+        "nalanimyst"
+      ]
+    },
+    {
+      "va": "Brent",
+      "total_posts": 2,
+      "posts_with_text": 1,
+      "posts_without_text": 1,
+      "text_extraction_rate": 0.5,
+      "total_views": 37800,
+      "avg_views": 18900,
+      "viral_posts": 2,
+      "viral_rate": 1.0,
+      "duplicate_groups": 0,
+      "accounts": [
+        "sukiyoji"
+      ]
+    },
+    {
+      "va": "Angel",
+      "total_posts": 2,
+      "posts_with_text": 2,
+      "posts_without_text": 0,
+      "text_extraction_rate": 1.0,
+      "total_views": 36044,
+      "avg_views": 18022,
+      "viral_posts": 1,
+      "viral_rate": 0.5,
+      "duplicate_groups": 0,
+      "accounts": [
+        "aureliacurse"
+      ]
+    },
+    {
+      "va": "Triesha",
+      "total_posts": 2,
+      "posts_with_text": 2,
+      "posts_without_text": 0,
+      "text_extraction_rate": 1.0,
+      "total_views": 56000,
+      "avg_views": 28000,
+      "viral_posts": 2,
+      "viral_rate": 1.0,
+      "duplicate_groups": 0,
+      "accounts": [
+        "aririmelts",
+        "aririflick"
+      ]
+    },
+    {
+      "va": "Leah",
+      "total_posts": 2,
+      "posts_with_text": 1,
+      "posts_without_text": 1,
+      "text_extraction_rate": 0.5,
+      "total_views": 28786,
+      "avg_views": 14393,
+      "viral_posts": 1,
+      "viral_rate": 0.5,
+      "duplicate_groups": 0,
+      "accounts": [
+        "marablurr",
+        "marafadee"
+      ]
+    },
+    {
+      "va": "swtzl",
+      "total_posts": 2,
+      "posts_with_text": 2,
+      "posts_without_text": 0,
+      "text_extraction_rate": 1.0,
+      "total_views": 1584,
+      "avg_views": 792,
+      "viral_posts": 0,
+      "viral_rate": 0.0,
+      "duplicate_groups": 0,
+      "accounts": [
+        "ggitsmia",
+        "mikagloom"
+      ]
+    },
+    {
+      "va": "Joshua",
+      "total_posts": 2,
+      "posts_with_text": 2,
+      "posts_without_text": 0,
+      "text_extraction_rate": 1.0,
+      "total_views": 17603,
+      "avg_views": 8801,
+      "viral_posts": 1,
+      "viral_rate": 0.5,
+      "duplicate_groups": 0,
+      "accounts": [
+        "puremiriam",
+        "blushmiriam"
+      ]
+    },
+    {
+      "va": "Resha",
+      "total_posts": 2,
+      "posts_with_text": 2,
+      "posts_without_text": 0,
+      "text_extraction_rate": 1.0,
+      "total_views": 5820,
+      "avg_views": 2910,
+      "viral_posts": 0,
+      "viral_rate": 0.0,
+      "duplicate_groups": 0,
+      "accounts": [
+        "nalanilith",
+        "nalanidreamer"
+      ]
+    },
+    {
+      "va": "Beverly",
+      "total_posts": 2,
+      "posts_with_text": 2,
+      "posts_without_text": 0,
+      "text_extraction_rate": 1.0,
+      "total_views": 15500,
+      "avg_views": 7750,
+      "viral_posts": 1,
+      "viral_rate": 0.5,
+      "duplicate_groups": 0,
+      "accounts": [
+        "naomisqueeze",
+        "naomipush"
+      ]
+    },
+    {
+      "va": "Jian",
+      "total_posts": 2,
+      "posts_with_text": 2,
+      "posts_without_text": 0,
+      "text_extraction_rate": 1.0,
+      "total_views": 1300,
+      "avg_views": 650,
+      "viral_posts": 0,
+      "viral_rate": 0.0,
+      "duplicate_groups": 0,
+      "accounts": [
+        "marasnapp",
+        "marawinks"
+      ]
+    },
+    {
+      "va": "Kate",
+      "total_posts": 2,
+      "posts_with_text": 2,
+      "posts_without_text": 0,
+      "text_extraction_rate": 1.0,
+      "total_views": 4226,
+      "avg_views": 2113,
+      "viral_posts": 0,
+      "viral_rate": 0.0,
+      "duplicate_groups": 0,
+      "accounts": [
+        "miravicious",
+        "miragazee"
+      ]
+    },
+    {
+      "va": "Jason",
+      "total_posts": 2,
+      "posts_with_text": 1,
+      "posts_without_text": 1,
+      "text_extraction_rate": 0.5,
+      "total_views": 11845,
+      "avg_views": 5922,
+      "viral_posts": 1,
+      "viral_rate": 0.5,
+      "duplicate_groups": 0,
+      "accounts": [
+        "marasilverr",
+        "maraglowsyyy"
+      ]
+    },
+    {
+      "va": "Cyndi",
+      "total_posts": 2,
+      "posts_with_text": 1,
+      "posts_without_text": 1,
+      "text_extraction_rate": 0.5,
+      "total_views": 616,
+      "avg_views": 308,
+      "viral_posts": 0,
+      "viral_rate": 0.0,
+      "duplicate_groups": 0,
+      "accounts": [
+        "meganxsnaps",
+        "megansplaaaash"
+      ]
+    },
+    {
+      "va": "Rico",
+      "total_posts": 2,
+      "posts_with_text": 2,
+      "posts_without_text": 0,
+      "text_extraction_rate": 1.0,
+      "total_views": 87386,
+      "avg_views": 43693,
+      "viral_posts": 1,
+      "viral_rate": 0.5,
+      "duplicate_groups": 0,
+      "accounts": [
+        "tyralurk",
+        "tyrabugged"
+      ]
+    },
+    {
+      "va": "Warren",
+      "total_posts": 1,
+      "posts_with_text": 1,
+      "posts_without_text": 0,
+      "text_extraction_rate": 1.0,
+      "total_views": 717,
+      "avg_views": 717,
+      "viral_posts": 0,
+      "viral_rate": 0.0,
+      "duplicate_groups": 0,
+      "accounts": [
+        "sukiihannaa"
+      ]
+    },
+    {
+      "va": "Kyle",
+      "total_posts": 1,
+      "posts_with_text": 1,
+      "posts_without_text": 0,
+      "text_extraction_rate": 1.0,
+      "total_views": 14400,
+      "avg_views": 14400,
+      "viral_posts": 1,
+      "viral_rate": 1.0,
+      "duplicate_groups": 0,
+      "accounts": [
+        "tyrasneak"
+      ]
+    },
+    {
+      "va": "Asle",
+      "total_posts": 1,
+      "posts_with_text": 1,
+      "posts_without_text": 0,
+      "text_extraction_rate": 1.0,
+      "total_views": 9,
+      "avg_views": 9,
+      "viral_posts": 0,
+      "viral_rate": 0.0,
+      "duplicate_groups": 0,
+      "accounts": [
+        "itsme.minimia"
+      ]
+    },
+    {
+      "va": "Kent",
+      "total_posts": 1,
+      "posts_with_text": 0,
+      "posts_without_text": 1,
+      "text_extraction_rate": 0.0,
+      "total_views": 775,
+      "avg_views": 775,
+      "viral_posts": 0,
+      "viral_rate": 0.0,
+      "duplicate_groups": 0,
+      "accounts": [
+        "marapinks"
+      ]
+    },
+    {
+      "va": "Trixie",
+      "total_posts": 1,
+      "posts_with_text": 1,
+      "posts_without_text": 0,
+      "text_extraction_rate": 1.0,
+      "total_views": 1065,
+      "avg_views": 1065,
+      "viral_posts": 0,
+      "viral_rate": 0.0,
+      "duplicate_groups": 0,
+      "accounts": [
+        "naomithinks"
+      ]
+    }
+  ]
+}

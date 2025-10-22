@@ -1,0 +1,3 @@
+post_url,creator,set_id,va,type,views,likes,comments,shares,bookmarks,engagement,engagement_rate,comment_count,account_username,account_followers,account_following,account_posts,account_likes,account_verified,scraped_at,scraping_method,scraping_success,post_created_date,post_created_time,hashtags,sound_url,slides,source
+https://www.tiktok.com/t/ZTMure1j4/,Sofia,86,Almira,New,67,1,0,0,0,1,1.49,581,sofiatightlegs,2151,0,355,0,False,2025-10-22T00:00:00,real_tiktok_scraper,True,2025-10-21,Unknown,,,,real_scraping
+https://www.tiktok.com/t/ZP8SxfT4H/,TestCreator,999,TestVA,Test,0,0,0,0,0,0,0.0,581,Unknown,0,0,0,0,False,2025-10-22T00:00:00,real_tiktok_scraper,False,2025-10-21,Unknown,,,,test_scraping

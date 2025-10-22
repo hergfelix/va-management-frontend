@@ -1,0 +1,15 @@
+{
+  "va": "Kyle",
+  "total_posts": 1,
+  "posts_with_text": 1,
+  "posts_without_text": 0,
+  "text_extraction_rate": 1.0,
+  "total_views": 14400,
+  "avg_views": 14400,
+  "viral_posts": 1,
+  "viral_rate": 1.0,
+  "duplicate_groups": 0,
+  "accounts": [
+    "tyrasneak"
+  ]
+}

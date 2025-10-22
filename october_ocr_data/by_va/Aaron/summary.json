@@ -1,0 +1,18 @@
+{
+  "va": "Aaron",
+  "total_posts": 8,
+  "posts_with_text": 4,
+  "posts_without_text": 4,
+  "text_extraction_rate": 0.5,
+  "total_views": 287856,
+  "avg_views": 35982,
+  "viral_posts": 3,
+  "viral_rate": 0.375,
+  "duplicate_groups": 0,
+  "accounts": [
+    "miriamxsassy",
+    "miriammdose",
+    "miriamfaves",
+    "miriamtales"
+  ]
+}

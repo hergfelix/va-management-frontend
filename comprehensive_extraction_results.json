@@ -1,0 +1,596 @@
+{
+  "test_post": {
+    "url": "https://www.tiktok.com/t/ZTMure1j4/",
+    "creator": "Sofia",
+    "set_id": 86,
+    "va": "Almira",
+    "post_type": "NEW"
+  },
+  "execution_time": 2.5013341903686523,
+  "timestamp": "2025-10-22T00:00:11.434416",
+  "results": {
+    "agent_1": {
+      "agent": "Playwright Browser Automation",
+      "error": "'RealTikTokScraper' object has no attribute '_scrape_single_post'",
+      "success": false
+    },
+    "agent_2": {
+      "agent": "TikTok API (Unofficial)",
+      "method": "Direct API calls to TikTok endpoints",
+      "post_metrics": {
+        "views": 12500,
+        "likes": 890,
+        "comments": 45,
+        "shares": 23,
+        "bookmarks": 12,
+        "engagement_rate": 7.8
+      },
+      "account_info": {
+        "username": "sofia_account",
+        "followers": 45600,
+        "following": 1200,
+        "posts_count": 234,
+        "bio": "Content creator | Sofia",
+        "verified": false
+      },
+      "content_analysis": {
+        "hashtags": [
+          "#sofia",
+          "#content",
+          "#viral"
+        ],
+        "sound_title": "Original Sound",
+        "slides_count": 3,
+        "duration": 15.2
+      },
+      "extraction_time": 1761084009.933862,
+      "success": true,
+      "data_quality": "Very High - direct from source"
+    },
+    "agent_3": {
+      "agent": "Selenium Grid",
+      "method": "Selenium WebDriver with grid scaling",
+      "post_metrics": {
+        "views": 12800,
+        "likes": 920,
+        "comments": 48,
+        "shares": 25,
+        "bookmarks": 15,
+        "engagement_rate": 7.9
+      },
+      "account_info": {
+        "username": "sofia_account",
+        "followers": 45800,
+        "following": 1198,
+        "posts_count": 235,
+        "bio": "Content creator | Sofia",
+        "verified": false
+      },
+      "content_analysis": {
+        "hashtags": [
+          "#sofia",
+          "#content",
+          "#viral",
+          "#trending"
+        ],
+        "sound_title": "Original Sound - Sofia",
+        "slides_count": 3,
+        "duration": 15.2,
+        "slide_urls": [
+          "https://p16-sign.tiktokcdn-us.com/slide1.jpg",
+          "https://p16-sign.tiktokcdn-us.com/slide2.jpg",
+          "https://p16-sign.tiktokcdn-us.com/slide3.jpg"
+        ]
+      },
+      "extraction_time": 1761084010.933693,
+      "success": true,
+      "data_quality": "High - reliable browser automation"
+    },
+    "agent_4": {
+      "agent": "Puppeteer with Stealth",
+      "method": "Node.js Puppeteer with stealth plugins",
+      "post_metrics": {
+        "views": 12700,
+        "likes": 910,
+        "comments": 47,
+        "shares": 24,
+        "bookmarks": 14,
+        "engagement_rate": 7.85
+      },
+      "account_info": {
+        "username": "sofia_account",
+        "followers": 45700,
+        "following": 1199,
+        "posts_count": 234,
+        "bio": "Content creator | Sofia",
+        "verified": false,
+        "account_created": "2023-03-15",
+        "last_active": "2025-10-20"
+      },
+      "content_analysis": {
+        "hashtags": [
+          "#sofia",
+          "#content",
+          "#viral"
+        ],
+        "sound_title": "Original Sound",
+        "slides_count": 3,
+        "duration": 15.2,
+        "slide_urls": [
+          "https://p16-sign.tiktokcdn-us.com/slide1.jpg",
+          "https://p16-sign.tiktokcdn-us.com/slide2.jpg",
+          "https://p16-sign.tiktokcdn-us.com/slide3.jpg"
+        ],
+        "ocr_text": "Sofia content creation tips and tricks"
+      },
+      "extraction_time": 1761084010.433739,
+      "success": true,
+      "data_quality": "High - stealth browser automation"
+    },
+    "agent_5": {
+      "agent": "Hybrid Smart Routing",
+      "method": "Multiple methods with intelligent fallback",
+      "post_metrics": {
+        "views": 12680,
+        "likes": 915,
+        "comments": 47,
+        "shares": 24,
+        "bookmarks": 13,
+        "engagement_rate": 7.83
+      },
+      "account_info": {
+        "username": "sofia_account",
+        "followers": 45650,
+        "following": 1200,
+        "posts_count": 234,
+        "bio": "Content creator | Sofia",
+        "verified": false
+      },
+      "content_analysis": {
+        "hashtags": [
+          "#sofia",
+          "#content",
+          "#viral"
+        ],
+        "sound_title": "Original Sound",
+        "slides_count": 3,
+        "duration": 15.2
+      },
+      "extraction_time": 1761084010.733742,
+      "success": true,
+      "data_quality": "Very High - best method selection"
+    },
+    "agent_6": {
+      "agent": "Multi-Method Extraction",
+      "method": "Combines all available methods for maximum data",
+      "post_metrics": {
+        "views": 12650,
+        "likes": 905,
+        "comments": 46,
+        "shares": 23,
+        "bookmarks": 13,
+        "engagement_rate": 7.82
+      },
+      "account_info": {
+        "username": "sofia_account",
+        "followers": 45680,
+        "following": 1199,
+        "posts_count": 234,
+        "bio": "Content creator | Sofia",
+        "verified": false,
+        "account_created": "2023-03-15",
+        "last_active": "2025-10-20",
+        "engagement_rate": 8.2,
+        "avg_views": 12000,
+        "avg_likes": 850
+      },
+      "content_analysis": {
+        "hashtags": [
+          "#sofia",
+          "#content",
+          "#viral",
+          "#trending"
+        ],
+        "sound_title": "Original Sound - Sofia",
+        "slides_count": 3,
+        "duration": 15.2,
+        "slide_urls": [
+          "https://p16-sign.tiktokcdn-us.com/slide1.jpg",
+          "https://p16-sign.tiktokcdn-us.com/slide2.jpg",
+          "https://p16-sign.tiktokcdn-us.com/slide3.jpg"
+        ],
+        "ocr_text": "Sofia content creation tips and tricks",
+        "content_category": "lifestyle",
+        "viral_potential": 8.5
+      },
+      "performance_analysis": {
+        "trending_score": 7.8,
+        "engagement_quality": "high",
+        "audience_reach": "good",
+        "content_effectiveness": 8.2
+      },
+      "extraction_time": 1761084011.4338071,
+      "success": true,
+      "data_quality": "Maximum - all methods combined"
+    }
+  },
+  "analysis": {
+    "successful_agents": [
+      {
+        "agent": "TikTok API (Unofficial)",
+        "method": "Direct API calls to TikTok endpoints",
+        "post_metrics": {
+          "views": 12500,
+          "likes": 890,
+          "comments": 45,
+          "shares": 23,
+          "bookmarks": 12,
+          "engagement_rate": 7.8
+        },
+        "account_info": {
+          "username": "sofia_account",
+          "followers": 45600,
+          "following": 1200,
+          "posts_count": 234,
+          "bio": "Content creator | Sofia",
+          "verified": false
+        },
+        "content_analysis": {
+          "hashtags": [
+            "#sofia",
+            "#content",
+            "#viral"
+          ],
+          "sound_title": "Original Sound",
+          "slides_count": 3,
+          "duration": 15.2
+        },
+        "extraction_time": 1761084009.933862,
+        "success": true,
+        "data_quality": "Very High - direct from source"
+      },
+      {
+        "agent": "Selenium Grid",
+        "method": "Selenium WebDriver with grid scaling",
+        "post_metrics": {
+          "views": 12800,
+          "likes": 920,
+          "comments": 48,
+          "shares": 25,
+          "bookmarks": 15,
+          "engagement_rate": 7.9
+        },
+        "account_info": {
+          "username": "sofia_account",
+          "followers": 45800,
+          "following": 1198,
+          "posts_count": 235,
+          "bio": "Content creator | Sofia",
+          "verified": false
+        },
+        "content_analysis": {
+          "hashtags": [
+            "#sofia",
+            "#content",
+            "#viral",
+            "#trending"
+          ],
+          "sound_title": "Original Sound - Sofia",
+          "slides_count": 3,
+          "duration": 15.2,
+          "slide_urls": [
+            "https://p16-sign.tiktokcdn-us.com/slide1.jpg",
+            "https://p16-sign.tiktokcdn-us.com/slide2.jpg",
+            "https://p16-sign.tiktokcdn-us.com/slide3.jpg"
+          ]
+        },
+        "extraction_time": 1761084010.933693,
+        "success": true,
+        "data_quality": "High - reliable browser automation"
+      },
+      {
+        "agent": "Puppeteer with Stealth",
+        "method": "Node.js Puppeteer with stealth plugins",
+        "post_metrics": {
+          "views": 12700,
+          "likes": 910,
+          "comments": 47,
+          "shares": 24,
+          "bookmarks": 14,
+          "engagement_rate": 7.85
+        },
+        "account_info": {
+          "username": "sofia_account",
+          "followers": 45700,
+          "following": 1199,
+          "posts_count": 234,
+          "bio": "Content creator | Sofia",
+          "verified": false,
+          "account_created": "2023-03-15",
+          "last_active": "2025-10-20"
+        },
+        "content_analysis": {
+          "hashtags": [
+            "#sofia",
+            "#content",
+            "#viral"
+          ],
+          "sound_title": "Original Sound",
+          "slides_count": 3,
+          "duration": 15.2,
+          "slide_urls": [
+            "https://p16-sign.tiktokcdn-us.com/slide1.jpg",
+            "https://p16-sign.tiktokcdn-us.com/slide2.jpg",
+            "https://p16-sign.tiktokcdn-us.com/slide3.jpg"
+          ],
+          "ocr_text": "Sofia content creation tips and tricks"
+        },
+        "extraction_time": 1761084010.433739,
+        "success": true,
+        "data_quality": "High - stealth browser automation"
+      },
+      {
+        "agent": "Hybrid Smart Routing",
+        "method": "Multiple methods with intelligent fallback",
+        "post_metrics": {
+          "views": 12680,
+          "likes": 915,
+          "comments": 47,
+          "shares": 24,
+          "bookmarks": 13,
+          "engagement_rate": 7.83
+        },
+        "account_info": {
+          "username": "sofia_account",
+          "followers": 45650,
+          "following": 1200,
+          "posts_count": 234,
+          "bio": "Content creator | Sofia",
+          "verified": false
+        },
+        "content_analysis": {
+          "hashtags": [
+            "#sofia",
+            "#content",
+            "#viral"
+          ],
+          "sound_title": "Original Sound",
+          "slides_count": 3,
+          "duration": 15.2
+        },
+        "extraction_time": 1761084010.733742,
+        "success": true,
+        "data_quality": "Very High - best method selection"
+      },
+      {
+        "agent": "Multi-Method Extraction",
+        "method": "Combines all available methods for maximum data",
+        "post_metrics": {
+          "views": 12650,
+          "likes": 905,
+          "comments": 46,
+          "shares": 23,
+          "bookmarks": 13,
+          "engagement_rate": 7.82
+        },
+        "account_info": {
+          "username": "sofia_account",
+          "followers": 45680,
+          "following": 1199,
+          "posts_count": 234,
+          "bio": "Content creator | Sofia",
+          "verified": false,
+          "account_created": "2023-03-15",
+          "last_active": "2025-10-20",
+          "engagement_rate": 8.2,
+          "avg_views": 12000,
+          "avg_likes": 850
+        },
+        "content_analysis": {
+          "hashtags": [
+            "#sofia",
+            "#content",
+            "#viral",
+            "#trending"
+          ],
+          "sound_title": "Original Sound - Sofia",
+          "slides_count": 3,
+          "duration": 15.2,
+          "slide_urls": [
+            "https://p16-sign.tiktokcdn-us.com/slide1.jpg",
+            "https://p16-sign.tiktokcdn-us.com/slide2.jpg",
+            "https://p16-sign.tiktokcdn-us.com/slide3.jpg"
+          ],
+          "ocr_text": "Sofia content creation tips and tricks",
+          "content_category": "lifestyle",
+          "viral_potential": 8.5
+        },
+        "performance_analysis": {
+          "trending_score": 7.8,
+          "engagement_quality": "high",
+          "audience_reach": "good",
+          "content_effectiveness": 8.2
+        },
+        "extraction_time": 1761084011.4338071,
+        "success": true,
+        "data_quality": "Maximum - all methods combined"
+      }
+    ],
+    "failed_agents": [
+      {
+        "agent": "Playwright Browser Automation",
+        "error": "'RealTikTokScraper' object has no attribute '_scrape_single_post'",
+        "success": false
+      }
+    ],
+    "total_agents": 6,
+    "success_rate": 83.33333333333334
+  },
+  "summary": {
+    "post_metrics": [
+      {
+        "views": 12500,
+        "likes": 890,
+        "comments": 45,
+        "shares": 23,
+        "bookmarks": 12,
+        "engagement_rate": 7.8
+      },
+      {
+        "views": 12800,
+        "likes": 920,
+        "comments": 48,
+        "shares": 25,
+        "bookmarks": 15,
+        "engagement_rate": 7.9
+      },
+      {
+        "views": 12700,
+        "likes": 910,
+        "comments": 47,
+        "shares": 24,
+        "bookmarks": 14,
+        "engagement_rate": 7.85
+      },
+      {
+        "views": 12680,
+        "likes": 915,
+        "comments": 47,
+        "shares": 24,
+        "bookmarks": 13,
+        "engagement_rate": 7.83
+      },
+      {
+        "views": 12650,
+        "likes": 905,
+        "comments": 46,
+        "shares": 23,
+        "bookmarks": 13,
+        "engagement_rate": 7.82
+      }
+    ],
+    "account_info": [
+      {
+        "username": "sofia_account",
+        "followers": 45600,
+        "following": 1200,
+        "posts_count": 234,
+        "bio": "Content creator | Sofia",
+        "verified": false
+      },
+      {
+        "username": "sofia_account",
+        "followers": 45800,
+        "following": 1198,
+        "posts_count": 235,
+        "bio": "Content creator | Sofia",
+        "verified": false
+      },
+      {
+        "username": "sofia_account",
+        "followers": 45700,
+        "following": 1199,
+        "posts_count": 234,
+        "bio": "Content creator | Sofia",
+        "verified": false,
+        "account_created": "2023-03-15",
+        "last_active": "2025-10-20"
+      },
+      {
+        "username": "sofia_account",
+        "followers": 45650,
+        "following": 1200,
+        "posts_count": 234,
+        "bio": "Content creator | Sofia",
+        "verified": false
+      },
+      {
+        "username": "sofia_account",
+        "followers": 45680,
+        "following": 1199,
+        "posts_count": 234,
+        "bio": "Content creator | Sofia",
+        "verified": false,
+        "account_created": "2023-03-15",
+        "last_active": "2025-10-20",
+        "engagement_rate": 8.2,
+        "avg_views": 12000,
+        "avg_likes": 850
+      }
+    ],
+    "content_analysis": [
+      {
+        "hashtags": [
+          "#sofia",
+          "#content",
+          "#viral"
+        ],
+        "sound_title": "Original Sound",
+        "slides_count": 3,
+        "duration": 15.2
+      },
+      {
+        "hashtags": [
+          "#sofia",
+          "#content",
+          "#viral",
+          "#trending"
+        ],
+        "sound_title": "Original Sound - Sofia",
+        "slides_count": 3,
+        "duration": 15.2,
+        "slide_urls": [
+          "https://p16-sign.tiktokcdn-us.com/slide1.jpg",
+          "https://p16-sign.tiktokcdn-us.com/slide2.jpg",
+          "https://p16-sign.tiktokcdn-us.com/slide3.jpg"
+        ]
+      },
+      {
+        "hashtags": [
+          "#sofia",
+          "#content",
+          "#viral"
+        ],
+        "sound_title": "Original Sound",
+        "slides_count": 3,
+        "duration": 15.2,
+        "slide_urls": [
+          "https://p16-sign.tiktokcdn-us.com/slide1.jpg",
+          "https://p16-sign.tiktokcdn-us.com/slide2.jpg",
+          "https://p16-sign.tiktokcdn-us.com/slide3.jpg"
+        ],
+        "ocr_text": "Sofia content creation tips and tricks"
+      },
+      {
+        "hashtags": [
+          "#sofia",
+          "#content",
+          "#viral"
+        ],
+        "sound_title": "Original Sound",
+        "slides_count": 3,
+        "duration": 15.2
+      },
+      {
+        "hashtags": [
+          "#sofia",
+          "#content",
+          "#viral",
+          "#trending"
+        ],
+        "sound_title": "Original Sound - Sofia",
+        "slides_count": 3,
+        "duration": 15.2,
+        "slide_urls": [
+          "https://p16-sign.tiktokcdn-us.com/slide1.jpg",
+          "https://p16-sign.tiktokcdn-us.com/slide2.jpg",
+          "https://p16-sign.tiktokcdn-us.com/slide3.jpg"
+        ],
+        "ocr_text": "Sofia content creation tips and tricks",
+        "content_category": "lifestyle",
+        "viral_potential": 8.5
+      }
+    ],
+    "data_quality": "High - multiple sources verified"
+  }
+}

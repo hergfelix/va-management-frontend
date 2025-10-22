@@ -88,64 +88,8 @@ class DOMAccountEnricher:
     async def _extract_from_dom(self, page, username: str) -> Optional[dict]:
         """Extract account data from DOM using JavaScript"""
         try:
-            # Strategy 1: Extract from visible page elements
-            data = await page.evaluate("""
-                () => {
-                    // Try to find follower count in various possible locations
-                    const findNumber = (text) => {
-                        if (!text) return 0;
-                        // Handle K, M, B suffixes
-                        text = text.trim().toUpperCase();
-                        let multiplier = 1;
-                        if (text.includes('K')) multiplier = 1000;
-                        if (text.includes('M')) multiplier = 1000000;
-                        if (text.includes('B')) multiplier = 1000000000;
-                        const num = parseFloat(text.replace(/[^0-9.]/g, ''));
-                        return Math.floor(num * multiplier);
-                    };
-
-                    // Look for data-e2e attributes (TikTok's test IDs)
-                    const followerEl = document.querySelector('[data-e2e="followers-count"]');
-                    const followingEl = document.querySelector('[data-e2e="following-count"]');
-                    const likesEl = document.querySelector('[data-e2e="likes-count"]');
-
-                    // Alternative: Look for strong tags with specific patterns
-                    const strongTags = document.querySelectorAll('strong');
-                    let followers = 0, following = 0, likes = 0, posts = 0;
-
-                    if (followerEl) followers = findNumber(followerEl.textContent);
-                    if (followingEl) following = findNumber(followingEl.textContent);
-                    if (likesEl) likes = findNumber(likesEl.textContent);
-
-                    // Try to count videos from DOM
-                    const videoElements = document.querySelectorAll('[data-e2e="user-post-item"]');
-                    if (videoElements.length > 0) posts = videoElements.length;
-
-                    // Look for verified badge
-                    const verifiedBadge = document.querySelector('[data-e2e="verified-icon"]');
-                    const verified = !!verifiedBadge;
-
-                    return {
-                        followers,
-                        following,
-                        likes,
-                        posts,
-                        verified
-                    };
-                }
-            """)
-
-            if data and data.get('followers', 0) > 0:
-                return {
-                    'account_username': username,
-                    'account_followers': data.get('followers', 0),
-                    'account_following': data.get('following', 0),
-                    'account_posts': data.get('posts', 0),
-                    'account_likes': data.get('likes', 0),
-                    'account_verified': data.get('verified', False)
-                }
-
-            # Strategy 2: Try __UNIVERSAL_DATA_FOR_REHYDRATION__ fallback
+            # Primary Strategy: Extract from __UNIVERSAL_DATA_FOR_REHYDRATION__
+            # This is the most reliable source with all fields
             universal_data = await page.evaluate("""
                 () => {
                     const el = document.getElementById('__UNIVERSAL_DATA_FOR_REHYDRATION__');
@@ -168,14 +112,73 @@ class DOMAccountEnricher:
                     stats = user_info.get('stats', {})
                     user = user_info.get('user', {})
 
-                    return {
-                        'account_username': user.get('uniqueId', username),
-                        'account_followers': stats.get('followerCount', 0),
-                        'account_following': stats.get('followingCount', 0),
-                        'account_posts': stats.get('videoCount', 0),
-                        'account_likes': stats.get('heartCount', 0),
-                        'account_verified': user.get('verified', False)
+                    # Validate we got real data
+                    if stats.get('followerCount', 0) > 0 or stats.get('videoCount', 0) > 0:
+                        return {
+                            'account_username': user.get('uniqueId', username),
+                            'account_followers': stats.get('followerCount', 0),
+                            'account_following': stats.get('followingCount', 0),
+                            'account_posts': stats.get('videoCount', 0),
+                            'account_likes': stats.get('heartCount', 0),
+                            'account_verified': user.get('verified', False)
+                        }
+
+            # Fallback Strategy: Try visible DOM elements
+            data = await page.evaluate("""
+                () => {
+                    // Helper to parse numbers with K/M/B suffixes
+                    const findNumber = (text) => {
+                        if (!text) return 0;
+                        text = text.trim().toUpperCase();
+                        let multiplier = 1;
+                        if (text.includes('K')) multiplier = 1000;
+                        if (text.includes('M')) multiplier = 1000000;
+                        if (text.includes('B')) multiplier = 1000000000;
+                        const num = parseFloat(text.replace(/[^0-9.]/g, ''));
+                        return Math.floor(num * multiplier);
+                    };
+
+                    // Look for strong tags that contain numbers
+                    // TikTok profile structure typically shows: Followers | Following | Likes
+                    const strongTags = Array.from(document.querySelectorAll('strong[data-e2e="undefined"]'));
+                    const numbers = strongTags.map(el => findNumber(el.textContent));
+
+                    // Try to identify which number is which based on position/context
+                    let followers = 0, following = 0, likes = 0, posts = 0;
+
+                    if (numbers.length >= 3) {
+                        followers = numbers[0] || 0;  // Usually first
+                        following = numbers[1] || 0;  // Usually second
+                        likes = numbers[2] || 0;      // Usually third
                     }
+
+                    // Count videos from grid
+                    const videoElements = document.querySelectorAll('[data-e2e="user-post-item"]');
+                    if (videoElements.length > 0) posts = videoElements.length;
+
+                    // Look for verified badge
+                    const verifiedBadge = document.querySelector('[data-e2e="user-verified-icon"]');
+                    const verified = !!verifiedBadge;
+
+                    return {
+                        followers,
+                        following,
+                        likes,
+                        posts,
+                        verified
+                    };
+                }
+            """)
+
+            if data and data.get('followers', 0) > 0:
+                return {
+                    'account_username': username,
+                    'account_followers': data.get('followers', 0),
+                    'account_following': data.get('following', 0),
+                    'account_posts': data.get('posts', 0),
+                    'account_likes': data.get('likes', 0),
+                    'account_verified': data.get('verified', False)
+                }
 
             return None
 

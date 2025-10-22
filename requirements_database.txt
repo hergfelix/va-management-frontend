@@ -1,0 +1,28 @@
+# Database Dependencies for TikTok Analytics Master Database
+# Created for Issue #1: Setup Master Database Schema
+
+# Core database libraries
+SQLAlchemy>=2.0.0
+alembic>=1.12.0
+
+# Database drivers
+psycopg2-binary>=2.9.0  # PostgreSQL driver
+sqlite3  # Built-in with Python
+
+# Data processing
+pandas>=2.0.0
+numpy>=1.24.0
+
+# Testing
+pytest>=7.0.0
+pytest-cov>=4.0.0
+
+# Optional: For production with Supabase
+# supabase>=1.0.0
+
+# Optional: For advanced JSON handling
+# pydantic>=2.0.0
+
+# Optional: For async support
+# asyncpg>=0.28.0
+# sqlalchemy[asyncio]>=2.0.0

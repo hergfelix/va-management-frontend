@@ -1,0 +1,16 @@
+# Slide Management System Requirements
+
+# Core (Required)
+aiohttp>=3.9.0          # Async HTTP client for slide downloads
+
+# Supabase Integration (Optional - for cloud storage)
+supabase>=2.0.0         # Supabase Python client
+
+# CSV Processing (Optional - if using process_slides_from_csv.py)
+pandas>=2.0.0           # DataFrame operations
+
+# Scraping (Optional - if running comprehensive_scraper.py)
+playwright>=1.40.0      # Browser automation
+
+# Note: After installing playwright, run:
+# python -m playwright install chromium

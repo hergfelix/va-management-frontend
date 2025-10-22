@@ -1,0 +1,13 @@
+{
+  "post_url": "https://www.tiktok.com/t/ZP8SxfT4H/",
+  "method": "direct_comments_url",
+  "success": true,
+  "comments": [
+    {
+      "text": "189.1K",
+      "selector": "[class*=\"Comment\"]",
+      "timestamp": "2025-10-22T00:25:29.370334"
+    }
+  ],
+  "comment_count": 1
+}
