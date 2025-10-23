@@ -9,7 +9,7 @@
     <script src="https://upload-widget.cloudinary.com/global/all.js"></script>
     <style>
         /* Origin-Inspired Clean Fintech Design System */
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:wght@300;400;500;600&family=Inter:wght@300;400;500;600;700&display=swap');
 
         * {
             font-family: 'Inter', sans-serif;
@@ -18,17 +18,44 @@
             box-sizing: border-box;
         }
 
-        /* Clean Sans-Serif Typography Only */
+        /* Elegant Serif Typography for Headings (Lyon Display alternative) */
         h1, h2, h3, h4, h5, h6 {
-            font-family: 'Inter', sans-serif;
+            font-family: 'EB Garamond', serif;
             font-weight: 300;
-            letter-spacing: -0.02em;
+            letter-spacing: normal;
+            line-height: 135%;
             color: #ffffff;
         }
 
-        h1 { font-size: 48px; }
-        h2 { font-size: 32px; }
-        h3 { font-size: 26px; }
+        /* Responsive Typography - Origin Style */
+        h1 {
+            font-size: 48px;
+        }
+        h2 {
+            font-size: 32px;
+        }
+        h3 {
+            font-size: 26px;
+        }
+
+        /* Responsive breakpoints */
+        @media (max-width: 1024px) {
+            h1 { font-size: 40px; }
+            h2 { font-size: 30px; }
+            h3 { font-size: 24px; }
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 36px; }
+            h2 { font-size: 28px; }
+            h3 { font-size: 22px; }
+        }
+
+        /* Body text with Inter (Suisse Int'l alternative) */
+        body, p, span, div, input, select, textarea, button {
+            font-family: 'Inter', sans-serif;
+            font-weight: 400;
+        }
 
         /* Origin Color Palette - Clean Dark Backgrounds */
         body {
@@ -256,17 +283,22 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        /* Text Colors - High Contrast */
-        .text-primary {
+        /* Text Colors - Origin Hierarchy */
+        .text-primary, h1, h2, h3, h4, h5, h6 {
             color: #ffffff;
         }
 
-        .text-secondary {
+        .text-secondary, p, body {
             color: #fafafae5;
         }
 
         .text-muted {
             color: #888;
+        }
+
+        /* Medium weight for emphasis on body text */
+        strong, b, .font-medium {
+            font-weight: 500;
         }
 
         /* Remove Purple/Pink Gradients */
