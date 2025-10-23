@@ -714,6 +714,24 @@
         </div>
     </div>
 
+    <!-- Payment Group Details Modal -->
+    <div id="groupDetailsModal" class="hidden fixed inset-0 modal-backdrop z-50 flex items-center justify-center p-4">
+        <div class="glass rounded-3xl max-w-4xl w-full p-8 slide-up max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-gray-800">Payment Group Details</h3>
+                <button onclick="closeModal('groupDetailsModal')" class="text-gray-400 hover:text-gray-600">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <div id="groupDetailsContent" class="space-y-6">
+                <!-- Content will be loaded dynamically -->
+            </div>
+        </div>
+    </div>
+
     <!-- Loading Overlay -->
     <div id="loadingOverlay" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
         <div class="glass rounded-2xl p-8">
@@ -1323,8 +1341,91 @@
             showToast('Edit functionality coming soon!', 'error');
         }
 
-        function viewGroupDetails(id) {
-            showToast('Group details view coming soon!', 'error');
+        async function viewGroupDetails(groupId) {
+            try {
+                // Fetch group details
+                const group = await apiCall(`/payments/groups/${groupId}`);
+
+                // Fetch all VAs in this group
+                const allVAs = await apiCall('/vas');
+                const groupVAs = allVAs.filter(va => va.payment_group_id === groupId);
+
+                // Calculate total payout
+                const totalPayout = groupVAs.reduce((sum, va) => sum + (parseFloat(va.monthly_base_salary) || 0), 0);
+
+                // Build the details HTML
+                const content = `
+                    <div class="bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl p-6 text-white mb-6">
+                        <h4 class="text-3xl font-bold mb-2">${group.group_name}</h4>
+                        <p class="text-purple-100 mb-4">Leader: ${group.leader_name}</p>
+                        <div class="bg-white bg-opacity-20 rounded-xl p-4">
+                            <p class="text-sm text-purple-100 mb-1">Group Wallet Address</p>
+                            <p class="font-mono text-sm break-all">${group.group_wallet_address}</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-4 mb-6">
+                        <div class="bg-blue-50 rounded-xl p-4">
+                            <p class="text-sm text-gray-600 mb-1">Total VAs</p>
+                            <p class="text-2xl font-bold text-blue-600">${groupVAs.length}</p>
+                        </div>
+                        <div class="bg-green-50 rounded-xl p-4">
+                            <p class="text-sm text-gray-600 mb-1">Monthly Payout</p>
+                            <p class="text-2xl font-bold text-green-600">$${totalPayout.toFixed(2)}</p>
+                        </div>
+                        <div class="bg-purple-50 rounded-xl p-4">
+                            <p class="text-sm text-gray-600 mb-1">Status</p>
+                            <p class="text-2xl font-bold text-purple-600">${groupVAs.filter(va => va.status === 'active').length} Active</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl border-2 border-gray-200 overflow-hidden">
+                        <div class="bg-gray-50 px-6 py-4 border-b-2 border-gray-200">
+                            <h5 class="font-bold text-gray-800">Virtual Assistants in this Group</h5>
+                        </div>
+                        <div class="divide-y divide-gray-200">
+                            ${groupVAs.length === 0 ? `
+                                <div class="px-6 py-8 text-center text-gray-500">
+                                    No VAs assigned to this group yet
+                                </div>
+                            ` : groupVAs.map(va => `
+                                <div class="px-6 py-4 hover:bg-gray-50 flex items-center justify-between">
+                                    <div class="flex items-center space-x-4">
+                                        ${va.profile_photo_url ? `
+                                            <img src="${va.profile_photo_url}" class="w-12 h-12 rounded-full object-cover">
+                                        ` : `
+                                            <div class="w-12 h-12 rounded-full bg-gradient-to-r from-purple-400 to-pink-400 flex items-center justify-center text-white font-bold">
+                                                ${va.full_name.charAt(0)}
+                                            </div>
+                                        `}
+                                        <div>
+                                            <p class="font-semibold text-gray-800">${va.full_name}</p>
+                                            <p class="text-sm text-gray-500">${va.telegram_handle}</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center space-x-6">
+                                        <div class="text-right">
+                                            <p class="text-sm text-gray-500">Monthly Salary</p>
+                                            <p class="font-bold text-green-600">$${parseFloat(va.monthly_base_salary || 0).toFixed(2)}</p>
+                                        </div>
+                                        <span class="px-3 py-1 rounded-full text-xs font-semibold ${
+                                            va.status === 'active' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'
+                                        }">
+                                            ${va.status}
+                                        </span>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+
+                document.getElementById('groupDetailsContent').innerHTML = content;
+                document.getElementById('groupDetailsModal').classList.remove('hidden');
+            } catch (error) {
+                console.error('View group details error:', error);
+                showToast('Failed to load group details', 'error');
+            }
         }
 
         // Auto-login if token exists
