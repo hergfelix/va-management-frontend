@@ -1185,166 +1185,80 @@
                     return;
                 }
 
-                // Group VAs by their assigned creators
-                const vasByCreator = {};
-                const unassignedVAs = [];
-
-                vas.forEach(va => {
-                    // Find which creators this VA manages
+                container.innerHTML = vas.map(va => {
+                    // Find all creators this VA manages
                     const managedCreators = creators.filter(c => c.assigned_to_va_id === va.id);
 
-                    if (managedCreators.length > 0) {
-                        managedCreators.forEach(creator => {
-                            if (!vasByCreator[creator.creator_name]) {
-                                vasByCreator[creator.creator_name] = {
-                                    creator: creator,
-                                    vas: []
-                                };
-                            }
-                            vasByCreator[creator.creator_name].vas.push(va);
-                        });
-                    } else {
-                        unassignedVAs.push(va);
-                    }
-                });
-
-                let html = '';
-
-                // Render VAs grouped by creator
-                Object.keys(vasByCreator).sort().forEach(creatorName => {
-                    const group = vasByCreator[creatorName];
-                    html += `
-                        <div class="col-span-full">
-                            <div class="flex items-center space-x-3 mb-4 px-2">
-                                ${group.creator.profile_photo_url ? `
-                                    <img src="${group.creator.profile_photo_url}"
-                                         alt="${creatorName}"
-                                         class="w-10 h-10 rounded-lg object-cover">
-                                ` : `
-                                    <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-400 to-pink-400 flex items-center justify-center">
-                                        <span class="text-white text-lg font-bold">${creatorName.charAt(0).toUpperCase()}</span>
+                    return `
+                        <div class="glass rounded-2xl p-6 hover-lift">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="flex items-center space-x-3">
+                                    <img src="${va.profile_photo_url || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(va.full_name)}"
+                                         class="w-16 h-16 rounded-full object-cover border-2 border-purple-200">
+                                    <div>
+                                        <h3 class="font-bold text-lg text-gray-800">${va.full_name}</h3>
+                                        <p class="text-sm text-gray-500">${va.telegram_handle}</p>
                                     </div>
-                                `}
-                                <div>
-                                    <h3 class="text-lg font-bold text-gray-800">${creatorName}</h3>
-                                    <p class="text-sm text-gray-500">${group.vas.length} VA${group.vas.length > 1 ? 's' : ''}</p>
                                 </div>
+                                <span class="badge badge-${va.status}">${va.status}</span>
                             </div>
-                        </div>
-                    `;
 
-                    group.vas.forEach(va => {
-                        html += `
-                            <div class="glass rounded-2xl p-6 hover-lift">
-                                <div class="mb-4">
-                                    <div class="flex items-center justify-between mb-3">
-                                        <div class="flex items-center space-x-3">
-                                            <img src="${va.profile_photo_url || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(va.full_name)}"
-                                                 class="w-12 h-12 rounded-full object-cover">
-                                            <div>
-                                                <h4 class="font-bold text-gray-800">${va.full_name}</h4>
-                                                <p class="text-xs text-gray-500">${va.telegram_handle}</p>
+                            ${managedCreators.length > 0 ? `
+                                <div class="bg-purple-50 border-l-4 border-purple-400 px-4 py-3 rounded mb-4">
+                                    <p class="text-xs font-semibold text-purple-600 mb-2">📝 MANAGING CREATORS:</p>
+                                    <div class="flex flex-wrap gap-2">
+                                        ${managedCreators.map(creator => `
+                                            <div class="flex items-center space-x-2 bg-white rounded-lg px-3 py-1 shadow-sm">
+                                                ${creator.profile_photo_url ? `
+                                                    <img src="${creator.profile_photo_url}" class="w-6 h-6 rounded object-cover">
+                                                ` : `
+                                                    <div class="w-6 h-6 rounded bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
+                                                        <span class="text-white text-xs font-bold">${creator.creator_name.charAt(0).toUpperCase()}</span>
+                                                    </div>
+                                                `}
+                                                <span class="text-sm font-semibold text-gray-800">${creator.creator_name}</span>
                                             </div>
-                                        </div>
-                                        <span class="badge badge-${va.status}">${va.status}</span>
-                                    </div>
-                                    <div class="bg-purple-50 border-l-4 border-purple-400 px-3 py-2 rounded">
-                                        <p class="text-sm font-semibold text-purple-800">📝 Managing: ${creatorName}</p>
+                                        `).join('')}
                                     </div>
                                 </div>
+                            ` : `
+                                <div class="bg-gray-100 border-l-4 border-gray-400 px-4 py-2 rounded mb-4">
+                                    <p class="text-sm font-semibold text-gray-600">⚠️ No creators assigned</p>
+                                </div>
+                            `}
 
-                                <div class="space-y-2 text-sm mb-4">
+                            <div class="space-y-2 text-sm mb-4">
+                                <div class="flex justify-between">
+                                    <span class="text-gray-500">Salary:</span>
+                                    <span class="font-semibold">$${va.monthly_base_salary}</span>
+                                </div>
+                                ${va.group_name ? `
                                     <div class="flex justify-between">
-                                        <span class="text-gray-500">Salary:</span>
-                                        <span class="font-semibold">$${va.monthly_base_salary}</span>
+                                        <span class="text-gray-500">Group:</span>
+                                        <span class="font-semibold">${va.group_name}</span>
                                     </div>
-                                    ${va.group_name ? `
-                                        <div class="flex justify-between">
-                                            <span class="text-gray-500">Group:</span>
-                                            <span class="font-semibold">${va.group_name}</span>
-                                        </div>
-                                    ` : ''}
-                                </div>
-
-                                <div class="flex space-x-2">
-                                    <button onclick="editVA(${va.id})"
-                                            class="flex-1 px-4 py-2 bg-blue-100 text-blue-700 rounded-lg font-semibold hover:bg-blue-200">
-                                        Edit
-                                    </button>
-                                    <button onclick="deleteVA(${va.id}, '${va.full_name}')"
-                                            class="px-4 py-2 bg-red-100 text-red-700 rounded-lg font-semibold hover:bg-red-200">
-                                        Delete
-                                    </button>
-                                </div>
+                                ` : ''}
+                                ${managedCreators.length > 0 ? `
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-500">Creators:</span>
+                                        <span class="font-semibold">${managedCreators.length}</span>
+                                    </div>
+                                ` : ''}
                             </div>
-                        `;
-                    });
-                });
 
-                // Render unassigned VAs
-                if (unassignedVAs.length > 0) {
-                    html += `
-                        <div class="col-span-full">
-                            <div class="flex items-center space-x-3 mb-4 px-2">
-                                <div class="w-10 h-10 rounded-lg bg-gray-300 flex items-center justify-center">
-                                    <span class="text-gray-600 text-lg font-bold">?</span>
-                                </div>
-                                <div>
-                                    <h3 class="text-lg font-bold text-gray-800">Unassigned VAs</h3>
-                                    <p class="text-sm text-gray-500">${unassignedVAs.length} VA${unassignedVAs.length > 1 ? 's' : ''}</p>
-                                </div>
+                            <div class="flex space-x-2">
+                                <button onclick="editVA(${va.id})"
+                                        class="flex-1 px-4 py-2 bg-blue-100 text-blue-700 rounded-lg font-semibold hover:bg-blue-200">
+                                    Edit
+                                </button>
+                                <button onclick="deleteVA(${va.id}, '${va.full_name}')"
+                                        class="px-4 py-2 bg-red-100 text-red-700 rounded-lg font-semibold hover:bg-red-200">
+                                    Delete
+                                </button>
                             </div>
                         </div>
                     `;
-
-                    unassignedVAs.forEach(va => {
-                        html += `
-                            <div class="glass rounded-2xl p-6 hover-lift">
-                                <div class="flex items-center justify-between mb-4">
-                                    <div class="flex items-center space-x-3">
-                                        <img src="${va.profile_photo_url || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(va.full_name)}"
-                                             class="w-12 h-12 rounded-full object-cover">
-                                        <div>
-                                            <h4 class="font-bold text-gray-800">${va.full_name}</h4>
-                                            <p class="text-xs text-gray-500">${va.telegram_handle}</p>
-                                        </div>
-                                    </div>
-                                    <span class="badge badge-${va.status}">${va.status}</span>
-                                </div>
-
-                                <div class="bg-gray-100 border-l-4 border-gray-400 px-3 py-2 rounded mb-4">
-                                    <p class="text-sm font-semibold text-gray-600">⚠️ No creator assigned</p>
-                                </div>
-
-                                <div class="space-y-2 text-sm mb-4">
-                                    <div class="flex justify-between">
-                                        <span class="text-gray-500">Salary:</span>
-                                        <span class="font-semibold">$${va.monthly_base_salary}</span>
-                                    </div>
-                                    ${va.group_name ? `
-                                        <div class="flex justify-between">
-                                            <span class="text-gray-500">Group:</span>
-                                            <span class="font-semibold">${va.group_name}</span>
-                                        </div>
-                                    ` : ''}
-                                </div>
-
-                                <div class="flex space-x-2">
-                                    <button onclick="editVA(${va.id})"
-                                            class="flex-1 px-4 py-2 bg-blue-100 text-blue-700 rounded-lg font-semibold hover:bg-blue-200">
-                                        Edit
-                                    </button>
-                                    <button onclick="deleteVA(${va.id}, '${va.full_name}')"
-                                            class="px-4 py-2 bg-red-100 text-red-700 rounded-lg font-semibold hover:bg-red-200">
-                                        Delete
-                                    </button>
-                                </div>
-                            </div>
-                        `;
-                    });
-                }
-
-                container.innerHTML = html;
+                }).join('');
             } catch (error) {
                 console.error('Load VAs error:', error);
             }
