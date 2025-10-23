@@ -888,14 +888,6 @@
                 </div>
 
                 <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-2">Assign to VA</label>
-                    <select name="assigned_to_va_id" id="creatorVASelect"
-                            class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl">
-                        <option value="">Unassigned</option>
-                    </select>
-                </div>
-
-                <div>
                     <label class="block text-sm font-semibold text-gray-700 mb-2">Monthly Cost ($)</label>
                     <input type="number" name="monthly_cost" step="0.01" value="0"
                            class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl">
@@ -1135,28 +1127,6 @@
                     <input type="text" id="editCreatorName" required
                            class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl"
                            placeholder="TikTok Creator Name">
-                </div>
-
-                <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-2">Niche</label>
-                    <input type="text" id="editCreatorNiche"
-                           class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl"
-                           placeholder="e.g., Beauty, Gaming, Lifestyle">
-                </div>
-
-                <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-2">Assign to VA</label>
-                    <select id="editCreatorVASelect"
-                            class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl">
-                        <option value="">Unassigned</option>
-                    </select>
-                </div>
-
-                <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-2">Social Media Link</label>
-                    <input type="url" id="editCreatorSocialLink"
-                           class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl"
-                           placeholder="https://tiktok.com/@username">
                 </div>
 
                 <div>
@@ -1619,12 +1589,6 @@
         }
 
         async function showAddCreatorModal() {
-            // Load VAs for dropdown
-            const vas = await apiCall('/vas');
-            const select = document.getElementById('creatorVASelect');
-            select.innerHTML = '<option value="">Unassigned</option>' +
-                vas.filter(v => v.status === 'active').map(v => `<option value="${v.id}">${v.full_name}</option>`).join('');
-
             // Initialize Cloudinary widget
             if (!addCreatorCloudinaryWidget) {
                 addCreatorCloudinaryWidget = cloudinary.createUploadWidget({
@@ -1832,9 +1796,6 @@
 
             const data = {
                 creator_name: document.getElementById('editCreatorName').value,
-                niche: document.getElementById('editCreatorNiche').value || null,
-                assigned_to_va_id: document.getElementById('editCreatorVASelect').value || null,
-                social_media_link: document.getElementById('editCreatorSocialLink').value || null,
                 monthly_cost: parseFloat(document.getElementById('editCreatorMonthlyCost').value) || 0,
                 notes: document.getElementById('editCreatorNotes').value || null,
                 profile_photo_url: document.getElementById('editCreatorPhotoUrl').value || null
@@ -2071,13 +2032,6 @@
         async function editCreator(id) {
             try {
                 const creator = await apiCall(`/creators/${id}`);
-                const vas = await apiCall('/vas');
-
-                const vaSelect = document.getElementById('editCreatorVASelect');
-                vaSelect.innerHTML = '<option value="">Unassigned</option>' +
-                    vas.filter(v => v.status === 'active').map(v =>
-                        `<option value="${v.id}" ${v.id === creator.assigned_to_va_id ? 'selected' : ''}>${v.full_name}</option>`
-                    ).join('');
 
                 // Initialize Cloudinary widget for creator edit
                 if (!editCreatorCloudinaryWidget) {
@@ -2100,8 +2054,6 @@
 
                 document.getElementById('editCreatorId').value = creator.id;
                 document.getElementById('editCreatorName').value = creator.creator_name || '';
-                document.getElementById('editCreatorNiche').value = creator.niche || '';
-                document.getElementById('editCreatorSocialLink').value = creator.social_media_link || '';
                 document.getElementById('editCreatorMonthlyCost').value = creator.monthly_cost || 0;
                 document.getElementById('editCreatorNotes').value = creator.notes || '';
                 document.getElementById('editCreatorPhotoUrl').value = creator.profile_photo_url || '';
