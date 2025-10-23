@@ -1177,7 +1177,8 @@
         async function loadVAs() {
             try {
                 const vas = await apiCall('/vas');
-                const creators = await apiCall('/creators');
+                const allCreators = await apiCall('/creators');
+                const allAssignments = await apiCall('/creator-assignments');
                 const container = document.getElementById('vasList');
 
                 if (vas.length === 0) {
@@ -1186,8 +1187,11 @@
                 }
 
                 container.innerHTML = vas.map(va => {
-                    // Find all creators this VA manages
-                    const managedCreators = creators.filter(c => c.assigned_to_va_id === va.id);
+                    // Find all creators this VA manages using junction table
+                    const vaAssignments = allAssignments.filter(a => a.va_id === va.id);
+                    const managedCreators = allCreators.filter(c =>
+                        vaAssignments.some(a => a.creator_id === c.id)
+                    );
 
                     return `
                         <div class="glass rounded-2xl p-6 hover-lift">
@@ -1599,38 +1603,14 @@
                     body: JSON.stringify(data)
                 });
 
-                // Update creator assignments
+                // Update creator assignments using bulk endpoint (many-to-many)
                 const selectedCreatorIds = Array.from(document.getElementById('editAssignedCreators').selectedOptions)
                     .map(opt => parseInt(opt.value));
 
-                // Get all creators to see which ones changed
-                const allCreators = await apiCall('/creators');
-
-                // Update each creator's assignment
-                for (const creator of allCreators) {
-                    const shouldBeAssigned = selectedCreatorIds.includes(creator.id);
-                    const isCurrentlyAssigned = creator.assigned_to_va_id === parseInt(id);
-
-                    if (shouldBeAssigned && !isCurrentlyAssigned) {
-                        // Assign this creator to the VA
-                        await apiCall(`/creators/${creator.id}`, {
-                            method: 'PUT',
-                            body: JSON.stringify({
-                                ...creator,
-                                assigned_to_va_id: parseInt(id)
-                            })
-                        });
-                    } else if (!shouldBeAssigned && isCurrentlyAssigned) {
-                        // Unassign this creator from the VA
-                        await apiCall(`/creators/${creator.id}`, {
-                            method: 'PUT',
-                            body: JSON.stringify({
-                                ...creator,
-                                assigned_to_va_id: null
-                            })
-                        });
-                    }
-                }
+                await apiCall(`/creator-assignments/va/${id}/bulk`, {
+                    method: 'PUT',
+                    body: JSON.stringify({ creator_ids: selectedCreatorIds })
+                });
 
                 closeModal('editVAModal');
                 await loadVAs();
@@ -1850,11 +1830,14 @@
                 select.innerHTML = '<option value="">No Group</option>' +
                     groups.map(g => `<option value="${g.id}" ${g.id === va.payment_group_id ? 'selected' : ''}>${g.group_name}</option>`).join('');
 
-                // Load all creators and populate creators dropdown
+                // Load all creators and currently assigned creators from junction table
                 const allCreators = await apiCall('/creators');
+                const assignedCreators = await apiCall(`/creator-assignments/va/${id}`);
+                const assignedCreatorIds = assignedCreators.map(c => c.id);
+
                 const creatorsSelect = document.getElementById('editAssignedCreators');
                 creatorsSelect.innerHTML = allCreators.map(c =>
-                    `<option value="${c.id}" ${c.assigned_to_va_id === va.id ? 'selected' : ''}>${c.creator_name}</option>`
+                    `<option value="${c.id}" ${assignedCreatorIds.includes(c.id) ? 'selected' : ''}>${c.creator_name}</option>`
                 ).join('');
 
                 // Initialize edit Cloudinary widget
