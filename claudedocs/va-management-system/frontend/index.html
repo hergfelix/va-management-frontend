@@ -1,0 +1,1338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VA Management System - Premium Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://upload-widget.cloudinary.com/global/all.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+        * { font-family: 'Inter', sans-serif; }
+
+        /* Glassmorphism */
+        .glass {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        /* Gradient backgrounds */
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .gradient-bg-alt {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        /* Smooth animations */
+        .fade-in {
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .slide-up {
+            animation: slideUp 0.4s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Card hover effects */
+        .hover-lift {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .hover-lift:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #888; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #555; }
+
+        /* Toast notifications */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 16px 24px;
+            border-radius: 12px;
+            color: white;
+            font-weight: 500;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            z-index: 9999;
+            animation: slideInRight 0.3s ease-out;
+        }
+
+        @keyframes slideInRight {
+            from { transform: translateX(400px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .toast-success { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .toast-error { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+
+        /* Modal backdrop */
+        .modal-backdrop {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+        }
+
+        /* Loading spinner */
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Button styles */
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(240, 147, 251, 0.4);
+        }
+
+        /* Status badges */
+        .badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-active { background: #d1fae5; color: #065f46; }
+        .badge-inactive { background: #fee2e2; color: #991b1b; }
+        .badge-pending { background: #fef3c7; color: #92400e; }
+
+        /* Form inputs */
+        input, select, textarea {
+            transition: all 0.3s ease;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        /* Photo upload area */
+        .upload-area {
+            border: 2px dashed #cbd5e0;
+            transition: all 0.3s ease;
+        }
+
+        .upload-area:hover {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.05);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen">
+
+    <!-- Login Screen -->
+    <div id="loginScreen" class="min-h-screen flex items-center justify-center p-4">
+        <div class="glass rounded-3xl shadow-2xl p-10 w-full max-w-md slide-up">
+            <div class="text-center mb-8">
+                <div class="inline-block p-4 rounded-full gradient-bg mb-4">
+                    <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                    </svg>
+                </div>
+                <h1 class="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">VA Management</h1>
+                <p class="text-gray-600 mt-2">Premium Dashboard 2025</p>
+            </div>
+
+            <form id="loginForm" class="space-y-5">
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Username</label>
+                    <input type="text" id="username"
+                           class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 transition-all"
+                           placeholder="Enter your username" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Password</label>
+                    <input type="password" id="password"
+                           class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 transition-all"
+                           placeholder="Enter your password" required>
+                </div>
+                <button type="submit"
+                        class="w-full btn-primary text-white py-3 rounded-xl font-semibold shadow-lg">
+                    Sign In
+                </button>
+                <div id="loginError" class="text-red-600 text-sm text-center hidden"></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main Dashboard -->
+    <div id="dashboard" class="hidden min-h-screen">
+        <!-- Navbar -->
+        <nav class="glass sticky top-0 z-50 shadow-lg">
+            <div class="container mx-auto px-6 py-4">
+                <div class="flex justify-between items-center">
+                    <div class="flex items-center space-x-4">
+                        <div class="p-2 rounded-lg gradient-bg">
+                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h1 class="text-xl font-bold text-gray-800">VA Management</h1>
+                            <p class="text-sm text-gray-500">Premium Dashboard</p>
+                        </div>
+                    </div>
+                    <button onclick="logout()"
+                            class="px-6 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-xl font-semibold hover:shadow-lg transition-all">
+                        Logout
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container mx-auto px-6 py-8">
+            <!-- Stats Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <div class="glass rounded-2xl p-6 hover-lift fade-in">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-500 uppercase">Active VAs</p>
+                            <p id="activeVAs" class="text-4xl font-bold text-gray-800 mt-2">-</p>
+                        </div>
+                        <div class="p-4 rounded-full bg-gradient-to-br from-blue-400 to-blue-600">
+                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass rounded-2xl p-6 hover-lift fade-in" style="animation-delay: 0.1s">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-500 uppercase">Total Phones</p>
+                            <p id="totalPhones" class="text-4xl font-bold text-gray-800 mt-2">-</p>
+                        </div>
+                        <div class="p-4 rounded-full bg-gradient-to-br from-purple-400 to-purple-600">
+                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass rounded-2xl p-6 hover-lift fade-in" style="animation-delay: 0.2s">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-500 uppercase">Creators</p>
+                            <p id="totalCreators" class="text-4xl font-bold text-gray-800 mt-2">-</p>
+                        </div>
+                        <div class="p-4 rounded-full bg-gradient-to-br from-pink-400 to-pink-600">
+                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass rounded-2xl p-6 hover-lift fade-in" style="animation-delay: 0.3s">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-500 uppercase">Monthly Payout</p>
+                            <p id="monthlyPayout" class="text-4xl font-bold text-gray-800 mt-2">$-</p>
+                        </div>
+                        <div class="p-4 rounded-full bg-gradient-to-br from-green-400 to-green-600">
+                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabs -->
+            <div class="glass rounded-2xl p-2 mb-6 inline-flex space-x-2">
+                <button onclick="showTab('vas')" id="tabVas"
+                        class="px-6 py-3 rounded-xl font-semibold transition-all bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg">
+                    Virtual Assistants
+                </button>
+                <button onclick="showTab('payments')" id="tabPayments"
+                        class="px-6 py-3 rounded-xl font-semibold transition-all text-gray-600 hover:bg-gray-100">
+                    Payments
+                </button>
+                <button onclick="showTab('phones')" id="tabPhones"
+                        class="px-6 py-3 rounded-xl font-semibold transition-all text-gray-600 hover:bg-gray-100">
+                    Phones
+                </button>
+                <button onclick="showTab('creators')" id="tabCreators"
+                        class="px-6 py-3 rounded-xl font-semibold transition-all text-gray-600 hover:bg-gray-100">
+                    Creators
+                </button>
+            </div>
+
+            <!-- VAs Tab -->
+            <div id="vasTab" class="fade-in">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800">Virtual Assistants</h2>
+                    <button onclick="showAddVAModal()"
+                            class="btn-primary px-6 py-3 text-white rounded-xl font-semibold shadow-lg flex items-center space-x-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                        </svg>
+                        <span>Add VA</span>
+                    </button>
+                </div>
+
+                <div id="vasList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- VAs will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Payments Tab -->
+            <div id="paymentsTab" class="hidden fade-in">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800">Payment Groups</h2>
+                    <button onclick="showAddPaymentGroupModal()"
+                            class="btn-primary px-6 py-3 text-white rounded-xl font-semibold shadow-lg flex items-center space-x-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                        </svg>
+                        <span>Add Group</span>
+                    </button>
+                </div>
+
+                <div id="paymentGroupsList" class="space-y-6">
+                    <!-- Payment groups will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Phones Tab -->
+            <div id="phonesTab" class="hidden fade-in">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800">Phone Inventory</h2>
+                    <button onclick="showAddPhoneModal()"
+                            class="btn-primary px-6 py-3 text-white rounded-xl font-semibold shadow-lg flex items-center space-x-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                        </svg>
+                        <span>Add Phone</span>
+                    </button>
+                </div>
+
+                <div id="phonesList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Phones will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Creators Tab -->
+            <div id="creatorsTab" class="hidden fade-in">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800">Creators</h2>
+                    <button onclick="showAddCreatorModal()"
+                            class="btn-primary px-6 py-3 text-white rounded-xl font-semibold shadow-lg flex items-center space-x-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                        </svg>
+                        <span>Add Creator</span>
+                    </button>
+                </div>
+
+                <div id="creatorsList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Creators will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add VA Modal -->
+    <div id="addVAModal" class="hidden fixed inset-0 modal-backdrop z-50 flex items-center justify-center p-4">
+        <div class="glass rounded-3xl max-w-2xl w-full p-8 slide-up max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-gray-800">Add Virtual Assistant</h3>
+                <button onclick="closeModal('addVAModal')" class="text-gray-400 hover:text-gray-600">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <form id="addVAForm" class="space-y-5">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Full Name *</label>
+                        <input type="text" name="full_name" required
+                               class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl"
+                               placeholder="John Doe">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Telegram Handle *</label>
+                        <input type="text" name="telegram_handle" required
+                               class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl"
+                               placeholder="@johndoe">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Wallet Address</label>
+                    <input type="text" name="wallet_address"
+                           class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl"
+                           placeholder="0x...">
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Monthly Salary ($)</label>
+                        <input type="number" name="monthly_base_salary" step="0.01" value="500"
+                               class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Payment Group</label>
+                        <select name="payment_group_id" id="vaPaymentGroup"
+                                class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl">
+                            <option value="">No Group</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Profile Photo</label>
+                    <div id="uploadWidget" class="upload-area rounded-xl p-8 text-center cursor-pointer">
+                        <svg class="w-12 h-12 mx-auto text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                        </svg>
+                        <p class="text-gray-600">Click to upload photo</p>
+                        <p class="text-sm text-gray-400 mt-1">PNG, JPG up to 10MB</p>
+                    </div>
+                    <input type="hidden" name="profile_photo_url" id="profilePhotoUrl">
+                    <div id="photoPreview" class="hidden mt-4">
+                        <img id="photoPreviewImg" class="w-32 h-32 rounded-xl object-cover mx-auto">
+                    </div>
+                </div>
+
+                <div class="flex justify-end space-x-3 pt-4">
+                    <button type="button" onclick="closeModal('addVAModal')"
+                            class="px-6 py-3 border-2 border-gray-200 rounded-xl font-semibold text-gray-600 hover:bg-gray-50">
+                        Cancel
+                    </button>
+                    <button type="submit"
+                            class="btn-primary px-6 py-3 text-white rounded-xl font-semibold">
+                        Add VA
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit VA Modal -->
+    <div id="editVAModal" class="hidden fixed inset-0 modal-backdrop z-50 flex items-center justify-center p-4">
+        <div class="glass rounded-3xl max-w-lg w-full p-8 slide-up">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-gray-800">Edit VA</h3>
+                <button onclick="closeModal('editVAModal')" class="text-gray-400 hover:text-gray-600">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <form id="editVAForm" class="space-y-5">
+                <input type="hidden" id="editVAId">
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Full Name *</label>
+                        <input type="text" id="editFullName" required
+                               class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl"
+                               placeholder="John Doe">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Telegram Handle *</label>
+                        <input type="text" id="editTelegramHandle" required
+                               class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl"
+                               placeholder="@johndoe">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Wallet Address</label>
+                    <input type="text" id="editWalletAddress"
+                           class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl"
+                           placeholder="0x...">
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Monthly Salary ($)</label>
+                        <input type="number" id="editMonthlySalary" step="0.01"
+                               class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Payment Group</label>
+                        <select id="editPaymentGroup"
+                                class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl">
+                            <option value="">No Group</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Status</label>
+                    <select id="editStatus"
+                            class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl">
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Profile Photo</label>
+                    <div id="editUploadWidget" class="upload-area rounded-xl p-8 text-center cursor-pointer">
+                        <svg class="w-12 h-12 mx-auto text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                        </svg>
+                        <p class="text-gray-600">Click to upload new photo</p>
+                        <p class="text-sm text-gray-400 mt-1">PNG, JPG up to 10MB</p>
+                    </div>
+                    <input type="hidden" id="editProfilePhotoUrl">
+                    <div id="editPhotoPreview" class="hidden mt-4">
+                        <img id="editPhotoPreviewImg" class="w-32 h-32 rounded-xl object-cover mx-auto">
+                    </div>
+                </div>
+
+                <div class="flex justify-end space-x-3 pt-4">
+                    <button type="button" onclick="closeModal('editVAModal')"
+                            class="px-6 py-3 border-2 border-gray-200 rounded-xl font-semibold text-gray-600 hover:bg-gray-50">
+                        Cancel
+                    </button>
+                    <button type="submit"
+                            class="btn-primary px-6 py-3 text-white rounded-xl font-semibold">
+                        Save Changes
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Payment Group Modal -->
+    <div id="addPaymentGroupModal" class="hidden fixed inset-0 modal-backdrop z-50 flex items-center justify-center p-4">
+        <div class="glass rounded-3xl max-w-lg w-full p-8 slide-up">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-gray-800">Add Payment Group</h3>
+                <button onclick="closeModal('addPaymentGroupModal')" class="text-gray-400 hover:text-gray-600">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <form id="addPaymentGroupForm" class="space-y-5">
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Group Name *</label>
+                    <input type="text" name="group_name" required
+                           class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl"
+                           placeholder="Family A">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Leader Name *</label>
+                    <input type="text" name="leader_name" required
+                           class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl"
+                           placeholder="John Doe">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Wallet Address *</label>
+                    <input type="text" name="wallet_address" required
+                           class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl"
+                           placeholder="0x...">
+                </div>
+
+                <div class="flex justify-end space-x-3 pt-4">
+                    <button type="button" onclick="closeModal('addPaymentGroupModal')"
+                            class="px-6 py-3 border-2 border-gray-200 rounded-xl font-semibold text-gray-600 hover:bg-gray-50">
+                        Cancel
+                    </button>
+                    <button type="submit"
+                            class="btn-primary px-6 py-3 text-white rounded-xl font-semibold">
+                        Add Group
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Phone Modal -->
+    <div id="addPhoneModal" class="hidden fixed inset-0 modal-backdrop z-50 flex items-center justify-center p-4">
+        <div class="glass rounded-3xl max-w-lg w-full p-8 slide-up">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-gray-800">Add Phone</h3>
+                <button onclick="closeModal('addPhoneModal')" class="text-gray-400 hover:text-gray-600">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <form id="addPhoneForm" class="space-y-5">
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Apple ID Email *</label>
+                    <input type="email" name="apple_id_email" required
+                           class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl"
+                           placeholder="appleid@example.com">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Apple ID Password *</label>
+                    <input type="password" name="apple_id_password" required
+                           class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl"
+                           placeholder="••••••••">
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Proxy IP *</label>
+                        <input type="text" name="proxy_ip" required
+                               class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl"
+                               placeholder="192.168.1.1">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Proxy Port *</label>
+                        <input type="number" name="proxy_port" required
+                               class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl"
+                               placeholder="8080">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Proxy Username</label>
+                    <input type="text" name="proxy_username"
+                           class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl"
+                           placeholder="Optional">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Proxy Password</label>
+                    <input type="password" name="proxy_password"
+                           class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl"
+                           placeholder="Optional">
+                </div>
+
+                <div class="flex justify-end space-x-3 pt-4">
+                    <button type="button" onclick="closeModal('addPhoneModal')"
+                            class="px-6 py-3 border-2 border-gray-200 rounded-xl font-semibold text-gray-600 hover:bg-gray-50">
+                        Cancel
+                    </button>
+                    <button type="submit"
+                            class="btn-primary px-6 py-3 text-white rounded-xl font-semibold">
+                        Add Phone
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Creator Modal -->
+    <div id="addCreatorModal" class="hidden fixed inset-0 modal-backdrop z-50 flex items-center justify-center p-4">
+        <div class="glass rounded-3xl max-w-lg w-full p-8 slide-up">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-gray-800">Add Creator</h3>
+                <button onclick="closeModal('addCreatorModal')" class="text-gray-400 hover:text-gray-600">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <form id="addCreatorForm" class="space-y-5">
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Creator Name *</label>
+                    <input type="text" name="creator_name" required
+                           class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl"
+                           placeholder="TikTok Creator Name">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Assign to VA</label>
+                    <select name="assigned_to_va_id" id="creatorVASelect"
+                            class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl">
+                        <option value="">Unassigned</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Monthly Cost ($)</label>
+                    <input type="number" name="monthly_cost" step="0.01" value="0"
+                           class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl">
+                </div>
+
+                <div class="flex justify-end space-x-3 pt-4">
+                    <button type="button" onclick="closeModal('addCreatorModal')"
+                            class="px-6 py-3 border-2 border-gray-200 rounded-xl font-semibold text-gray-600 hover:bg-gray-50">
+                        Cancel
+                    </button>
+                    <button type="submit"
+                            class="btn-primary px-6 py-3 text-white rounded-xl font-semibold">
+                        Add Creator
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+        <div class="glass rounded-2xl p-8">
+            <div class="spinner mx-auto mb-4"></div>
+            <p class="text-gray-700 font-semibold">Loading...</p>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'https://va-management-backend-production.up.railway.app/api';
+        let token = localStorage.getItem('token');
+        let cloudinaryWidget;
+        let editCloudinaryWidget;
+
+        // Toast notifications
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.animation = 'slideInRight 0.3s ease-out reverse';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // API call helper
+        async function apiCall(endpoint, options = {}) {
+            try {
+                const response = await fetch(`${API_URL}${endpoint}`, {
+                    ...options,
+                    headers: {
+                        'Authorization': token ? `Bearer ${token}` : '',
+                        'Content-Type': 'application/json',
+                        ...options.headers
+                    }
+                });
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.error || 'Request failed');
+                }
+
+                return await response.json();
+            } catch (error) {
+                console.error('API Error:', error);
+                showToast(error.message, 'error');
+                throw error;
+            }
+        }
+
+        // Login
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                const data = await apiCall('/auth/login', {
+                    method: 'POST',
+                    body: JSON.stringify({ username, password })
+                });
+
+                token = data.token;
+                localStorage.setItem('token', token);
+                document.getElementById('loginScreen').classList.add('hidden');
+                document.getElementById('dashboard').classList.remove('hidden');
+                loadDashboard();
+                showToast('Welcome back!');
+            } catch (error) {
+                document.getElementById('loginError').textContent = 'Invalid credentials';
+                document.getElementById('loginError').classList.remove('hidden');
+            }
+        });
+
+        // Logout
+        function logout() {
+            localStorage.removeItem('token');
+            token = null;
+            document.getElementById('dashboard').classList.add('hidden');
+            document.getElementById('loginScreen').classList.remove('hidden');
+            showToast('Logged out successfully');
+        }
+
+        // Load Dashboard
+        async function loadDashboard() {
+            try {
+                const stats = await apiCall('/dashboard');
+                document.getElementById('activeVAs').textContent = stats.statistics.vas.active_vas;
+                document.getElementById('totalPhones').textContent = stats.statistics.phones.total_phones;
+                document.getElementById('totalCreators').textContent = stats.statistics.creators.total_creators;
+                document.getElementById('monthlyPayout').textContent = '$' + stats.statistics.payments.total_amount;
+
+                await loadVAs();
+            } catch (error) {
+                console.error('Dashboard load error:', error);
+            }
+        }
+
+        // Tab switching
+        function showTab(tab) {
+            const tabs = ['vas', 'payments', 'phones', 'creators'];
+            tabs.forEach(t => {
+                document.getElementById(`${t}Tab`).classList.add('hidden');
+                const btn = document.getElementById(`tab${t.charAt(0).toUpperCase() + t.slice(1)}`);
+                btn.classList.remove('bg-gradient-to-r', 'from-purple-600', 'to-pink-600', 'text-white', 'shadow-lg');
+                btn.classList.add('text-gray-600');
+            });
+
+            document.getElementById(`${tab}Tab`).classList.remove('hidden');
+            const activeBtn = document.getElementById(`tab${tab.charAt(0).toUpperCase() + tab.slice(1)}`);
+            activeBtn.classList.add('bg-gradient-to-r', 'from-purple-600', 'to-pink-600', 'text-white', 'shadow-lg');
+            activeBtn.classList.remove('text-gray-600');
+
+            // Load data for the tab
+            if (tab === 'payments') loadPaymentGroups();
+            if (tab === 'phones') loadPhones();
+            if (tab === 'creators') loadCreators();
+        }
+
+        // Load VAs
+        async function loadVAs() {
+            try {
+                const vas = await apiCall('/vas');
+                const container = document.getElementById('vasList');
+
+                if (vas.length === 0) {
+                    container.innerHTML = '<div class="col-span-full text-center text-gray-500 py-12">No VAs found. Add your first VA to get started!</div>';
+                    return;
+                }
+
+                container.innerHTML = vas.map(va => `
+                    <div class="glass rounded-2xl p-6 hover-lift">
+                        <div class="flex items-start justify-between mb-4">
+                            <div class="flex items-center space-x-4">
+                                <img src="${va.profile_photo_url || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(va.full_name)}"
+                                     class="w-16 h-16 rounded-full object-cover border-4 border-purple-200">
+                                <div>
+                                    <h3 class="font-bold text-lg text-gray-800">${va.full_name}</h3>
+                                    <p class="text-sm text-gray-500">${va.telegram_handle}</p>
+                                    <span class="badge badge-${va.status} mt-1">${va.status}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="space-y-2 text-sm">
+                            <div class="flex justify-between">
+                                <span class="text-gray-500">Salary:</span>
+                                <span class="font-semibold">$${va.monthly_base_salary}</span>
+                            </div>
+                            ${va.group_name ? `
+                                <div class="flex justify-between">
+                                    <span class="text-gray-500">Group:</span>
+                                    <span class="font-semibold">${va.group_name}</span>
+                                </div>
+                            ` : ''}
+                        </div>
+
+                        <div class="flex space-x-2 mt-4">
+                            <button onclick="editVA(${va.id})"
+                                    class="flex-1 px-4 py-2 bg-blue-100 text-blue-700 rounded-lg font-semibold hover:bg-blue-200">
+                                Edit
+                            </button>
+                            <button onclick="deleteVA(${va.id}, '${va.full_name}')"
+                                    class="px-4 py-2 bg-red-100 text-red-700 rounded-lg font-semibold hover:bg-red-200">
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Load VAs error:', error);
+            }
+        }
+
+        // Load Payment Groups
+        async function loadPaymentGroups() {
+            try {
+                const groups = await apiCall('/payments/groups');
+                const container = document.getElementById('paymentGroupsList');
+
+                if (groups.length === 0) {
+                    container.innerHTML = '<div class="text-center text-gray-500 py-12">No payment groups found.</div>';
+                    return;
+                }
+
+                container.innerHTML = groups.map(group => `
+                    <div class="glass rounded-2xl p-6 hover-lift">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h3 class="font-bold text-xl text-gray-800">${group.group_name}</h3>
+                                <p class="text-gray-600 mt-1">Leader: ${group.leader_name}</p>
+                                <p class="text-sm text-gray-500 mt-1 font-mono">${group.wallet_address}</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-3xl font-bold text-purple-600">$0</p>
+                                <p class="text-sm text-gray-500 mt-1">${group.vas_count} VAs</p>
+                            </div>
+                        </div>
+
+                        <div class="flex space-x-2 mt-4">
+                            <button onclick="viewGroupDetails(${group.id})"
+                                    class="flex-1 px-4 py-2 bg-purple-100 text-purple-700 rounded-lg font-semibold hover:bg-purple-200">
+                                View Details
+                            </button>
+                            <button onclick="deletePaymentGroup(${group.id}, '${group.group_name}')"
+                                    class="px-4 py-2 bg-red-100 text-red-700 rounded-lg font-semibold hover:bg-red-200">
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Load payment groups error:', error);
+            }
+        }
+
+        // Load Phones
+        async function loadPhones() {
+            try {
+                const phones = await apiCall('/phones');
+                const container = document.getElementById('phonesList');
+
+                if (phones.length === 0) {
+                    container.innerHTML = '<div class="col-span-full text-center text-gray-500 py-12">No phones found.</div>';
+                    return;
+                }
+
+                container.innerHTML = phones.map(phone => `
+                    <div class="glass rounded-2xl p-6 hover-lift">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h3 class="font-bold text-lg text-gray-800">Phone #${phone.id}</h3>
+                                <span class="badge badge-${phone.status === 'available' ? 'active' : 'inactive'} mt-1">
+                                    ${phone.status.replace('_', ' ')}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="space-y-2 text-sm">
+                            <div>
+                                <span class="text-gray-500">Apple ID:</span>
+                                <p class="font-semibold">${phone.apple_id_email}</p>
+                            </div>
+                            <div>
+                                <span class="text-gray-500">Proxy:</span>
+                                <p class="font-semibold font-mono">${phone.proxy_ip}:${phone.proxy_port}</p>
+                            </div>
+                            ${phone.va_name ? `
+                                <div>
+                                    <span class="text-gray-500">Assigned to:</span>
+                                    <p class="font-semibold">${phone.va_name}</p>
+                                </div>
+                            ` : ''}
+                        </div>
+
+                        <div class="flex space-x-2 mt-4">
+                            <button onclick="editPhone(${phone.id})"
+                                    class="flex-1 px-4 py-2 bg-blue-100 text-blue-700 rounded-lg font-semibold hover:bg-blue-200">
+                                Edit
+                            </button>
+                            <button onclick="deletePhone(${phone.id})"
+                                    class="px-4 py-2 bg-red-100 text-red-700 rounded-lg font-semibold hover:bg-red-200">
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Load phones error:', error);
+            }
+        }
+
+        // Load Creators
+        async function loadCreators() {
+            try {
+                const creators = await apiCall('/creators');
+                const container = document.getElementById('creatorsList');
+
+                if (creators.length === 0) {
+                    container.innerHTML = '<div class="col-span-full text-center text-gray-500 py-12">No creators found.</div>';
+                    return;
+                }
+
+                container.innerHTML = creators.map(creator => `
+                    <div class="glass rounded-2xl p-6 hover-lift">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h3 class="font-bold text-lg text-gray-800">${creator.creator_name}</h3>
+                                ${creator.va_name ? `
+                                    <p class="text-sm text-gray-500 mt-1">Managed by: ${creator.va_name}</p>
+                                ` : `
+                                    <span class="badge badge-pending mt-1">Unassigned</span>
+                                `}
+                            </div>
+                        </div>
+
+                        <div class="space-y-2 text-sm">
+                            <div class="flex justify-between">
+                                <span class="text-gray-500">Monthly Cost:</span>
+                                <span class="font-semibold">$${creator.monthly_cost || 0}</span>
+                            </div>
+                        </div>
+
+                        <div class="flex space-x-2 mt-4">
+                            <button onclick="editCreator(${creator.id})"
+                                    class="flex-1 px-4 py-2 bg-blue-100 text-blue-700 rounded-lg font-semibold hover:bg-blue-200">
+                                Edit
+                            </button>
+                            <button onclick="deleteCreator(${creator.id}, '${creator.creator_name}')"
+                                    class="px-4 py-2 bg-red-100 text-red-700 rounded-lg font-semibold hover:bg-red-200">
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Load creators error:', error);
+            }
+        }
+
+        // Modal functions
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
+        }
+
+        async function showAddVAModal() {
+            // Load payment groups for dropdown
+            const groups = await apiCall('/payments/groups');
+            const select = document.getElementById('vaPaymentGroup');
+            select.innerHTML = '<option value="">No Group</option>' +
+                groups.map(g => `<option value="${g.id}">${g.group_name}</option>`).join('');
+
+            // Initialize Cloudinary widget
+            if (!cloudinaryWidget) {
+                cloudinaryWidget = cloudinary.createUploadWidget({
+                    cloudName: 'Root',
+                    uploadPreset: 'va_photos',
+                    sources: ['local', 'camera'],
+                    multiple: false,
+                    maxFileSize: 10000000,
+                    clientAllowedFormats: ['png', 'jpg', 'jpeg']
+                }, (error, result) => {
+                    if (!error && result && result.event === "success") {
+                        document.getElementById('profilePhotoUrl').value = result.info.secure_url;
+                        document.getElementById('photoPreview').classList.remove('hidden');
+                        document.getElementById('photoPreviewImg').src = result.info.secure_url;
+                        showToast('Photo uploaded successfully!');
+                    }
+                });
+            }
+
+            document.getElementById('uploadWidget').onclick = () => cloudinaryWidget.open();
+            document.getElementById('addVAModal').classList.remove('hidden');
+        }
+
+        function showAddPaymentGroupModal() {
+            document.getElementById('addPaymentGroupModal').classList.remove('hidden');
+        }
+
+        function showAddPhoneModal() {
+            document.getElementById('addPhoneModal').classList.remove('hidden');
+        }
+
+        async function showAddCreatorModal() {
+            // Load VAs for dropdown
+            const vas = await apiCall('/vas');
+            const select = document.getElementById('creatorVASelect');
+            select.innerHTML = '<option value="">Unassigned</option>' +
+                vas.filter(v => v.status === 'active').map(v => `<option value="${v.id}">${v.full_name}</option>`).join('');
+
+            document.getElementById('addCreatorModal').classList.remove('hidden');
+        }
+
+        // Form submissions
+        document.getElementById('addVAForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData.entries());
+
+            try {
+                await apiCall('/vas', {
+                    method: 'POST',
+                    body: JSON.stringify(data)
+                });
+
+                closeModal('addVAModal');
+                e.target.reset();
+                document.getElementById('photoPreview').classList.add('hidden');
+                await loadVAs();
+                await loadDashboard();
+                showToast('VA added successfully!');
+            } catch (error) {
+                console.error('Add VA error:', error);
+            }
+        });
+
+        document.getElementById('addPaymentGroupForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData.entries());
+
+            try {
+                await apiCall('/payments/groups', {
+                    method: 'POST',
+                    body: JSON.stringify(data)
+                });
+
+                closeModal('addPaymentGroupModal');
+                e.target.reset();
+                await loadPaymentGroups();
+                showToast('Payment group added successfully!');
+            } catch (error) {
+                console.error('Add payment group error:', error);
+            }
+        });
+
+        document.getElementById('addPhoneForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData.entries());
+
+            try {
+                await apiCall('/phones', {
+                    method: 'POST',
+                    body: JSON.stringify(data)
+                });
+
+                closeModal('addPhoneModal');
+                e.target.reset();
+                await loadPhones();
+                await loadDashboard();
+                showToast('Phone added successfully!');
+            } catch (error) {
+                console.error('Add phone error:', error);
+            }
+        });
+
+        document.getElementById('addCreatorForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData.entries());
+
+            try {
+                await apiCall('/creators', {
+                    method: 'POST',
+                    body: JSON.stringify(data)
+                });
+
+                closeModal('addCreatorModal');
+                e.target.reset();
+                await loadCreators();
+                await loadDashboard();
+                showToast('Creator added successfully!');
+            } catch (error) {
+                console.error('Add creator error:', error);
+            }
+        });
+
+        document.getElementById('editVAForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('editVAId').value;
+
+            const data = {
+                full_name: document.getElementById('editFullName').value,
+                telegram_handle: document.getElementById('editTelegramHandle').value,
+                wallet_address: document.getElementById('editWalletAddress').value || null,
+                monthly_base_salary: parseFloat(document.getElementById('editMonthlySalary').value) || 500,
+                payment_group_id: document.getElementById('editPaymentGroup').value || null,
+                status: document.getElementById('editStatus').value,
+                profile_photo_url: document.getElementById('editProfilePhotoUrl').value || null
+            };
+
+            try {
+                await apiCall(`/vas/${id}`, {
+                    method: 'PUT',
+                    body: JSON.stringify(data)
+                });
+
+                closeModal('editVAModal');
+                await loadVAs();
+                await loadDashboard();
+                showToast('VA updated successfully!');
+            } catch (error) {
+                console.error('Edit VA error:', error);
+                showToast('Failed to update VA', 'error');
+            }
+        });
+
+        // Delete functions
+        async function deleteVA(id, name) {
+            if (!confirm(`Are you sure you want to delete ${name}?`)) return;
+
+            try {
+                await apiCall(`/vas/${id}`, { method: 'DELETE' });
+                await loadVAs();
+                await loadDashboard();
+                showToast('VA deleted successfully!');
+            } catch (error) {
+                console.error('Delete VA error:', error);
+            }
+        }
+
+        async function deletePaymentGroup(id, name) {
+            if (!confirm(`Are you sure you want to delete ${name}?`)) return;
+
+            try {
+                await apiCall(`/payments/groups/${id}`, { method: 'DELETE' });
+                await loadPaymentGroups();
+                showToast('Payment group deleted successfully!');
+            } catch (error) {
+                console.error('Delete payment group error:', error);
+            }
+        }
+
+        async function deletePhone(id) {
+            if (!confirm('Are you sure you want to delete this phone?')) return;
+
+            try {
+                await apiCall(`/phones/${id}`, { method: 'DELETE' });
+                await loadPhones();
+                await loadDashboard();
+                showToast('Phone deleted successfully!');
+            } catch (error) {
+                console.error('Delete phone error:', error);
+            }
+        }
+
+        async function deleteCreator(id, name) {
+            if (!confirm(`Are you sure you want to delete ${name}?`)) return;
+
+            try {
+                await apiCall(`/creators/${id}`, { method: 'DELETE' });
+                await loadCreators();
+                await loadDashboard();
+                showToast('Creator deleted successfully!');
+            } catch (error) {
+                console.error('Delete creator error:', error);
+            }
+        }
+
+        // Placeholder edit functions (to be implemented)
+        async function editVA(id) {
+            try {
+                // Load VA data
+                const va = await apiCall(`/vas/${id}`);
+
+                // Load payment groups for dropdown
+                const groups = await apiCall('/payments/groups');
+                const select = document.getElementById('editPaymentGroup');
+                select.innerHTML = '<option value="">No Group</option>' +
+                    groups.map(g => `<option value="${g.id}" ${g.id === va.payment_group_id ? 'selected' : ''}>${g.group_name}</option>`).join('');
+
+                // Initialize edit Cloudinary widget
+                if (!editCloudinaryWidget) {
+                    editCloudinaryWidget = cloudinary.createUploadWidget({
+                        cloudName: 'Root',
+                        uploadPreset: 'va_photos',
+                        sources: ['local', 'camera'],
+                        multiple: false,
+                        maxFileSize: 10000000,
+                        clientAllowedFormats: ['png', 'jpg', 'jpeg']
+                    }, (error, result) => {
+                        if (!error && result && result.event === "success") {
+                            document.getElementById('editProfilePhotoUrl').value = result.info.secure_url;
+                            document.getElementById('editPhotoPreview').classList.remove('hidden');
+                            document.getElementById('editPhotoPreviewImg').src = result.info.secure_url;
+                            showToast('Photo uploaded successfully!');
+                        }
+                    });
+                }
+
+                // Populate form with VA data
+                document.getElementById('editVAId').value = va.id;
+                document.getElementById('editFullName').value = va.full_name || '';
+                document.getElementById('editTelegramHandle').value = va.telegram_handle || '';
+                document.getElementById('editWalletAddress').value = va.wallet_address || '';
+                document.getElementById('editMonthlySalary').value = va.monthly_base_salary || 500;
+                document.getElementById('editStatus').value = va.status || 'active';
+                document.getElementById('editProfilePhotoUrl').value = va.profile_photo_url || '';
+
+                // Show existing photo if available
+                if (va.profile_photo_url) {
+                    document.getElementById('editPhotoPreview').classList.remove('hidden');
+                    document.getElementById('editPhotoPreviewImg').src = va.profile_photo_url;
+                } else {
+                    document.getElementById('editPhotoPreview').classList.add('hidden');
+                }
+
+                // Setup edit upload widget click
+                document.getElementById('editUploadWidget').onclick = () => editCloudinaryWidget.open();
+
+                // Show modal
+                document.getElementById('editVAModal').classList.remove('hidden');
+            } catch (error) {
+                console.error('Edit VA error:', error);
+                showToast('Failed to load VA data', 'error');
+            }
+        }
+
+        function editPhone(id) {
+            showToast('Edit functionality coming soon!', 'error');
+        }
+
+        function editCreator(id) {
+            showToast('Edit functionality coming soon!', 'error');
+        }
+
+        function viewGroupDetails(id) {
+            showToast('Group details view coming soon!', 'error');
+        }
+
+        // Auto-login if token exists
+        if (token) {
+            document.getElementById('loginScreen').classList.add('hidden');
+            document.getElementById('dashboard').classList.remove('hidden');
+            loadDashboard();
+        }
+    </script>
+</body>
+</html>
