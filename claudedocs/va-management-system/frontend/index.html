@@ -296,6 +296,10 @@
                         class="px-6 py-3 rounded-xl font-semibold transition-all text-gray-600 hover:bg-gray-100">
                     Payments
                 </button>
+                <button onclick="showTab('finances')" id="tabFinances"
+                        class="px-6 py-3 rounded-xl font-semibold transition-all text-gray-600 hover:bg-gray-100">
+                    Finances
+                </button>
                 <button onclick="showTab('phones')" id="tabPhones"
                         class="px-6 py-3 rounded-xl font-semibold transition-all text-gray-600 hover:bg-gray-100">
                     Phones
@@ -357,6 +361,39 @@
 
                 <div id="phonesList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     <!-- Phones will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Finances Tab -->
+            <div id="financesTab" class="hidden fade-in">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800">Payment History</h2>
+                    <button onclick="showRecordPaymentModal()"
+                            class="btn-primary px-6 py-3 text-white rounded-xl font-semibold shadow-lg flex items-center space-x-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                        </svg>
+                        <span>Record Payment</span>
+                    </button>
+                </div>
+
+                <div class="glass rounded-2xl overflow-hidden">
+                    <table class="w-full">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Date</th>
+                                <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">VA Name</th>
+                                <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Amount</th>
+                                <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Type</th>
+                                <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Status</th>
+                                <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Notes</th>
+                                <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="paymentHistoryTable" class="divide-y divide-gray-200">
+                            <!-- Payment history will be loaded here -->
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
@@ -733,6 +770,260 @@
         </div>
     </div>
 
+    <!-- Record Payment Modal -->
+    <div id="recordPaymentModal" class="hidden fixed inset-0 modal-backdrop z-50 flex items-center justify-center p-4">
+        <div class="glass rounded-3xl max-w-lg w-full p-8 slide-up">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-gray-800">Record Payment</h3>
+                <button onclick="closeModal('recordPaymentModal')" class="text-gray-400 hover:text-gray-600">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <form id="recordPaymentForm" class="space-y-5">
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">VA *</label>
+                    <select name="va_id" id="paymentVASelect" required
+                            class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl">
+                        <option value="">Select VA</option>
+                    </select>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Amount ($) *</label>
+                        <input type="number" name="amount" step="0.01" required
+                               class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl"
+                               placeholder="500.00">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Payment Date *</label>
+                        <input type="date" name="payment_date" required
+                               class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Type *</label>
+                        <select name="payment_type" required
+                                class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl">
+                            <option value="salary">Salary</option>
+                            <option value="bonus">Bonus</option>
+                            <option value="reimbursement">Reimbursement</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Status *</label>
+                        <select name="status" required
+                                class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl">
+                            <option value="pending">Pending</option>
+                            <option value="completed">Completed</option>
+                            <option value="failed">Failed</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Notes</label>
+                    <textarea name="notes" rows="3"
+                              class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl"
+                              placeholder="Optional payment notes..."></textarea>
+                </div>
+
+                <div class="flex justify-end space-x-3 pt-4">
+                    <button type="button" onclick="closeModal('recordPaymentModal')"
+                            class="px-6 py-3 border-2 border-gray-200 rounded-xl font-semibold text-gray-600 hover:bg-gray-50">
+                        Cancel
+                    </button>
+                    <button type="submit"
+                            class="btn-primary px-6 py-3 text-white rounded-xl font-semibold">
+                        Record Payment
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Phone Modal -->
+    <div id="editPhoneModal" class="hidden fixed inset-0 modal-backdrop z-50 flex items-center justify-center p-4">
+        <div class="glass rounded-3xl max-w-lg w-full p-8 slide-up">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-gray-800">Edit Phone</h3>
+                <button onclick="closeModal('editPhoneModal')" class="text-gray-400 hover:text-gray-600">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <form id="editPhoneForm" class="space-y-5">
+                <input type="hidden" id="editPhoneId">
+
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Apple ID Email *</label>
+                    <input type="email" id="editPhoneAppleId" required
+                           class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl"
+                           placeholder="appleid@example.com">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Apple ID Password *</label>
+                    <input type="password" id="editPhonePassword" required
+                           class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl"
+                           placeholder="••••••••">
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Proxy IP *</label>
+                        <input type="text" id="editPhoneProxyIp" required
+                               class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl"
+                               placeholder="192.168.1.1">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Proxy Port *</label>
+                        <input type="number" id="editPhoneProxyPort" required
+                               class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl"
+                               placeholder="8080">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Proxy Username</label>
+                    <input type="text" id="editPhoneProxyUsername"
+                           class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl"
+                           placeholder="Optional">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Proxy Password</label>
+                    <input type="password" id="editPhoneProxyPassword"
+                           class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl"
+                           placeholder="Optional">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Assign to VA</label>
+                    <select id="editPhoneVASelect"
+                            class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl">
+                        <option value="">Unassigned</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Status</label>
+                    <select id="editPhoneStatus"
+                            class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl">
+                        <option value="available">Available</option>
+                        <option value="in_use">In Use</option>
+                        <option value="maintenance">Maintenance</option>
+                    </select>
+                </div>
+
+                <div class="flex justify-end space-x-3 pt-4">
+                    <button type="button" onclick="closeModal('editPhoneModal')"
+                            class="px-6 py-3 border-2 border-gray-200 rounded-xl font-semibold text-gray-600 hover:bg-gray-50">
+                        Cancel
+                    </button>
+                    <button type="submit"
+                            class="btn-primary px-6 py-3 text-white rounded-xl font-semibold">
+                        Save Changes
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Creator Modal -->
+    <div id="editCreatorModal" class="hidden fixed inset-0 modal-backdrop z-50 flex items-center justify-center p-4">
+        <div class="glass rounded-3xl max-w-lg w-full p-8 slide-up max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-gray-800">Edit Creator</h3>
+                <button onclick="closeModal('editCreatorModal')" class="text-gray-400 hover:text-gray-600">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <form id="editCreatorForm" class="space-y-5">
+                <input type="hidden" id="editCreatorId">
+
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Creator Name *</label>
+                    <input type="text" id="editCreatorName" required
+                           class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl"
+                           placeholder="TikTok Creator Name">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Niche</label>
+                    <input type="text" id="editCreatorNiche"
+                           class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl"
+                           placeholder="e.g., Beauty, Gaming, Lifestyle">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Assign to VA</label>
+                    <select id="editCreatorVASelect"
+                            class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl">
+                        <option value="">Unassigned</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Social Media Link</label>
+                    <input type="url" id="editCreatorSocialLink"
+                           class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl"
+                           placeholder="https://tiktok.com/@username">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Monthly Cost ($)</label>
+                    <input type="number" id="editCreatorMonthlyCost" step="0.01"
+                           class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl"
+                           placeholder="0.00">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Notes</label>
+                    <textarea id="editCreatorNotes" rows="3"
+                              class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl"
+                              placeholder="Optional notes about this creator..."></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Profile Photo</label>
+                    <div id="editCreatorUploadWidget" class="upload-area rounded-xl p-8 text-center cursor-pointer">
+                        <svg class="w-12 h-12 mx-auto text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                        </svg>
+                        <p class="text-gray-600">Click to upload new photo</p>
+                        <p class="text-sm text-gray-400 mt-1">PNG, JPG up to 10MB</p>
+                    </div>
+                    <input type="hidden" id="editCreatorPhotoUrl">
+                    <div id="editCreatorPhotoPreview" class="hidden mt-4">
+                        <img id="editCreatorPhotoPreviewImg" class="w-32 h-32 rounded-xl object-cover mx-auto">
+                    </div>
+                </div>
+
+                <div class="flex justify-end space-x-3 pt-4">
+                    <button type="button" onclick="closeModal('editCreatorModal')"
+                            class="px-6 py-3 border-2 border-gray-200 rounded-xl font-semibold text-gray-600 hover:bg-gray-50">
+                        Cancel
+                    </button>
+                    <button type="submit"
+                            class="btn-primary px-6 py-3 text-white rounded-xl font-semibold">
+                        Save Changes
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- Loading Overlay -->
     <div id="loadingOverlay" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
         <div class="glass rounded-2xl p-8">
@@ -835,7 +1126,7 @@
 
         // Tab switching
         function showTab(tab) {
-            const tabs = ['vas', 'payments', 'phones', 'creators'];
+            const tabs = ['vas', 'payments', 'finances', 'phones', 'creators'];
             tabs.forEach(t => {
                 document.getElementById(`${t}Tab`).classList.add('hidden');
                 const btn = document.getElementById(`tab${t.charAt(0).toUpperCase() + t.slice(1)}`);
@@ -850,6 +1141,7 @@
 
             // Load data for the tab
             if (tab === 'payments') loadPaymentGroups();
+            if (tab === 'finances') loadPaymentHistory();
             if (tab === 'phones') loadPhones();
             if (tab === 'creators') loadCreators();
         }
@@ -1223,6 +1515,87 @@
             }
         });
 
+        document.getElementById('recordPaymentForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData.entries());
+
+            try {
+                await apiCall('/payments/history', {
+                    method: 'POST',
+                    body: JSON.stringify(data)
+                });
+
+                closeModal('recordPaymentModal');
+                e.target.reset();
+                await loadPaymentHistory();
+                showToast('Payment recorded successfully!');
+            } catch (error) {
+                console.error('Record payment error:', error);
+            }
+        });
+
+        document.getElementById('editPhoneForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('editPhoneId').value;
+
+            const data = {
+                apple_id_email: document.getElementById('editPhoneAppleId').value,
+                apple_id_password: document.getElementById('editPhonePassword').value,
+                proxy_ip: document.getElementById('editPhoneProxyIp').value,
+                proxy_port: parseInt(document.getElementById('editPhoneProxyPort').value),
+                proxy_username: document.getElementById('editPhoneProxyUsername').value || null,
+                proxy_password: document.getElementById('editPhoneProxyPassword').value || null,
+                assigned_to_va_id: document.getElementById('editPhoneVASelect').value || null,
+                status: document.getElementById('editPhoneStatus').value
+            };
+
+            try {
+                await apiCall(`/phones/${id}`, {
+                    method: 'PUT',
+                    body: JSON.stringify(data)
+                });
+
+                closeModal('editPhoneModal');
+                await loadPhones();
+                await loadDashboard();
+                showToast('Phone updated successfully!');
+            } catch (error) {
+                console.error('Edit phone error:', error);
+                showToast('Failed to update phone', 'error');
+            }
+        });
+
+        document.getElementById('editCreatorForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('editCreatorId').value;
+
+            const data = {
+                creator_name: document.getElementById('editCreatorName').value,
+                niche: document.getElementById('editCreatorNiche').value || null,
+                assigned_to_va_id: document.getElementById('editCreatorVASelect').value || null,
+                social_media_link: document.getElementById('editCreatorSocialLink').value || null,
+                monthly_cost: parseFloat(document.getElementById('editCreatorMonthlyCost').value) || 0,
+                notes: document.getElementById('editCreatorNotes').value || null,
+                profile_photo_url: document.getElementById('editCreatorPhotoUrl').value || null
+            };
+
+            try {
+                await apiCall(`/creators/${id}`, {
+                    method: 'PUT',
+                    body: JSON.stringify(data)
+                });
+
+                closeModal('editCreatorModal');
+                await loadCreators();
+                await loadDashboard();
+                showToast('Creator updated successfully!');
+            } catch (error) {
+                console.error('Edit creator error:', error);
+                showToast('Failed to update creator', 'error');
+            }
+        });
+
         // Delete functions
         async function deleteVA(id, name) {
             if (!confirm(`Are you sure you want to delete ${name}?`)) return;
@@ -1275,7 +1648,69 @@
             }
         }
 
-        // Placeholder edit functions (to be implemented)
+        async function deletePaymentRecord(id) {
+            if (!confirm('Are you sure you want to delete this payment record?')) return;
+
+            try {
+                await apiCall(`/payments/history/${id}`, { method: 'DELETE' });
+                await loadPaymentHistory();
+                showToast('Payment record deleted successfully!');
+            } catch (error) {
+                console.error('Delete payment record error:', error);
+            }
+        }
+
+        // Load Payment History
+        async function loadPaymentHistory() {
+            try {
+                const history = await apiCall('/payments/history');
+                const tbody = document.getElementById('paymentHistoryTable');
+
+                if (history.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="7" class="px-6 py-8 text-center text-gray-500">No payment history found.</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = history.map(payment => {
+                    const date = new Date(payment.payment_date).toLocaleDateString();
+                    const statusClass = payment.status === 'completed' ? 'badge-active' :
+                                       payment.status === 'pending' ? 'badge-pending' : 'badge-inactive';
+
+                    return `
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 text-sm text-gray-900">${date}</td>
+                            <td class="px-6 py-4 text-sm font-semibold text-gray-900">${payment.va_name}</td>
+                            <td class="px-6 py-4 text-sm font-semibold text-green-600">$${parseFloat(payment.amount).toFixed(2)}</td>
+                            <td class="px-6 py-4 text-sm text-gray-900 capitalize">${payment.payment_type}</td>
+                            <td class="px-6 py-4"><span class="badge ${statusClass}">${payment.status}</span></td>
+                            <td class="px-6 py-4 text-sm text-gray-600">${payment.notes || '-'}</td>
+                            <td class="px-6 py-4 text-sm">
+                                <button onclick="deletePaymentRecord(${payment.id})"
+                                        class="text-red-600 hover:text-red-800 font-semibold">Delete</button>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+            } catch (error) {
+                console.error('Load payment history error:', error);
+            }
+        }
+
+        // Show Record Payment Modal
+        async function showRecordPaymentModal() {
+            const vas = await apiCall('/vas');
+            const select = document.getElementById('paymentVASelect');
+            select.innerHTML = '<option value="">Select VA</option>' +
+                vas.filter(v => v.status === 'active').map(v => `<option value="${v.id}">${v.full_name}</option>`).join('');
+
+            // Set default date to today
+            const today = new Date().toISOString().split('T')[0];
+            document.querySelector('#recordPaymentForm input[name="payment_date"]').value = today;
+
+            document.getElementById('recordPaymentModal').classList.remove('hidden');
+        }
+
+        // Edit functions
         async function editVA(id) {
             try {
                 // Load VA data
@@ -1334,12 +1769,86 @@
             }
         }
 
-        function editPhone(id) {
-            showToast('Edit functionality coming soon!', 'error');
+        let editCreatorCloudinaryWidget;
+
+        async function editPhone(id) {
+            try {
+                const phone = await apiCall(`/phones/${id}`);
+                const vas = await apiCall('/vas');
+
+                const vaSelect = document.getElementById('editPhoneVASelect');
+                vaSelect.innerHTML = '<option value="">Unassigned</option>' +
+                    vas.filter(v => v.status === 'active').map(v =>
+                        `<option value="${v.id}" ${v.id === phone.assigned_to_va_id ? 'selected' : ''}>${v.full_name}</option>`
+                    ).join('');
+
+                document.getElementById('editPhoneId').value = phone.id;
+                document.getElementById('editPhoneAppleId').value = phone.apple_id_email || '';
+                document.getElementById('editPhonePassword').value = phone.apple_id_password || '';
+                document.getElementById('editPhoneProxyIp').value = phone.proxy_ip || '';
+                document.getElementById('editPhoneProxyPort').value = phone.proxy_port || '';
+                document.getElementById('editPhoneProxyUsername').value = phone.proxy_username || '';
+                document.getElementById('editPhoneProxyPassword').value = phone.proxy_password || '';
+                document.getElementById('editPhoneStatus').value = phone.status || 'available';
+
+                document.getElementById('editPhoneModal').classList.remove('hidden');
+            } catch (error) {
+                console.error('Edit phone error:', error);
+                showToast('Failed to load phone data', 'error');
+            }
         }
 
-        function editCreator(id) {
-            showToast('Edit functionality coming soon!', 'error');
+        async function editCreator(id) {
+            try {
+                const creator = await apiCall(`/creators/${id}`);
+                const vas = await apiCall('/vas');
+
+                const vaSelect = document.getElementById('editCreatorVASelect');
+                vaSelect.innerHTML = '<option value="">Unassigned</option>' +
+                    vas.filter(v => v.status === 'active').map(v =>
+                        `<option value="${v.id}" ${v.id === creator.assigned_to_va_id ? 'selected' : ''}>${v.full_name}</option>`
+                    ).join('');
+
+                // Initialize Cloudinary widget for creator edit
+                if (!editCreatorCloudinaryWidget) {
+                    editCreatorCloudinaryWidget = cloudinary.createUploadWidget({
+                        cloudName: 'dorheqojc',
+                        uploadPreset: 'va_photos',
+                        sources: ['local', 'camera'],
+                        multiple: false,
+                        maxFileSize: 10000000,
+                        clientAllowedFormats: ['png', 'jpg', 'jpeg']
+                    }, (error, result) => {
+                        if (!error && result && result.event === "success") {
+                            document.getElementById('editCreatorPhotoUrl').value = result.info.secure_url;
+                            document.getElementById('editCreatorPhotoPreview').classList.remove('hidden');
+                            document.getElementById('editCreatorPhotoPreviewImg').src = result.info.secure_url;
+                            showToast('Photo uploaded successfully!');
+                        }
+                    });
+                }
+
+                document.getElementById('editCreatorId').value = creator.id;
+                document.getElementById('editCreatorName').value = creator.creator_name || '';
+                document.getElementById('editCreatorNiche').value = creator.niche || '';
+                document.getElementById('editCreatorSocialLink').value = creator.social_media_link || '';
+                document.getElementById('editCreatorMonthlyCost').value = creator.monthly_cost || 0;
+                document.getElementById('editCreatorNotes').value = creator.notes || '';
+                document.getElementById('editCreatorPhotoUrl').value = creator.profile_photo_url || '';
+
+                if (creator.profile_photo_url) {
+                    document.getElementById('editCreatorPhotoPreview').classList.remove('hidden');
+                    document.getElementById('editCreatorPhotoPreviewImg').src = creator.profile_photo_url;
+                } else {
+                    document.getElementById('editCreatorPhotoPreview').classList.add('hidden');
+                }
+
+                document.getElementById('editCreatorUploadWidget').onclick = () => editCreatorCloudinaryWidget.open();
+                document.getElementById('editCreatorModal').classList.remove('hidden');
+            } catch (error) {
+                console.error('Edit creator error:', error);
+                showToast('Failed to load creator data', 'error');
+            }
         }
 
         async function viewGroupDetails(groupId) {
