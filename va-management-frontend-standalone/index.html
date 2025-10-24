@@ -2584,11 +2584,11 @@ Please confirm when done!`;
                                         class="flex-1 px-4 py-2 bg-white text-black rounded-lg font-semibold hover:bg-white/90 transition-all">
                                     Edit
                                 </button>
-                                <button onclick="showOffboardVAModal(${va.id}, \`${va.full_name.replace(/`/g, '\\`').replace(/\\/g, '\\\\')}\`)"
+                                <button onclick="showOffboardVAModal(${va.id}, '${va.full_name.replace(/'/g, "\\'")}')"
                                         class="px-4 py-2 bg-orange-500/20 text-orange-300 border border-orange-500/30 rounded-lg font-semibold hover:bg-orange-500/30 transition-all">
                                     Offboard
                                 </button>
-                                <button onclick="deleteVA(${va.id}, \`${va.full_name.replace(/`/g, '\\`').replace(/\\/g, '\\\\')}\`)"
+                                <button onclick="deleteVA(${va.id}, '${va.full_name.replace(/'/g, "\\'")}')"
                                         class="px-4 py-2 bg-red-500/20 text-red-300 border border-red-500/30 rounded-lg font-semibold hover:bg-red-500/30 transition-all">
                                     Delete
                                 </button>
