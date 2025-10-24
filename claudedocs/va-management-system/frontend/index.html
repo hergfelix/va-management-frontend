@@ -1262,55 +1262,82 @@
         let addCreatorCloudinaryWidget;
 
         // Payment Stages Configuration
+        // Month 1: $150, Month 2: $200, Month 3+: $300 (final)
         const PAYMENT_STAGES = [
             { month: 1, salary: 150 },
             { month: 2, salary: 200 },
-            { month: 3, salary: 250 },
-            { month: 4, salary: 300 },
-            { month: 5, salary: 350 },
-            { month: 6, salary: 400 },
-            { month: 7, salary: 450 },
-            { month: 8, salary: 500 },
-            { month: 9, salary: 550 },
-            { month: 10, salary: 600 },
-            { month: 11, salary: 650 },
-            { month: 12, salary: 700 }
+            { month: 3, salary: 300 }  // Final stage - no more raises
         ];
 
-        // Calculate months worked from onboarding date
-        function calculateMonthsWorked(onboardingDate) {
+        // Calculate which month of work this is (1st month, 2nd month, etc.)
+        function calculateWorkMonth(onboardingDate) {
             if (!onboardingDate) return 0;
+
             const start = new Date(onboardingDate);
             const now = new Date();
-            const months = (now.getFullYear() - start.getFullYear()) * 12 + (now.getMonth() - start.getMonth()) + 1;
-            return Math.max(1, months); // Minimum 1 month
+
+            // Calculate full months between start and now
+            const yearDiff = now.getFullYear() - start.getFullYear();
+            const monthDiff = now.getMonth() - start.getMonth();
+            const workMonth = (yearDiff * 12) + monthDiff + 1; // +1 because first month is month 1
+
+            return Math.max(1, workMonth);
         }
 
-        // Get current payment stage based on months worked
-        function getPaymentStage(onboardingDate) {
-            const monthsWorked = calculateMonthsWorked(onboardingDate);
+        // Calculate pro-rated salary for partial month
+        function calculateProRatedSalary(onboardingDate, baseSalary) {
+            const start = new Date(onboardingDate);
+            const startDay = start.getDate();
 
-            // Find the appropriate stage
-            let currentStage = PAYMENT_STAGES[0];
-            for (const stage of PAYMENT_STAGES) {
-                if (monthsWorked >= stage.month) {
-                    currentStage = stage;
-                } else {
-                    break;
-                }
+            // If they started on the 1st, no pro-rating needed
+            if (startDay === 1) return baseSalary;
+
+            // Calculate days worked in the first month
+            const daysInMonth = new Date(start.getFullYear(), start.getMonth() + 1, 0).getDate();
+            const daysWorked = daysInMonth - startDay + 1; // +1 to include start day
+
+            // Pro-rate: (salary / 30) * days_worked
+            return Math.round((baseSalary / 30) * daysWorked * 100) / 100; // Round to 2 decimals
+        }
+
+        // Check if VA is in their first month
+        function isFirstMonth(onboardingDate) {
+            if (!onboardingDate) return false;
+
+            const start = new Date(onboardingDate);
+            const now = new Date();
+
+            return start.getMonth() === now.getMonth() && start.getFullYear() === now.getFullYear();
+        }
+
+        // Get current payment stage based on work month
+        function getPaymentStage(onboardingDate) {
+            if (!onboardingDate) return null;
+
+            const workMonth = calculateWorkMonth(onboardingDate);
+
+            // Determine current stage (max out at month 3)
+            const stageIndex = Math.min(workMonth - 1, PAYMENT_STAGES.length - 1);
+            const currentStage = PAYMENT_STAGES[stageIndex];
+
+            // Determine next stage (null if already at max)
+            const nextStage = workMonth < PAYMENT_STAGES.length ? PAYMENT_STAGES[workMonth] : null;
+
+            // Calculate actual salary (pro-rated if first month and mid-month start)
+            let actualSalary = currentStage.salary;
+            if (isFirstMonth(onboardingDate)) {
+                actualSalary = calculateProRatedSalary(onboardingDate, currentStage.salary);
             }
 
-            // Find next stage
-            const nextStageIndex = PAYMENT_STAGES.findIndex(s => s.month > monthsWorked);
-            const nextStage = nextStageIndex >= 0 ? PAYMENT_STAGES[nextStageIndex] : null;
-
             return {
-                monthsWorked,
-                currentMonth: currentStage.month,
+                workMonth,
+                currentStage: workMonth,
                 currentSalary: currentStage.salary,
-                nextMonth: nextStage?.month || null,
+                actualSalary: actualSalary,
+                isProRated: isFirstMonth(onboardingDate) && actualSalary !== currentStage.salary,
+                nextStage: nextStage?.month || null,
                 nextSalary: nextStage?.salary || null,
-                isMaxLevel: !nextStage
+                isMaxLevel: workMonth >= PAYMENT_STAGES.length
             };
         }
 
@@ -1484,28 +1511,33 @@
                             `}
 
                             <div class="space-y-2 text-sm mb-4">
-                                ${va.onboarding_date ? `
+                                ${va.onboarding_date && paymentStage ? `
                                     <div class="flex justify-between">
                                         <span class="text-gray-400">📅 Joined:</span>
                                         <span class="font-semibold text-white">${new Date(va.onboarding_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
                                     </div>
                                     <div class="flex justify-between items-center">
-                                        <span class="text-gray-400">💰 Stage ${paymentStage.currentMonth}/12:</span>
-                                        <span class="font-semibold text-white">$${paymentStage.currentSalary}</span>
+                                        <span class="text-gray-400">💰 Month ${paymentStage.currentStage}/3:</span>
+                                        <span class="font-semibold text-white">$${paymentStage.isProRated ? paymentStage.actualSalary.toFixed(2) : paymentStage.currentSalary}</span>
                                     </div>
+                                    ${paymentStage.isProRated ? `
+                                        <div class="bg-yellow-900/20 border border-yellow-600/30 rounded-lg px-3 py-1.5">
+                                            <span class="text-yellow-200 text-xs">⏱️ Pro-rated for partial month</span>
+                                        </div>
+                                    ` : ''}
                                     ${!paymentStage.isMaxLevel ? `
                                         <div class="bg-gray-800/30 border border-white/10 rounded-lg px-3 py-2">
                                             <div class="flex justify-between items-center mb-1">
-                                                <span class="text-gray-400 text-xs">Next raise (Month ${paymentStage.nextMonth}):</span>
+                                                <span class="text-gray-400 text-xs">Next raise (Month ${paymentStage.nextStage}):</span>
                                                 <span class="text-white text-xs font-semibold">$${paymentStage.nextSalary}</span>
                                             </div>
                                             <div class="w-full bg-gray-700 rounded-full h-1.5">
-                                                <div class="bg-white h-1.5 rounded-full" style="width: ${(paymentStage.currentMonth / 12) * 100}%"></div>
+                                                <div class="bg-white h-1.5 rounded-full" style="width: ${(paymentStage.currentStage / 3) * 100}%"></div>
                                             </div>
                                         </div>
                                     ` : `
                                         <div class="bg-gray-800/30 border border-white/10 rounded-lg px-3 py-2 text-center">
-                                            <span class="text-white text-xs font-semibold">🏆 Max Level Reached</span>
+                                            <span class="text-white text-xs font-semibold">🏆 Max Salary Reached ($300)</span>
                                         </div>
                                     `}
                                 ` : `
