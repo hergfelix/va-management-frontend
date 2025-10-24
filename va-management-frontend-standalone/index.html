@@ -2475,18 +2475,28 @@ Please confirm when done!`;
         document.getElementById('addVAForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const formData = new FormData(e.target);
-            const data = Object.fromEntries(formData.entries());
 
             // Get selected creator IDs
             const creatorCheckboxes = document.querySelectorAll('input[name="creator_ids[]"]:checked');
             const creatorIds = Array.from(creatorCheckboxes).map(cb => parseInt(cb.value));
 
             try {
-                // Create VA
-                const newVA = await apiCall('/vas', {
+                // Create VA with FormData (for file upload support)
+                const response = await fetch(`${API_URL}/vas`, {
                     method: 'POST',
-                    body: JSON.stringify(data)
+                    headers: {
+                        'Authorization': token ? `Bearer ${token}` : ''
+                        // Don't set Content-Type - browser will set it with boundary for multipart/form-data
+                    },
+                    body: formData
                 });
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.error || 'Failed to create VA');
+                }
+
+                const newVA = await response.json();
 
                 // Assign creators if any selected
                 if (creatorIds.length > 0) {
@@ -2501,15 +2511,20 @@ Please confirm when done!`;
                     ));
                 }
 
+                // Extract values from formData for onboarding and messages
+                const phoneType = formData.get('phone_type');
+                const phoneFromVAId = formData.get('phone_from_va_id');
+                const fullName = formData.get('full_name');
+
                 // Save onboarding checklist
                 await apiCall(`/vas/${newVA.id}/complete-onboarding`, {
                     method: 'POST',
                     body: JSON.stringify({
-                        apple_code_provided: data.apple_code_provided === 'on',
-                        proxy_configured: data.proxy_configured === 'on',
-                        phone_type: data.phone_type,
-                        phone_from_va_id: data.phone_from_va_id || null,
-                        training_materials_provided: data.training_materials_provided === 'on'
+                        apple_code_provided: formData.get('apple_code_provided') === 'on',
+                        proxy_configured: formData.get('proxy_configured') === 'on',
+                        phone_type: phoneType,
+                        phone_from_va_id: phoneFromVAId || null,
+                        training_materials_provided: formData.get('training_materials_provided') === 'on'
                     })
                 });
 
@@ -2520,18 +2535,17 @@ Please confirm when done!`;
                 await loadDashboard();
 
                 // Generate phone setup message if applicable
-                const phoneType = data.phone_type;
                 let setupMessage = null;
                 let transferFromVAName = null;
 
-                if (phoneType === 'transfer' && data.phone_from_va_id) {
+                if (phoneType === 'transfer' && phoneFromVAId) {
                     // Get the VA name we're transferring from
                     const allVAs = await apiCall('/vas');
-                    const transferFromVA = allVAs.find(va => va.id === parseInt(data.phone_from_va_id));
+                    const transferFromVA = allVAs.find(va => va.id === parseInt(phoneFromVAId));
                     transferFromVAName = transferFromVA ? transferFromVA.full_name : 'Previous VA';
-                    setupMessage = generatePhoneSetupMessage(data.full_name, 'transfer', transferFromVAName);
+                    setupMessage = generatePhoneSetupMessage(fullName, 'transfer', transferFromVAName);
                 } else if (phoneType === 'new') {
-                    setupMessage = generatePhoneSetupMessage(data.full_name, 'new');
+                    setupMessage = generatePhoneSetupMessage(fullName, 'new');
                 }
 
                 if (setupMessage) {
