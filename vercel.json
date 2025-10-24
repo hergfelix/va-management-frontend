@@ -1,0 +1,6 @@
+{
+  "buildCommand": "",
+  "outputDirectory": "va-management-frontend-standalone",
+  "installCommand": "echo 'No dependencies to install'",
+  "framework": null
+}
