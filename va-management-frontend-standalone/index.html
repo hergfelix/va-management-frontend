@@ -2580,15 +2580,15 @@ Please confirm when done!`;
                             </div>
 
                             <div class="flex space-x-2">
-                                <button onclick="editVA(${va.id})"
+                                <button data-action="edit-va" data-va-id="${va.id}"
                                         class="flex-1 px-4 py-2 bg-white text-black rounded-lg font-semibold hover:bg-white/90 transition-all">
                                     Edit
                                 </button>
-                                <button onclick="showOffboardVAModal(${va.id}, '${va.full_name.replace(/'/g, "\\'")}')"
+                                <button data-action="offboard-va" data-va-id="${va.id}" data-va-name="${va.full_name}"
                                         class="px-4 py-2 bg-orange-500/20 text-orange-300 border border-orange-500/30 rounded-lg font-semibold hover:bg-orange-500/30 transition-all">
                                     Offboard
                                 </button>
-                                <button onclick="deleteVA(${va.id}, '${va.full_name.replace(/'/g, "\\'")}')"
+                                <button data-action="delete-va" data-va-id="${va.id}" data-va-name="${va.full_name}"
                                         class="px-4 py-2 bg-red-500/20 text-red-300 border border-red-500/30 rounded-lg font-semibold hover:bg-red-500/30 transition-all">
                                     Delete
                                 </button>
@@ -3603,6 +3603,30 @@ Please confirm when done!`;
                 showToast('Failed to load group details', 'error');
             }
         }
+
+        // Event delegation for VA buttons
+        document.addEventListener('click', function(e) {
+            const button = e.target.closest('[data-action]');
+            if (!button) return;
+
+            const action = button.dataset.action;
+            const vaId = parseInt(button.dataset.vaId);
+            const vaName = button.dataset.vaName;
+
+            console.log('Button clicked:', action, vaId, vaName);
+
+            switch(action) {
+                case 'edit-va':
+                    editVA(vaId);
+                    break;
+                case 'offboard-va':
+                    showOffboardVAModal(vaId, vaName);
+                    break;
+                case 'delete-va':
+                    deleteVA(vaId, vaName);
+                    break;
+            }
+        });
 
         // Auto-login if token exists
         if (token) {
