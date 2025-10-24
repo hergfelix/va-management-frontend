@@ -657,8 +657,7 @@
                     </div>
                     <div>
                         <label class="block text-sm font-semibold text-gray-300 mb-2">Onboarding Date</label>
-                        <input type="date" name="onboarding_date"
-                               value="${new Date().toISOString().split('T')[0]}"
+                        <input type="date" name="onboarding_date" id="vaOnboardingDate"
                                class="w-full px-4 py-3 border-2 border-white/10 rounded-xl bg-gray-800/50 text-white">
                     </div>
                 </div>
@@ -1708,6 +1707,9 @@
         }
 
         async function showAddVAModal() {
+            // Set today's date as default for onboarding date
+            document.getElementById('vaOnboardingDate').value = new Date().toISOString().split('T')[0];
+
             // Load payment groups for dropdown
             const groups = await apiCall('/payments/groups');
             const select = document.getElementById('vaPaymentGroup');
