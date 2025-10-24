@@ -1,6 +1,6 @@
 {
   "buildCommand": "",
-  "outputDirectory": ".",
+  "outputDirectory": "va-management-frontend-standalone",
   "cleanUrls": true,
   "trailingSlash": false
 }
