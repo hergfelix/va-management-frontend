@@ -2234,11 +2234,19 @@ Please confirm when done!`;
         // Load Creator-Centric Assignments View
         async function loadCreatorAssignments() {
             try {
+                console.log('Loading creator assignments...');
                 const creators = await apiCall('/creators');
                 const vas = await apiCall('/vas');
                 const assignments = await apiCall('/creator-assignments');
+                console.log('Data loaded:', { creators: creators.length, vas: vas.length, assignments: assignments.length });
+
                 const creatorContainer = document.getElementById('creatorAssignments');
                 const availableVAsContainer = document.getElementById('availableVAs');
+
+                if (!creatorContainer || !availableVAsContainer) {
+                    console.error('Container elements not found!');
+                    return;
+                }
 
                 if (creators.length === 0) {
                     creatorContainer.innerHTML = '<div class="glass rounded-2xl p-8 text-center"><p class="text-gray-400">No creators found. Add your first creator to get started.</p></div>';
@@ -2380,7 +2388,23 @@ Please confirm when done!`;
 
             } catch (error) {
                 console.error('Load creator assignments error:', error);
+                const creatorContainer = document.getElementById('creatorAssignments');
+                if (creatorContainer) {
+                    creatorContainer.innerHTML = '<div class="glass rounded-2xl p-8 text-center"><p class="text-red-400">Error loading creator assignments. Check console for details.</p></div>';
+                }
             }
+        }
+
+        // Show modal to assign VA to a specific creator
+        function showAssignVAModal(creatorId, creatorName) {
+            // TODO: Implement assign VA modal
+            alert(`Assign VA to ${creatorName} - Feature coming soon!`);
+        }
+
+        // Show modal to quickly assign an unassigned VA to any creator
+        function showQuickAssignModal(vaId, vaName) {
+            // TODO: Implement quick assign modal
+            alert(`Assign ${vaName} to a creator - Feature coming soon!`);
         }
 
         // Tab switching
