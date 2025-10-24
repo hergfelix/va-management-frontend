@@ -773,6 +773,11 @@
             </div>
 
             <form id="addVAForm" class="space-y-5">
+                <!-- Required Fields Only -->
+                <div class="bg-purple-500/10 border border-purple-500/30 rounded-xl p-4 mb-4">
+                    <p class="text-sm text-purple-200 mb-3">✨ <strong>Quick Add:</strong> Just name + telegram to get started! Fill in the rest during onboarding.</p>
+                </div>
+
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <label class="block text-sm font-semibold text-gray-300 mb-2">Full Name *</label>
@@ -788,23 +793,42 @@
                     </div>
                 </div>
 
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-300 mb-2">VA Type *</label>
-                        <select name="va_type" id="vaType" onchange="toggleCustomSalary()"
-                                class="w-full px-4 py-3 border-2 border-white/10 rounded-xl bg-gray-800/50 text-white">
-                            <option value="social_media">Social Media VA</option>
-                            <option value="editor">Editor</option>
-                            <option value="manager">Manager</option>
-                            <option value="specialist">Specialist</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-300 mb-2">Onboarding Date</label>
-                        <input type="date" name="onboarding_date" id="vaOnboardingDate"
-                               class="w-full px-4 py-3 border-2 border-white/10 rounded-xl bg-gray-800/50 text-white">
-                    </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-300 mb-2">Notes (e.g., "onboarding in progress")</label>
+                    <textarea name="notes" rows="2"
+                              class="w-full px-4 py-3 border-2 border-white/10 rounded-xl bg-gray-800/50 text-white"
+                              placeholder="Add any notes about this VA's current status..."></textarea>
                 </div>
+
+                <!-- Optional Details - Collapsed by Default -->
+                <div class="border-t border-white/10 pt-4">
+                    <button type="button" onclick="document.getElementById('optionalVAFields').classList.toggle('hidden')"
+                            class="flex items-center space-x-2 text-gray-400 hover:text-white transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                        <span class="text-sm font-medium">Optional Details (can add later)</span>
+                    </button>
+                </div>
+
+                <div id="optionalVAFields" class="hidden space-y-4 border-t border-white/10 pt-4">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-300 mb-2">VA Type</label>
+                            <select name="va_type" id="vaType" onchange="toggleCustomSalary()"
+                                    class="w-full px-4 py-3 border-2 border-white/10 rounded-xl bg-gray-800/50 text-white">
+                                <option value="social_media">Social Media VA</option>
+                                <option value="editor">Editor</option>
+                                <option value="manager">Manager</option>
+                                <option value="specialist">Specialist</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-300 mb-2">Onboarding Date</label>
+                            <input type="date" name="onboarding_date" id="vaOnboardingDate"
+                                   class="w-full px-4 py-3 border-2 border-white/10 rounded-xl bg-gray-800/50 text-white">
+                        </div>
+                    </div>
 
                 <div class="grid grid-cols-2 gap-4">
                     <div id="baseSalaryField">
@@ -2517,17 +2541,22 @@ Please confirm when done!`;
                 const phoneFromVAId = formData.get('phone_from_va_id');
                 const fullName = formData.get('full_name');
 
-                // Save onboarding checklist
-                await apiCall(`/vas/${newVA.id}/complete-onboarding`, {
-                    method: 'POST',
-                    body: JSON.stringify({
-                        apple_code_provided: formData.get('apple_code_provided') === 'on',
-                        proxy_configured: formData.get('proxy_configured') === 'on',
-                        phone_type: phoneType,
-                        phone_from_va_id: phoneFromVAId || null,
-                        training_materials_provided: formData.get('training_materials_provided') === 'on'
-                    })
-                });
+                // Save onboarding checklist (optional - don't block VA creation if this fails)
+                try {
+                    await apiCall(`/vas/${newVA.id}/complete-onboarding`, {
+                        method: 'POST',
+                        body: JSON.stringify({
+                            apple_code_provided: formData.get('apple_code_provided') === 'on',
+                            proxy_configured: formData.get('proxy_configured') === 'on',
+                            phone_type: phoneType,
+                            phone_from_va_id: phoneFromVAId || null,
+                            training_materials_provided: formData.get('training_materials_provided') === 'on'
+                        })
+                    });
+                } catch (onboardingError) {
+                    console.warn('Onboarding checklist save failed (non-critical):', onboardingError);
+                    // Continue anyway - VA was created successfully
+                }
 
                 closeModal('addVAModal');
                 e.target.reset();
@@ -2556,7 +2585,7 @@ Please confirm when done!`;
                 }
             } catch (error) {
                 console.error('Add VA error:', error);
-                showToast('Failed to add VA', 'error');
+                // Error toast already shown by apiCall, just log it
             }
         });
 
