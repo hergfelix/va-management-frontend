@@ -754,6 +754,12 @@
                            placeholder="0x...">
                 </div>
 
+                <div>
+                    <label class="block text-sm font-semibold text-gray-300 mb-2">Joined Date</label>
+                    <input type="date" id="editOnboardingDate"
+                           class="w-full px-4 py-3 border-2 border-white/10 rounded-xl bg-gray-800/50 text-white">
+                </div>
+
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <label class="block text-sm font-semibold text-gray-700 mb-2">Monthly Salary ($)</label>
@@ -1256,6 +1262,59 @@
         let editCloudinaryWidget;
         let addCreatorCloudinaryWidget;
 
+        // Payment Stages Configuration
+        const PAYMENT_STAGES = [
+            { month: 1, salary: 150 },
+            { month: 2, salary: 200 },
+            { month: 3, salary: 250 },
+            { month: 4, salary: 300 },
+            { month: 5, salary: 350 },
+            { month: 6, salary: 400 },
+            { month: 7, salary: 450 },
+            { month: 8, salary: 500 },
+            { month: 9, salary: 550 },
+            { month: 10, salary: 600 },
+            { month: 11, salary: 650 },
+            { month: 12, salary: 700 }
+        ];
+
+        // Calculate months worked from onboarding date
+        function calculateMonthsWorked(onboardingDate) {
+            if (!onboardingDate) return 0;
+            const start = new Date(onboardingDate);
+            const now = new Date();
+            const months = (now.getFullYear() - start.getFullYear()) * 12 + (now.getMonth() - start.getMonth()) + 1;
+            return Math.max(1, months); // Minimum 1 month
+        }
+
+        // Get current payment stage based on months worked
+        function getPaymentStage(onboardingDate) {
+            const monthsWorked = calculateMonthsWorked(onboardingDate);
+
+            // Find the appropriate stage
+            let currentStage = PAYMENT_STAGES[0];
+            for (const stage of PAYMENT_STAGES) {
+                if (monthsWorked >= stage.month) {
+                    currentStage = stage;
+                } else {
+                    break;
+                }
+            }
+
+            // Find next stage
+            const nextStageIndex = PAYMENT_STAGES.findIndex(s => s.month > monthsWorked);
+            const nextStage = nextStageIndex >= 0 ? PAYMENT_STAGES[nextStageIndex] : null;
+
+            return {
+                monthsWorked,
+                currentMonth: currentStage.month,
+                currentSalary: currentStage.salary,
+                nextMonth: nextStage?.month || null,
+                nextSalary: nextStage?.salary || null,
+                isMaxLevel: !nextStage
+            };
+        }
+
         // Toast notifications
         function showToast(message, type = 'success') {
             const toast = document.createElement('div');
@@ -1384,6 +1443,9 @@
                         vaAssignments.some(a => a.creator_id === c.id)
                     );
 
+                    // Calculate payment stage
+                    const paymentStage = getPaymentStage(va.onboarding_date);
+
                     return `
                         <div class="glass rounded-2xl p-6 hover-lift">
                             <div class="flex items-center justify-between mb-4">
@@ -1428,11 +1490,31 @@
                                         <span class="text-gray-400">📅 Joined:</span>
                                         <span class="font-semibold text-white">${new Date(va.onboarding_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
                                     </div>
-                                ` : ''}
-                                <div class="flex justify-between">
-                                    <span class="text-gray-400">💰 Salary:</span>
-                                    <span class="font-semibold text-white">$${va.monthly_base_salary}</span>
-                                </div>
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-gray-400">💰 Stage ${paymentStage.currentMonth}/12:</span>
+                                        <span class="font-semibold text-white">$${paymentStage.currentSalary}</span>
+                                    </div>
+                                    ${!paymentStage.isMaxLevel ? `
+                                        <div class="bg-gray-800/30 border border-white/10 rounded-lg px-3 py-2">
+                                            <div class="flex justify-between items-center mb-1">
+                                                <span class="text-gray-400 text-xs">Next raise (Month ${paymentStage.nextMonth}):</span>
+                                                <span class="text-white text-xs font-semibold">$${paymentStage.nextSalary}</span>
+                                            </div>
+                                            <div class="w-full bg-gray-700 rounded-full h-1.5">
+                                                <div class="bg-white h-1.5 rounded-full" style="width: ${(paymentStage.currentMonth / 12) * 100}%"></div>
+                                            </div>
+                                        </div>
+                                    ` : `
+                                        <div class="bg-gray-800/30 border border-white/10 rounded-lg px-3 py-2 text-center">
+                                            <span class="text-white text-xs font-semibold">🏆 Max Level Reached</span>
+                                        </div>
+                                    `}
+                                ` : `
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-400">💰 Salary:</span>
+                                        <span class="font-semibold text-white">$${va.monthly_base_salary}</span>
+                                    </div>
+                                `}
                                 ${va.group_name ? `
                                     <div class="flex justify-between">
                                         <span class="text-gray-400">👥 Group:</span>
@@ -1815,6 +1897,7 @@
                 full_name: document.getElementById('editFullName').value,
                 telegram_handle: document.getElementById('editTelegramHandle').value,
                 wallet_address: document.getElementById('editWalletAddress').value || null,
+                onboarding_date: document.getElementById('editOnboardingDate').value || null,
                 monthly_base_salary: parseFloat(document.getElementById('editMonthlySalary').value) || 500,
                 payment_group_id: document.getElementById('editPaymentGroup').value || null,
                 status: document.getElementById('editStatus').value,
@@ -2086,6 +2169,7 @@
                 document.getElementById('editFullName').value = va.full_name || '';
                 document.getElementById('editTelegramHandle').value = va.telegram_handle || '';
                 document.getElementById('editWalletAddress').value = va.wallet_address || '';
+                document.getElementById('editOnboardingDate').value = va.onboarding_date || '';
                 document.getElementById('editMonthlySalary').value = va.monthly_base_salary || 500;
                 document.getElementById('editStatus').value = va.status || 'active';
                 document.getElementById('editProfilePhotoUrl').value = va.profile_photo_url || '';
