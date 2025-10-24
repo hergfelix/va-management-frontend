@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+  <defs>
+    <pattern id="dots" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1.5" fill="#ffffff" opacity="0.03"/>
+    </pattern>
+  </defs>
+  <!-- Mountain shape using dots -->
+  <path d="M 0,600 L 200,400 L 400,250 L 600,180 L 800,150 L 800,600 Z" fill="url(#dots)"/>
+</svg>
