@@ -868,13 +868,14 @@
 
                     <div class="space-y-4">
                         <div>
-                            <label class="block text-sm font-semibold text-gray-300 mb-2">Phone Assignment *</label>
-                            <select name="phone_type" id="phoneType" onchange="togglePhoneTransfer()" required
+                            <label class="block text-sm font-semibold text-gray-300 mb-2">Phone Assignment</label>
+                            <select name="phone_type" id="phoneType" onchange="togglePhoneTransfer()"
                                     class="w-full px-4 py-3 border-2 border-white/10 rounded-xl bg-gray-800/50 text-white">
-                                <option value="">Select phone type</option>
+                                <option value="">No phone yet (will assign later)</option>
                                 <option value="new">New Phone</option>
                                 <option value="transfer">Transfer from Existing VA</option>
                             </select>
+                            <p class="text-xs text-gray-400 mt-1">You can assign a phone later when offboarding another VA</p>
                         </div>
 
                         <div id="phoneTransferField" class="hidden">
