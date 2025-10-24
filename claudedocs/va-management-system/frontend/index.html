@@ -706,14 +706,35 @@
 
                 <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-sm font-semibold text-gray-300 mb-2">Monthly Salary ($)</label>
-                        <input type="number" name="monthly_base_salary" step="0.01" value="500"
-                               class="w-full px-4 py-3 border-2 border-white/10 rounded-xl bg-gray-800/50 text-white">
+                        <label class="block text-sm font-semibold text-gray-300 mb-2">VA Type *</label>
+                        <select name="va_type" id="vaType" onchange="toggleCustomSalary()"
+                                class="w-full px-4 py-3 border-2 border-white/10 rounded-xl bg-gray-800/50 text-white">
+                            <option value="social_media">Social Media VA</option>
+                            <option value="editor">Editor</option>
+                            <option value="manager">Manager</option>
+                            <option value="specialist">Specialist</option>
+                        </select>
                     </div>
                     <div>
                         <label class="block text-sm font-semibold text-gray-300 mb-2">Onboarding Date</label>
                         <input type="date" name="onboarding_date" id="vaOnboardingDate"
                                class="w-full px-4 py-3 border-2 border-white/10 rounded-xl bg-gray-800/50 text-white">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div id="baseSalaryField">
+                        <label class="block text-sm font-semibold text-gray-300 mb-2">Base Salary ($)</label>
+                        <input type="number" name="monthly_base_salary" step="0.01" value="500"
+                               class="w-full px-4 py-3 border-2 border-white/10 rounded-xl bg-gray-800/50 text-white">
+                        <p class="text-xs text-gray-400 mt-1">For Social Media VAs: Starting salary (3-stage progression)</p>
+                    </div>
+                    <div id="customSalaryField" class="hidden">
+                        <label class="block text-sm font-semibold text-gray-300 mb-2">Fixed Monthly Salary ($) *</label>
+                        <input type="number" name="custom_salary" id="vaCustomSalary" step="0.01"
+                               class="w-full px-4 py-3 border-2 border-white/10 rounded-xl bg-gray-800/50 text-white"
+                               placeholder="500">
+                        <p class="text-xs text-gray-400 mt-1">Fixed salary (no progression stages)</p>
                     </div>
                 </div>
 
@@ -801,17 +822,37 @@
                     </div>
                 </div>
 
-                <div>
-                    <label class="block text-sm font-semibold text-gray-300 mb-2">Joined Date</label>
-                    <input type="date" id="editOnboardingDate"
-                           class="w-full px-4 py-3 border-2 border-white/10 rounded-xl bg-gray-800/50 text-white">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-300 mb-2">VA Type *</label>
+                        <select id="editVAType" onchange="toggleEditCustomSalary()"
+                                class="w-full px-4 py-3 border-2 border-white/10 rounded-xl bg-gray-800/50 text-white">
+                            <option value="social_media">Social Media VA</option>
+                            <option value="editor">Editor</option>
+                            <option value="manager">Manager</option>
+                            <option value="specialist">Specialist</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-300 mb-2">Joined Date</label>
+                        <input type="date" id="editOnboardingDate"
+                               class="w-full px-4 py-3 border-2 border-white/10 rounded-xl bg-gray-800/50 text-white">
+                    </div>
                 </div>
 
                 <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Monthly Salary ($)</label>
+                    <div id="editBaseSalaryField">
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Base Salary ($)</label>
                         <input type="number" id="editMonthlySalary" step="0.01"
                                class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl">
+                        <p class="text-xs text-gray-400 mt-1">For Social Media VAs: Starting salary (3-stage progression)</p>
+                    </div>
+                    <div id="editCustomSalaryField" class="hidden">
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Fixed Monthly Salary ($) *</label>
+                        <input type="number" id="editCustomSalary" step="0.01"
+                               class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl"
+                               placeholder="500">
+                        <p class="text-xs text-gray-400 mt-1">Fixed salary (no progression stages)</p>
                     </div>
                     <div>
                         <label class="block text-sm font-semibold text-gray-700 mb-2">Payment Group</label>
@@ -1390,6 +1431,40 @@
             };
         }
 
+        // Toggle custom salary field in Add VA modal
+        function toggleCustomSalary() {
+            const vaType = document.getElementById('vaType').value;
+            const baseSalaryField = document.getElementById('baseSalaryField');
+            const customSalaryField = document.getElementById('customSalaryField');
+
+            if (vaType === 'social_media') {
+                baseSalaryField.classList.remove('hidden');
+                customSalaryField.classList.add('hidden');
+                document.getElementById('vaCustomSalary').removeAttribute('required');
+            } else {
+                baseSalaryField.classList.add('hidden');
+                customSalaryField.classList.remove('hidden');
+                document.getElementById('vaCustomSalary').setAttribute('required', 'required');
+            }
+        }
+
+        // Toggle custom salary field in Edit VA modal
+        function toggleEditCustomSalary() {
+            const vaType = document.getElementById('editVAType').value;
+            const baseSalaryField = document.getElementById('editBaseSalaryField');
+            const customSalaryField = document.getElementById('editCustomSalaryField');
+
+            if (vaType === 'social_media') {
+                baseSalaryField.classList.remove('hidden');
+                customSalaryField.classList.add('hidden');
+                document.getElementById('editCustomSalary').removeAttribute('required');
+            } else {
+                baseSalaryField.classList.add('hidden');
+                customSalaryField.classList.remove('hidden');
+                document.getElementById('editCustomSalary').setAttribute('required', 'required');
+            }
+        }
+
         // Toast notifications
         function showToast(message, type = 'success') {
             const toast = document.createElement('div');
@@ -1534,8 +1609,17 @@
                         vaAssignments.some(a => a.creator_id === c.id)
                     );
 
-                    // Calculate payment stage
-                    const paymentStage = getPaymentStage(va.onboarding_date);
+                    // Calculate payment stage for social media VAs
+                    const paymentStage = va.va_type === 'social_media' ? getPaymentStage(va.onboarding_date) : null;
+
+                    // Define VA type display names and icons
+                    const vaTypeInfo = {
+                        'social_media': { label: 'Social Media VA', icon: '📱' },
+                        'editor': { label: 'Editor', icon: '✂️' },
+                        'manager': { label: 'Manager', icon: '👔' },
+                        'specialist': { label: 'Specialist', icon: '⭐' }
+                    };
+                    const typeInfo = vaTypeInfo[va.va_type] || vaTypeInfo['social_media'];
 
                     return `
                         <div class="glass rounded-2xl p-6 hover-lift">
@@ -1546,6 +1630,11 @@
                                     <div>
                                         <h3 class="font-bold text-lg text-white">${va.full_name}</h3>
                                         <p class="text-sm text-gray-500">${va.telegram_handle}</p>
+                                        ${va.va_type !== 'social_media' ? `
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-purple-900/30 text-purple-200 border border-purple-600/30 mt-1">
+                                                ${typeInfo.icon} ${typeInfo.label}
+                                            </span>
+                                        ` : ''}
                                     </div>
                                 </div>
                                 <span class="badge badge-${va.status}">${va.status}</span>
@@ -1576,39 +1665,55 @@
                             `}
 
                             <div class="space-y-2 text-sm mb-4">
-                                ${va.onboarding_date && paymentStage ? `
-                                    <div class="flex justify-between">
-                                        <span class="text-gray-400">📅 Joined:</span>
-                                        <span class="font-semibold text-white">${new Date(va.onboarding_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
-                                    </div>
-                                    <div class="flex justify-between items-center">
-                                        <span class="text-gray-400">💰 Month ${paymentStage.currentStage}/3:</span>
-                                        <span class="font-semibold text-white">$${paymentStage.isProRated ? paymentStage.actualSalary.toFixed(2) : paymentStage.currentSalary}</span>
-                                    </div>
-                                    ${paymentStage.isProRated ? `
-                                        <div class="bg-yellow-900/20 border border-yellow-600/30 rounded-lg px-3 py-1.5">
-                                            <span class="text-yellow-200 text-xs">⏱️ Pro-rated for partial month</span>
+                                ${va.va_type === 'social_media' ? `
+                                    ${va.onboarding_date && paymentStage ? `
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-400">📅 Joined:</span>
+                                            <span class="font-semibold text-white">${new Date(va.onboarding_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
                                         </div>
-                                    ` : ''}
-                                    ${!paymentStage.isMaxLevel ? `
-                                        <div class="bg-gray-800/30 border border-white/10 rounded-lg px-3 py-2">
-                                            <div class="flex justify-between items-center mb-1">
-                                                <span class="text-gray-400 text-xs">Next raise (Month ${paymentStage.nextStage}):</span>
-                                                <span class="text-white text-xs font-semibold">$${paymentStage.nextSalary}</span>
-                                            </div>
-                                            <div class="w-full bg-gray-700 rounded-full h-1.5">
-                                                <div class="bg-white h-1.5 rounded-full" style="width: ${(paymentStage.currentStage / 3) * 100}%"></div>
-                                            </div>
+                                        <div class="flex justify-between items-center">
+                                            <span class="text-gray-400">💰 Month ${paymentStage.currentStage}/3:</span>
+                                            <span class="font-semibold text-white">$${paymentStage.isProRated ? paymentStage.actualSalary.toFixed(2) : paymentStage.currentSalary}</span>
                                         </div>
+                                        ${paymentStage.isProRated ? `
+                                            <div class="bg-yellow-900/20 border border-yellow-600/30 rounded-lg px-3 py-1.5">
+                                                <span class="text-yellow-200 text-xs">⏱️ Pro-rated for partial month</span>
+                                            </div>
+                                        ` : ''}
+                                        ${!paymentStage.isMaxLevel ? `
+                                            <div class="bg-gray-800/30 border border-white/10 rounded-lg px-3 py-2">
+                                                <div class="flex justify-between items-center mb-1">
+                                                    <span class="text-gray-400 text-xs">Next raise (Month ${paymentStage.nextStage}):</span>
+                                                    <span class="text-white text-xs font-semibold">$${paymentStage.nextSalary}</span>
+                                                </div>
+                                                <div class="w-full bg-gray-700 rounded-full h-1.5">
+                                                    <div class="bg-white h-1.5 rounded-full" style="width: ${(paymentStage.currentStage / 3) * 100}%"></div>
+                                                </div>
+                                            </div>
+                                        ` : `
+                                            <div class="bg-gray-800/30 border border-white/10 rounded-lg px-3 py-2 text-center">
+                                                <span class="text-white text-xs font-semibold">🏆 Max Salary Reached ($300)</span>
+                                            </div>
+                                        `}
                                     ` : `
-                                        <div class="bg-gray-800/30 border border-white/10 rounded-lg px-3 py-2 text-center">
-                                            <span class="text-white text-xs font-semibold">🏆 Max Salary Reached ($300)</span>
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-400">💰 Base Salary:</span>
+                                            <span class="font-semibold text-white">$${va.monthly_base_salary}</span>
                                         </div>
                                     `}
                                 ` : `
+                                    ${va.onboarding_date ? `
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-400">📅 Joined:</span>
+                                            <span class="font-semibold text-white">${new Date(va.onboarding_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+                                        </div>
+                                    ` : ''}
                                     <div class="flex justify-between">
-                                        <span class="text-gray-400">💰 Salary:</span>
-                                        <span class="font-semibold text-white">$${va.monthly_base_salary}</span>
+                                        <span class="text-gray-400">💰 Fixed Salary:</span>
+                                        <span class="font-semibold text-white">$${va.custom_salary || va.monthly_base_salary}/month</span>
+                                    </div>
+                                    <div class="bg-purple-900/20 border border-purple-600/30 rounded-lg px-3 py-1.5 text-center">
+                                        <span class="text-purple-200 text-xs">💼 ${typeInfo.label} - Fixed Rate</span>
                                     </div>
                                 `}
                                 ${va.group_name ? `
@@ -1991,10 +2096,13 @@
         document.getElementById('editVAForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const id = document.getElementById('editVAId').value;
+            const vaType = document.getElementById('editVAType').value;
 
             const data = {
                 full_name: document.getElementById('editFullName').value,
                 telegram_handle: document.getElementById('editTelegramHandle').value,
+                va_type: vaType,
+                custom_salary: vaType !== 'social_media' ? parseFloat(document.getElementById('editCustomSalary').value) : null,
                 onboarding_date: document.getElementById('editOnboardingDate').value || null,
                 monthly_base_salary: parseFloat(document.getElementById('editMonthlySalary').value) || 500,
                 payment_group_id: document.getElementById('editPaymentGroup').value || null,
@@ -2266,6 +2374,12 @@
                 document.getElementById('editVAId').value = va.id;
                 document.getElementById('editFullName').value = va.full_name || '';
                 document.getElementById('editTelegramHandle').value = va.telegram_handle || '';
+
+                // Set VA Type and toggle custom salary field
+                document.getElementById('editVAType').value = va.va_type || 'social_media';
+                document.getElementById('editCustomSalary').value = va.custom_salary || '';
+                toggleEditCustomSalary(); // Show/hide appropriate salary field
+
                 // Format date for HTML5 date input (YYYY-MM-DD)
                 if (va.onboarding_date) {
                     const date = new Date(va.onboarding_date);
