@@ -2263,7 +2263,7 @@ Please confirm when done!`;
                     const totalMonthlyCost = assignedVAs.reduce((sum, va) => {
                         const paymentStage = va.va_type === 'social_media' ? getPaymentStage(va.onboarding_date) : null;
                         const salary = paymentStage?.actualSalary || va.custom_salary || va.monthly_base_salary || 0;
-                        return sum + salary;
+                        return sum + (parseFloat(salary) || 0);
                     }, 0);
 
                     return `
@@ -2293,7 +2293,7 @@ Please confirm when done!`;
                                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mb-4">
                                     ${assignedVAs.map(va => {
                                         const paymentStage = va.va_type === 'social_media' ? getPaymentStage(va.onboarding_date) : null;
-                                        const salary = paymentStage?.actualSalary || va.custom_salary || va.monthly_base_salary || 0;
+                                        const salary = parseFloat(paymentStage?.actualSalary || va.custom_salary || va.monthly_base_salary || 0);
                                         const vaTypeInfo = {
                                             'social_media': 'SM VA',
                                             'editor': 'Editor',
@@ -2353,7 +2353,7 @@ Please confirm when done!`;
                 if (unassignedVAs.length > 0) {
                     availableVAsContainer.innerHTML = unassignedVAs.map(va => {
                         const paymentStage = va.va_type === 'social_media' ? getPaymentStage(va.onboarding_date) : null;
-                        const salary = paymentStage?.actualSalary || va.custom_salary || va.monthly_base_salary || 0;
+                        const salary = parseFloat(paymentStage?.actualSalary || va.custom_salary || va.monthly_base_salary || 0);
 
                         return `
                             <div class="glass rounded-xl p-4 hover-lift">
