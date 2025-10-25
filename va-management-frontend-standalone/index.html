@@ -3612,7 +3612,8 @@ Please confirm when done!`;
             }
         }
 
-        // Event delegation for VA buttons
+        // Event delegation for VA buttons - MUST be attached immediately on page load
+        // This ensures buttons work even if loadDashboard() encounters errors
         document.addEventListener('click', function(e) {
             const button = e.target.closest('[data-action]');
             if (!button) return;
@@ -3635,6 +3636,7 @@ Please confirm when done!`;
                     break;
             }
         });
+        console.log('✅ Event delegation listener attached');
 
         // Auto-login if token exists
         if (token) {
