@@ -1,6 +1,12 @@
 {
   "buildCommand": "",
-  "outputDirectory": "va-management-frontend-standalone",
-  "cleanUrls": true,
-  "trailingSlash": false
+  "outputDirectory": ".",
+  "installCommand": "echo 'No dependencies to install'",
+  "framework": null,
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
 }
